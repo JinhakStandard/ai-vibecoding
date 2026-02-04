@@ -18,7 +18,7 @@ claude
 ### 2단계: 이 저장소 URL을 주고 적용 요청
 
 ```
-> https://bitbucket.org/jinhak/standards 여기를 참고해서 프로젝트에 적용해줘
+> https://bitbucket.org/jinhaksa/jinhakstandardai/src/master/README.md 여기를 참고해서 프로젝트에 적용해줘
 ```
 
 ### 그러면 Claude Code가 자동으로:
@@ -72,7 +72,7 @@ claude
 > 각 프로젝트의 CLAUDE.md에 다음 메타 정보가 기록되어 추적됩니다:
 > ```html
 > <!-- jinhak_standard_version: 1.1 -->
-> <!-- jinhak_standard_repo: https://bitbucket.org/jinhak/standards -->
+> <!-- jinhak_standard_repo: https://bitbucket.org/jinhaksa/jinhakstandardai/src/master/README.md -->
 > <!-- applied_date: 2025-02-20 -->
 > ```
 
@@ -131,7 +131,7 @@ JinhakStandard/
 
 ```bash
 # 1. 이 저장소를 클론하여 참고
-git clone https://bitbucket.org/jinhak/standards /tmp/jinhak-standards
+git clone https://LimHyeongSeop@bitbucket.org/jinhaksa/jinhakstandardai.git /tmp/jinhak-standards
 
 # 2. CLAUDE.md 템플릿 복사 후 프로젝트 정보 수정
 cp /tmp/jinhak-standards/templates/project-claude.md ./CLAUDE.md
