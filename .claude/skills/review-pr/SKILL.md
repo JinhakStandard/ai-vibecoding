@@ -12,13 +12,13 @@ $ARGUMENTS - PR 번호 또는 URL
 ## 사용법
 ```
 /review-pr 123
-/review-pr https://bitbucket.org/team/repo/pull-requests/123
+/review-pr https://github.com/JinhakStandard/ai-vibecoding/pull/123
 ```
 
 ## 실행 절차
 
 ### 1단계: PR 정보 수집
-- `gh pr view $ARGUMENTS` 또는 Bitbucket API로 PR 내용 확인
+- `gh pr view $ARGUMENTS` 또는 GitHub API로 PR 내용 확인
 - `gh pr diff $ARGUMENTS`로 변경된 파일 목록과 diff 확인
 
 ### 2단계: 코드 품질 체크

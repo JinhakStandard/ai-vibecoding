@@ -12,7 +12,7 @@ $ARGUMENTS - 표준 저장소 URL (선택사항. 없으면 기본 URL 사용)
 ## 사용법
 ```
 /apply-standard
-/apply-standard https://bitbucket.org/jinhak/standards
+/apply-standard https://github.com/JinhakStandard/ai-vibecoding
 ```
 
 ## 사전 준비 체크리스트 (적용 전)
@@ -61,7 +61,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 ```markdown
 <!-- JINHAK Standard Metadata -->
 <!-- jinhak_standard_version: 1.0 -->
-<!-- jinhak_standard_repo: https://bitbucket.org/jinhak/standards -->
+<!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: YYYY-MM-DD -->
 ```
 

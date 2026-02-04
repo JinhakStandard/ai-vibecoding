@@ -42,8 +42,8 @@
 | 항목 | 표준 기술 |
 |------|----------|
 | 비밀키 관리 | **Vault** (모든 Private Key, 인증 정보, API Key 등) |
-| 버전관리 | Git (Bitbucket) |
-| CI/CD | Bitbucket Pipelines |
+| 버전관리 | Git (GitHub) |
+| CI/CD | GitHub Actions |
 | 컨테이너 | Docker |
 | 모니터링 | 프로젝트별 선택 |
 
@@ -445,7 +445,7 @@ new Intl.NumberFormat('ko-KR', {
 
 ## 부록: 이 표준의 기여 방법
 
-이 표준은 Bitbucket Public Repo에서 관리됩니다.
+이 표준은 GitHub Public Repo(https://github.com/JinhakStandard/ai-vibecoding)에서 관리됩니다.
 
 1. 개선 사항이 있으면 PR로 제출
 2. PR 제목 형식: `docs: [변경 내용 요약]`

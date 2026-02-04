@@ -18,7 +18,7 @@ claude
 ### 2단계: 이 저장소 URL을 주고 적용 요청
 
 ```
-> https://bitbucket.org/jinhaksa/jinhakstandardai/src/master/README.md 여기를 참고해서 프로젝트에 적용해줘
+> https://github.com/JinhakStandard/ai-vibecoding 여기를 참고해서 프로젝트에 적용해줘
 ```
 
 ### 그러면 Claude Code가 자동으로:
@@ -72,7 +72,7 @@ claude
 > 각 프로젝트의 CLAUDE.md에 다음 메타 정보가 기록되어 추적됩니다:
 > ```html
 > <!-- jinhak_standard_version: 1.1 -->
-> <!-- jinhak_standard_repo: https://bitbucket.org/jinhaksa/jinhakstandardai/src/master/README.md -->
+> <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 > <!-- applied_date: 2025-02-20 -->
 > ```
 
@@ -131,7 +131,7 @@ JinhakStandard/
 
 ```bash
 # 1. 이 저장소를 클론하여 참고
-git clone https://LimHyeongSeop@bitbucket.org/jinhaksa/jinhakstandardai.git /tmp/jinhak-standards
+git clone https://github.com/JinhakStandard/ai-vibecoding.git /tmp/jinhak-standards
 
 # 2. CLAUDE.md 템플릿 복사 후 프로젝트 정보 수정
 cp /tmp/jinhak-standards/templates/project-claude.md ./CLAUDE.md
@@ -207,7 +207,7 @@ claude
 | 폴더 구조 | 모노레포 여부, 앱 수에 따라 구조 조정 |
 | UI 라이브러리 | shadcn/ui 등 UI 라이브러리 구성 방식 |
 | 테스트 전략 | 단위/통합/E2E 테스트 범위 결정 |
-| CI/CD | Bitbucket Pipelines 설정은 프로젝트별 구성 |
+| CI/CD | GitHub Actions 설정은 프로젝트별 구성 |
 | Vault 경로 | 프로젝트별 Vault secret path 설정 |
 | Skills | 프로젝트별 추가 슬래시 명령어 정의 |
 | 표준 버전 | `/session-start` 시 자동 버전 체크 |
