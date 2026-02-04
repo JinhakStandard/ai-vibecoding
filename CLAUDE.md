@@ -1,0 +1,416 @@
+# JINHAK 전사 AI 개발 표준
+
+이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
+
+---
+
+## 응답 언어
+
+**모든 응답은 한글로 작성합니다.**
+
+---
+
+## 1. 회사 기술 스택 개요
+
+### 프론트엔드
+| 항목 | 표준 기술 |
+|------|----------|
+| 프레임워크 | React 18+ / Next.js |
+| 빌드 도구 | Vite |
+| 언어 | JavaScript (JSX) 또는 TypeScript (TSX) |
+| 상태관리 | Zustand |
+| 라우팅 | React Router v6 / Next.js App Router |
+| 스타일링 | Tailwind CSS + CVA (Class Variance Authority) |
+| 아이콘 | Lucide React |
+
+### 백엔드
+| 항목 | 표준 기술 |
+|------|----------|
+| 런타임 | Node.js 20+ |
+| 언어 | TypeScript (strict mode) |
+| 프레임워크 | Express / Fastify / NestJS |
+| ORM | Prisma / Drizzle |
+| API 문서 | Swagger / OpenAPI |
+
+### 데이터베이스
+| 조건 | 표준 DB |
+|------|---------|
+| 신규 프로젝트 | PostgreSQL |
+| 대형 프로젝트 또는 기존 프로젝트 | MSSQL (SQL Server) |
+
+### 보안/인프라
+| 항목 | 표준 기술 |
+|------|----------|
+| 비밀키 관리 | **Vault** (모든 Private Key, 인증 정보, API Key 등) |
+| 버전관리 | Git (Bitbucket) |
+| CI/CD | Bitbucket Pipelines |
+| 컨테이너 | Docker |
+| 모니터링 | 프로젝트별 선택 |
+
+---
+
+## 2. AI 협업 핵심 원칙
+
+### 2.1 프로젝트 설정 필수 구조
+
+모든 프로젝트는 AI와의 효과적인 협업을 위해 다음 구조를 갖추어야 합니다.
+
+```
+프로젝트루트/
+├── CLAUDE.md              # Claude Code 메인 설정 파일 (필수)
+├── .claude/               # Claude Code 설정 폴더
+│   ├── settings.json      # 권한, 환경변수, 훅 설정
+│   └── skills/            # 슬래시 명령어 (Skills) 정의
+│       ├── apply-standard/SKILL.md  # 표준 적용/업데이트
+│       ├── commit/SKILL.md          # 커밋 생성
+│       ├── review-pr/SKILL.md       # PR 리뷰
+│       ├── session-start/SKILL.md   # 세션 시작
+│       └── test/SKILL.md            # 테스트 실행
+└── .ai/                   # 프로젝트 문서화 폴더
+    ├── SESSION_LOG.md     # 세션별 작업 기록
+    ├── CURRENT_SPRINT.md  # 현재 진행/대기 작업 현황
+    ├── DECISIONS.md       # 기술 의사결정 기록 (ADR)
+    ├── ARCHITECTURE.md    # 시스템 아키텍처 문서
+    └── CONVENTIONS.md     # 코딩 컨벤션
+```
+
+### 2.2 세션 관리 규칙
+
+**세션 시작 시:**
+1. `.ai/SESSION_LOG.md` 읽어 이전 작업 확인
+2. `.ai/CURRENT_SPRINT.md` 읽어 진행 중인 작업 파악
+
+**작업 완료 후 (필수):**
+1. `.ai/SESSION_LOG.md`에 작업 내용 추가
+2. `.ai/CURRENT_SPRINT.md` 진행 상태 업데이트
+3. 중요 기술 결정 시 `.ai/DECISIONS.md` 업데이트
+
+**SESSION_LOG.md 기록 형식:**
+```markdown
+## YYYY-MM-DD
+
+### 세션 작업 내용
+- 작업 1 설명
+- 작업 2 설명
+
+### 변경 파일
+- `파일경로` - 변경 내용
+
+### 커밋
+- `해시` 커밋 메시지
+```
+
+### 2.3 AI에게 기대하는 행동
+
+1. **코드를 읽기 전에 수정하지 않는다** - 반드시 기존 코드를 먼저 이해한 후 변경 제안
+2. **과도한 엔지니어링을 피한다** - 요청된 범위 내에서만 작업, 불필요한 추상화 금지
+3. **보안을 최우선으로 한다** - XSS, SQL Injection, 커맨드 인젝션 등 OWASP Top 10 취약점 방지
+4. **기존 패턴을 따른다** - 프로젝트의 기존 컨벤션과 패턴을 존중
+5. **한국어로 소통한다** - 모든 응답, 주석 설명, 커밋 메시지는 한국어 사용
+
+---
+
+## 3. 코드 품질 기준
+
+### 3.1 필수 준수 사항
+
+- **단일 책임 원칙**: 한 컴포넌트/함수는 한 가지 일만 수행
+- **DRY 원칙**: 3회 이상 반복되는 코드는 공통 모듈로 추출
+- **네이밍**: 의도가 드러나는 명확한 이름 사용 (축약어 지양)
+- **에러 처리**: 시스템 경계(사용자 입력, 외부 API)에서만 검증, 내부 코드는 프레임워크 보장을 신뢰
+- **비밀정보 관리**: 모든 Private Key, API Key, 인증 정보는 **Vault**를 통해 관리. `.env` 파일은 절대 커밋 금지
+
+### 3.2 금지 사항
+
+```
+- any 타입 사용 금지 (TypeScript 프로젝트)
+- console.log 프로덕션 코드 사용 금지
+- 하드코딩된 URL/포트/비밀키 사용 금지
+- 미사용 import/변수 방치 금지
+- 주석 처리된 코드 방치 금지
+```
+
+### 3.3 네이밍 컨벤션 (공통)
+
+| 대상 | 규칙 | 예시 |
+|------|------|------|
+| 컴포넌트 파일 | PascalCase | `DashboardLayout.jsx` |
+| 컴포넌트명 | PascalCase | `DashboardGrid` |
+| 함수/변수 | camelCase | `setViewMode`, `handleSubmit` |
+| 상수 | UPPER_SNAKE_CASE | `STORAGE_KEY`, `MAX_RETRY_COUNT` |
+| 타입/인터페이스 | PascalCase | `UserProfile`, `ApiResponse` |
+| 훅 | camelCase + use 접두사 | `useAuth`, `useDashboard` |
+| 스토어 파일 | camelCase + Store | `dashboardStore.js` |
+| CSS 클래스 | Tailwind (kebab-case) | `bg-primary text-white` |
+| ID 값 | prefix + 고유값 | `dept-001`, `user-ceo` |
+
+---
+
+## 4. Git 커밋 규칙
+
+### 4.1 커밋 메시지 형식
+
+```
+<type>: <subject>
+
+[optional body]
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+### 4.2 Type 분류
+
+| Type | 설명 | 예시 |
+|------|------|------|
+| `feat` | 새로운 기능 추가 | `feat: 사용자 프로필 페이지 추가` |
+| `fix` | 버그 수정 | `fix: 로그인 토큰 만료 처리 오류 수정` |
+| `docs` | 문서 변경 | `docs: API 문서 업데이트` |
+| `style` | 코드 포맷팅 (기능 변경 없음) | `style: 들여쓰기 통일` |
+| `refactor` | 리팩토링 | `refactor: 인증 로직 모듈 분리` |
+| `test` | 테스트 추가/수정 | `test: 사용자 서비스 단위 테스트 추가` |
+| `chore` | 빌드/설정 변경 | `chore: ESLint 규칙 업데이트` |
+
+### 4.3 Git 안전 프로토콜
+
+**절대 하지 말아야 할 것:**
+- `git config` 직접 수정 금지
+- `git push --force` 금지 (특히 main/master)
+- `git reset --hard` 금지 (명시적 요청 없이)
+- `--no-verify` 등 hooks 스킵 금지
+- `.env`, `credentials.json` 등 시크릿 파일 커밋 금지
+
+**커밋 생성 절차:**
+1. `git status`로 변경 파일 확인
+2. `git diff`로 변경 내용 분석
+3. `git log --oneline -5`로 최근 커밋 스타일 확인
+4. 관련 파일만 개별 스테이징 (`git add -A` 지양)
+5. HEREDOC 형식으로 커밋 메시지 작성
+6. `git status`로 커밋 성공 확인
+
+**pre-commit hook 실패 시:**
+- 문제 해결 후 **새 커밋** 생성 (amend 금지)
+
+---
+
+## 5. HTTP API 규칙
+
+> **중요: GET, POST만 사용**
+
+| Method | 용도 | 비고 |
+|--------|------|------|
+| `GET` | 데이터 조회 | 쿼리 파라미터로 필터링 |
+| `POST` | 생성, 수정, 삭제 | `action` 필드로 동작 구분 |
+
+```javascript
+// PATCH, PUT, DELETE는 사용하지 않음
+// POST + action 패턴으로 대체
+POST /api/users
+body: { action: 'create', data: {...} }
+body: { action: 'update', id: '123', data: {...} }
+body: { action: 'delete', id: '123' }
+```
+
+---
+
+## 6. Claude Code 설정
+
+### 6.1 Hooks 시스템
+
+`.claude/settings.json`에서 이벤트 기반 자동화를 설정합니다.
+
+**사용 가능한 Hook 이벤트:**
+
+| 이벤트 | 설명 | 주요 변수 |
+|--------|------|----------|
+| `UserPromptSubmit` | 사용자 프롬프트 제출 시 | - |
+| `PreToolUse` | 도구 실행 전 | `${tool}`, `${command}`, `${file}` |
+| `PostToolUse` | 도구 실행 후 | `${tool}`, `${file}` |
+| `Stop` | Claude 응답 완료 시 | - |
+
+**설정 예시:**
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "command": "cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "command": "npx eslint --fix ${file} 2>/dev/null || true"
+      }
+    ]
+  }
+}
+```
+
+> Windows 환경에서는 `cat` 대신 `type`, `head` 대신 PowerShell 명령을 사용하세요.
+
+### 6.2 Skills (슬래시 명령어)
+
+`.claude/skills/` 디렉토리에 반복 작업을 자동화하는 명령어를 정의합니다.
+
+```
+.claude/skills/
+├── apply-standard/SKILL.md  # /apply-standard - JINHAK 표준 적용/업데이트
+├── commit/SKILL.md           # /commit - 커밋 생성
+├── review-pr/SKILL.md        # /review-pr - PR 리뷰
+├── session-start/SKILL.md    # /session-start - 세션 시작
+└── test/SKILL.md             # /test - 테스트 실행
+```
+
+| 명령어 | 용도 |
+|--------|------|
+| `/apply-standard` | 이 표준을 프로젝트에 적용하거나 업데이트 |
+| `/session-start` | 세션 시작, 이전 작업 확인, 표준 버전 체크 |
+| `/commit` | 변경사항 분석 후 표준에 맞는 커밋 생성 |
+| `/review-pr <번호>` | PR을 표준 기준으로 리뷰 |
+| `/test` | 테스트 실행 및 결과 분석 |
+
+### 6.3 권한 설정
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(pnpm *)",
+      "Bash(npx *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Read", "Glob", "Grep"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(git config *)"
+    ]
+  }
+}
+```
+
+---
+
+## 7. 표준 적용 프로세스
+
+### 7.1 다른 프로젝트에 이 표준을 적용하는 방법
+
+사용자가 이 저장소의 URL을 제공하며 "여기를 참고해서 프로젝트에 적용해줘"라고 요청하면, 다음 절차를 따릅니다:
+
+1. **표준 저장소 내용 확인**: URL에서 CLAUDE.md, CHANGELOG.md, templates/, .claude/skills/ 내용을 읽습니다.
+2. **현재 프로젝트 분석**: package.json, tsconfig.json 등을 읽어 기술 스택을 파악합니다.
+3. **표준 적용**: `/apply-standard` 스킬의 절차에 따라 파일을 생성/수정합니다.
+4. **결과 보고**: 생성/수정된 파일 목록과 다음 단계를 안내합니다.
+
+> Claude Code에서 `/apply-standard` 명령을 사용하면 이 과정이 자동으로 실행됩니다.
+
+### 7.2 버전 추적
+
+각 프로젝트의 CLAUDE.md에 다음 메타 정보가 HTML 주석으로 포함됩니다:
+
+```html
+<!-- jinhak_standard_version: 1.1 -->
+<!-- jinhak_standard_repo: [저장소 URL] -->
+<!-- applied_date: 2025-02-20 -->
+```
+
+**세션 시작 시 (`/session-start`):**
+1. 프로젝트 CLAUDE.md의 `jinhak_standard_version` 확인
+2. 표준 저장소의 CHANGELOG.md에서 최신 버전 확인
+3. 업데이트가 있으면 변경 내역을 요약하여 사용자에게 안내
+4. 사용자 승인 시 업데이트 적용
+
+### 7.3 기존 프로젝트 업데이트
+
+이미 표준이 적용된 프로젝트에서 표준 버전이 올라간 경우:
+
+1. CHANGELOG.md에서 현재 버전과 최신 버전 사이의 변경 사항 확인
+2. 변경 사항을 사용자에게 요약 보고
+3. 승인 후 다음을 업데이트:
+   - CLAUDE.md의 변경된 규칙 반영
+   - 새로 추가된 스킬 파일 복사
+   - settings.json 규칙 업데이트
+   - `jinhak_standard_version` 메타 정보 업데이트
+
+---
+
+## 8. 날짜 및 데이터 형식
+
+```javascript
+// 날짜: ISO 형식 또는 YYYY-MM-DD
+{
+  createdAt: '2024-01-15',
+  updatedAt: new Date().toISOString().split('T')[0],
+}
+
+// ID: prefix + 고유값
+{
+  id: 'dept-001',
+  userId: 'user-ceo',
+  goalId: 'goal-2024-001',
+}
+
+// 통화: Intl.NumberFormat 사용
+new Intl.NumberFormat('ko-KR', {
+  style: 'currency',
+  currency: 'KRW',
+}).format(amount)
+```
+
+---
+
+## 9. 상세 문서 참조
+
+이 문서는 핵심 원칙만 다룹니다. 상세한 가이드는 아래 문서를 참조하세요.
+
+| 문서 | 내용 |
+|------|------|
+| [CODING_CONVENTIONS.md](./CODING_CONVENTIONS.md) | 코딩 컨벤션 상세 가이드 |
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | 아키텍처 원칙 및 패턴 |
+| [VIBE_CODING_GUIDE.md](./VIBE_CODING_GUIDE.md) | 바이브 코딩 방법론 |
+| [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | 표준 프로젝트 구조 |
+| [templates/project-claude.md](./templates/project-claude.md) | 개별 프로젝트용 CLAUDE.md 템플릿 |
+| [templates/component-template.md](./templates/component-template.md) | 컴포넌트 생성 템플릿 |
+| [templates/ai-folder-templates.md](./templates/ai-folder-templates.md) | .ai/ 폴더 파일 초기 템플릿 |
+| [CHANGELOG.md](./CHANGELOG.md) | 버전별 변경 이력 |
+
+---
+
+## 10. 빠른 시작 체크리스트
+
+새 프로젝트에서 AI 개발 환경을 설정할 때:
+
+**자동 적용 (권장):**
+1. Claude Code에서 이 표준 저장소 URL을 주며 "적용해줘"라고 요청
+2. 또는 `/apply-standard` 실행
+
+**수동 적용:**
+- [ ] `CLAUDE.md` 생성 (templates/project-claude.md 참고, 메타 정보 포함)
+- [ ] `.ai/` 폴더 및 하위 문서 생성 (SESSION_LOG, CURRENT_SPRINT, DECISIONS, ARCHITECTURE, CONVENTIONS)
+- [ ] `.claude/settings.json` 생성 (권한, hooks 포함)
+- [ ] `.claude/skills/` 스킬 파일 생성 (commit, review-pr, session-start, test)
+- [ ] `.gitignore`에 `CLAUDE.local.md`, `.env` 추가
+- [ ] 팀원에게 이 표준 문서 공유
+
+---
+
+## 부록: 이 표준의 기여 방법
+
+이 표준은 Bitbucket Public Repo에서 관리됩니다.
+
+1. 개선 사항이 있으면 PR로 제출
+2. PR 제목 형식: `docs: [변경 내용 요약]`
+3. 변경 이유를 PR 설명에 명시
+4. 최소 1명의 리뷰어 승인 후 머지
+
+---
+
+*마지막 업데이트: 2025-02*
+*버전: 1.1*
