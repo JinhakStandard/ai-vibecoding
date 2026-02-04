@@ -58,6 +58,7 @@
 ```
 프로젝트루트/
 ├── CLAUDE.md              # Claude Code 메인 설정 파일 (필수)
+├── CLAUDE.local.md        # 로컬 개발자 설정 (git 제외, 선택사항)
 ├── .claude/               # Claude Code 설정 폴더
 │   ├── settings.json      # 권한, 환경변수, 훅 설정
 │   └── skills/            # 슬래시 명령어 (Skills) 정의
@@ -73,6 +74,21 @@
     ├── ARCHITECTURE.md    # 시스템 아키텍처 문서
     └── CONVENTIONS.md     # 코딩 컨벤션
 ```
+
+#### 2.1.1 CLAUDE.local.md 오버라이드
+
+`CLAUDE.local.md`는 개인 개발자가 로컬 환경에 맞게 Claude Code 동작을 조정하기 위한 파일입니다.
+
+**오버라이드 우선순위:**
+```
+CLAUDE.md (전사 표준) < 프로젝트 CLAUDE.md < CLAUDE.local.md
+```
+
+**규칙:**
+- `.gitignore`에 반드시 포함 (커밋 금지)
+- 보안 규칙 및 핵심 품질 규칙은 오버라이드 불가 (보안 정책, `any` 타입, `console.log` 등)
+- 로컬 환경 정보, 개인 작업 스타일, 실험적 규칙 등을 기록
+- 상세 가이드: [templates/claude-local-template.md](./templates/claude-local-template.md)
 
 ### 2.2 세션 관리 규칙
 
@@ -108,6 +124,27 @@
 4. **기존 패턴을 따른다** - 프로젝트의 기존 컨벤션과 패턴을 존중
 5. **한국어로 소통한다** - 모든 응답, 주석 설명, 커밋 메시지는 한국어 사용
 
+### 2.4 AI 안티패턴 자동 감지
+
+Claude는 다음 안티패턴을 감지하면 **즉시 경고하고 대안을 제시**해야 합니다.
+
+| 분류 | 안티패턴 | Claude 대응 |
+|------|---------|------------|
+| 위험한 요청 | `push --force`, `reset --hard`, `--no-verify` 등 위험 명령 | 실행 거부 + 안전한 대안 제시 |
+| 위험한 요청 | 프로덕션 DB 직접 조작 요청 | 거부 + 스테이징 환경 사용 안내 |
+| 민감 정보 노출 | 프롬프트에 비밀번호, API Key, 개인정보 포함 | 경고 + 마스킹/가명화 요청 |
+| 민감 정보 노출 | `.env` 파일 내용 공유 요청 | 거부 + Vault 사용 안내 |
+| 품질 저하 | "전체를 처음부터 다시 작성해줘" | 부분 수정 제안 |
+| 품질 저하 | 한번에 5개 이상 기능 동시 요청 | 단계별 분할 제안 |
+
+**3중 방어 구조:**
+
+1. **CLAUDE.md 규칙 (자연어 감지)**: 이 테이블을 기반으로 프롬프트 해석 시 안티패턴을 감지하여 경고 + 대안 제시
+2. **settings.json deny 규칙 (하드 블로킹)**: `--no-verify`, `push --force` 등 위험 명령어 물리적 차단
+3. **hooks 보조 경고 (소프트 알림)**: PreToolUse hook으로 파일 수정 전 보안 경고 주입
+
+> 상세 안티패턴 목록과 대화 예시는 [VIBE_CODING_GUIDE.md](./VIBE_CODING_GUIDE.md) 섹션 6.4~6.5를 참조하세요.
+
 ---
 
 ## 3. 코드 품질 기준
@@ -119,6 +156,7 @@
 - **네이밍**: 의도가 드러나는 명확한 이름 사용 (축약어 지양)
 - **에러 처리**: 시스템 경계(사용자 입력, 외부 API)에서만 검증, 내부 코드는 프레임워크 보장을 신뢰
 - **비밀정보 관리**: 모든 Private Key, API Key, 인증 정보는 **Vault**를 통해 관리. `.env` 파일은 절대 커밋 금지
+- **ISMS 보안 준수**: 개인정보 보호, 접근 통제, 감사 로깅, 암호화 규칙은 [SECURITY_ISMS.md](./SECURITY_ISMS.md) 참조
 
 ### 3.2 금지 사항
 
@@ -379,6 +417,8 @@ new Intl.NumberFormat('ko-KR', {
 | [templates/project-claude.md](./templates/project-claude.md) | 개별 프로젝트용 CLAUDE.md 템플릿 |
 | [templates/component-template.md](./templates/component-template.md) | 컴포넌트 생성 템플릿 |
 | [templates/ai-folder-templates.md](./templates/ai-folder-templates.md) | .ai/ 폴더 파일 초기 템플릿 |
+| [templates/claude-local-template.md](./templates/claude-local-template.md) | CLAUDE.local.md 가이드 및 템플릿 |
+| [SECURITY_ISMS.md](./SECURITY_ISMS.md) | ISMS 보안 가이드 (AI 개발) |
 | [CHANGELOG.md](./CHANGELOG.md) | 버전별 변경 이력 |
 
 ---
@@ -394,9 +434,11 @@ new Intl.NumberFormat('ko-KR', {
 **수동 적용:**
 - [ ] `CLAUDE.md` 생성 (templates/project-claude.md 참고, 메타 정보 포함)
 - [ ] `.ai/` 폴더 및 하위 문서 생성 (SESSION_LOG, CURRENT_SPRINT, DECISIONS, ARCHITECTURE, CONVENTIONS)
-- [ ] `.claude/settings.json` 생성 (권한, hooks 포함)
+- [ ] `.claude/settings.json` 생성 (권한, hooks, deny 규칙 포함)
 - [ ] `.claude/skills/` 스킬 파일 생성 (commit, review-pr, session-start, test)
 - [ ] `.gitignore`에 `CLAUDE.local.md`, `.env` 추가
+- [ ] `CLAUDE.local.md` 필요 시 생성 (templates/claude-local-template.md 참고)
+- [ ] ISMS 보안 체크리스트 확인 (SECURITY_ISMS.md 섹션 8)
 - [ ] 팀원에게 이 표준 문서 공유
 
 ---
@@ -412,5 +454,5 @@ new Intl.NumberFormat('ko-KR', {
 
 ---
 
-*마지막 업데이트: 2025-02*
-*버전: 1.1*
+*마지막 업데이트: 2026-02*
+*버전: 1.2*

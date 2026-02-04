@@ -27,14 +27,31 @@
       "Bash(git push --force*)",
       "Bash(git reset --hard*)",
       "Bash(git clean -f*)",
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(*--no-verify*)"
     ]
   },
   "hooks": {
     "UserPromptSubmit": [
       {
         "matcher": "",
-        "command": "type .ai\\CURRENT_SPRINT.md 2>nul || echo."
+        "hooks": [
+          {
+            "type": "command",
+            "command": "type .ai\\CURRENT_SPRINT.md 2>nul || echo."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo [SECURITY] 파일 수정 감지: %file%"
+          }
+        ]
       }
     ]
   }

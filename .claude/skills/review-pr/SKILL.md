@@ -30,6 +30,8 @@ $ARGUMENTS - PR 번호 또는 URL
 3. **타입 안전성**: `any` 타입 사용 여부 (TypeScript)
 4. **HTTP 메서드**: GET/POST만 사용하는지 (PUT/PATCH/DELETE 금지)
 5. **프로덕션 console.log**: 프로덕션 코드에 console.log 잔존 여부
+6. **ISMS 보안**: 개인정보 처리 규칙 준수, 감사 로깅 누락, 암호화 미적용 (SECURITY_ISMS.md 참조)
+7. **AI 안티패턴**: `--no-verify`, `push --force` 등 위험 명령 포함 여부, 하드코딩된 민감 정보 존재 여부
 
 **품질 검토 (권장):**
 1. **네이밍 컨벤션**: PascalCase(컴포넌트), camelCase(함수/변수), UPPER_SNAKE_CASE(상수)

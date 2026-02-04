@@ -15,6 +15,18 @@ $ARGUMENTS - 표준 저장소 URL (선택사항. 없으면 기본 URL 사용)
 /apply-standard https://bitbucket.org/jinhak/standards
 ```
 
+## 사전 준비 체크리스트 (적용 전)
+
+적용을 시작하기 전에 다음을 확인합니다:
+
+- [ ] 프로젝트 루트 디렉토리에서 실행 중인가
+- [ ] git 저장소가 초기화되어 있는가 (`git init`)
+- [ ] 커밋되지 않은 변경사항이 없는가 (`git status` 확인)
+- [ ] 패키지 매니저가 설치되어 있는가 (npm/pnpm)
+- [ ] Node.js 20+ 버전인가
+
+---
+
 ## 실행 절차
 
 ### 1단계: 현재 프로젝트 분석
@@ -218,13 +230,24 @@ CLAUDE.md가 이미 있는 경우:
 - `/test` - 테스트 실행
 ```
 
-## 표준 체크리스트
+## 적용 후 검증 체크리스트
 
-적용 후 다음 항목을 확인합니다:
+적용 후 다음 3개 영역을 순서대로 확인합니다:
 
+### 파일 생성 검증
 - [ ] CLAUDE.md에 프로젝트 정보가 정확한가
-- [ ] .ai/ 폴더와 파일이 모두 생성되었는가
+- [ ] .ai/ 폴더와 5개 파일이 모두 생성되었는가 (SESSION_LOG, CURRENT_SPRINT, DECISIONS, ARCHITECTURE, CONVENTIONS)
 - [ ] .claude/settings.json이 OS에 맞게 설정되었는가
-- [ ] .claude/skills/ 에 4개 스킬이 모두 있는가
+- [ ] .claude/skills/ 에 5개 스킬이 모두 있는가 (apply-standard, commit, review-pr, session-start, test)
 - [ ] .gitignore에 CLAUDE.local.md와 .env가 포함되었는가
 - [ ] jinhak_standard_version 메타 정보가 기록되었는가
+
+### 기능 동작 검증
+- [ ] `/session-start` 명령이 정상 실행되는가
+- [ ] UserPromptSubmit hook이 CURRENT_SPRINT.md를 정상 출력하는가
+- [ ] PreToolUse hook이 파일 수정 시 보안 경고를 출력하는가
+
+### 보안 검증
+- [ ] settings.json deny 규칙에 `--no-verify`, `push --force`, `reset --hard`, `rm -rf`, `git config` 포함되었는가
+- [ ] .env 파일이 .gitignore에 포함되었는가
+- [ ] SECURITY_ISMS.md 보안 가이드를 참조하도록 설정되었는가

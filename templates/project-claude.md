@@ -5,7 +5,7 @@
 ---
 
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 1.0 -->
+<!-- jinhak_standard_version: 1.2 -->
 <!-- jinhak_standard_repo: [표준 저장소 URL - Bitbucket Public Repo URL로 교체] -->
 <!-- applied_date: [YYYY-MM-DD] -->
 
@@ -163,6 +163,27 @@ PORT=3000
 3. 하드코딩된 URL/포트/비밀키 사용 금지
 4. `git push --force` 금지
 5. 주석 처리된 코드 방치 금지
+
+---
+
+## AI 안티패턴 금지
+
+Claude에게 다음 요청은 금지되며, 감지 시 경고 후 대안이 제시됩니다:
+
+- `push --force`, `reset --hard`, `--no-verify` 등 위험 명령 요청
+- 프롬프트에 비밀번호, API Key, 개인정보 포함
+- `.env` 파일 내용 공유 또는 커밋 요청
+- 파일 전체 재작성 요청 (부분 수정으로 대체)
+
+---
+
+## 로컬 오버라이드
+
+개인 개발 환경에 맞는 설정이 필요하면 프로젝트 루트에 `CLAUDE.local.md`를 생성하세요.
+
+- `.gitignore`에 포함되어 커밋되지 않음
+- 보안 규칙 및 핵심 품질 규칙은 오버라이드 불가
+- 작성 가이드: 표준 저장소의 `templates/claude-local-template.md` 참고
 
 ---
 
