@@ -5,6 +5,58 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [1.3] - 2026-02
+
+### Opus 4.6 대응 업데이트
+
+Claude Opus 4.6 출시 (2026-02-05) 및 Claude Code v2.1.30~2.1.34 업데이트에 맞춰 전사 표준을 현대화합니다.
+
+### 추가
+- CLAUDE.md 섹션 6.4 "Agent Teams (멀티 에이전트 협업)" 신규 추가
+  - Agent Teams 활성화 방법, 적합/부적합 작업 가이드
+  - 환경변수 `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` 설정
+- CLAUDE.md 섹션 6.5 "Adaptive Thinking & Effort 설정" 신규 추가
+  - 4단계 Effort 설정 (low/medium/high/max) 및 작업별 권장 수준
+- CLAUDE.md 섹션 6.6 "컨텍스트 & 출력 사양" 신규 추가
+  - 1M 토큰 컨텍스트 윈도우, 128K 출력 토큰, Context Compaction 활용 가이드
+- CLAUDE.md 섹션 6.7 "Plan 모드 & Task 관리" 신규 추가
+  - Plan 모드 활용 시나리오, Task 종속성 추적, `--from-pr` 옵션
+- CLAUDE.md 섹션 6.1 Hook 이벤트 테이블에 3종 신규 추가
+  - `SubagentStart` - 서브에이전트 보안 규칙 전파
+  - `TaskCompleted` - 작업 완료 추적/알림
+  - `TeammateIdle` - Agent Teams 팀원 유휴 시 조정
+- CLAUDE.md 섹션 6.1에 Hook 옵션 설명 추가 (`once: true`, `additionalContext`)
+- `.claude/settings.json`에 `env` 섹션 추가 (Agent Teams 활성화)
+- `.claude/settings.json`에 `SubagentStart` hook 추가 (보안 규칙 전파 알림)
+- `.claude/settings.json`에 `Stop` hook 추가 (세션 완료 알림)
+
+### 변경
+- CLAUDE.md 섹션 2.2 세션 관리 규칙: Agent Memory 활용 안내 추가, SESSION_LOG 경량화 (요약 기록 방식)
+- CLAUDE.md 섹션 2.4 안티패턴 테이블: "5개 이상 동시 요청" → "순차 의존성 있는 5개 이상" 으로 완화 (독립 작업은 Agent Teams 활용 가능)
+- `.claude/settings.json` UserPromptSubmit hook에 `once: true` 추가 (세션 1회 실행으로 토큰 절약)
+- CLAUDE.md 섹션 7.2 버전 추적 예시를 1.3으로 업데이트
+- CLAUDE.md 버전 1.2 → 1.3, 날짜 2026-02
+- `session-start/SKILL.md`: Agent Memory 안내 추가, `--from-pr` 세션 재개 옵션 추가
+- `commit/SKILL.md`: Co-Authored-By 모델 비종속 정책 명시, 세션 기록 순서 조정
+- `review-pr/SKILL.md`: `--from-pr` 팁 추가, 크로스 체크에 Agent Teams 코드 일관성 항목 추가
+- `test/SKILL.md`: Agent Teams 병렬 테스트 분석 안내 추가
+- `apply-standard/SKILL.md`: settings.json 템플릿을 v1.3 사양으로 업데이트 (env, 신규 hooks, once, deny 보강), 검증 체크리스트에 v1.3 항목 추가, 버전 참조 1.0 → 1.3
+- VIBE_CODING_GUIDE.md 섹션 1 "부적합한 경우" → "주의가 필요한 경우"로 톤 완화, 코드 리뷰/대규모 분석 적합 항목 추가
+- VIBE_CODING_GUIDE.md 섹션 5 세션 관리: Agent Memory 안내, `--from-pr`, Plan 모드 추가
+- VIBE_CODING_GUIDE.md 섹션 6.3 "AI가 잘 못하는 것" → "AI 협업 시 주의가 필요한 영역"으로 변경, Opus 4.6 향상 반영
+- VIBE_CODING_GUIDE.md 섹션 6.6 "Opus 4.6 신기능 활용법" 신규 추가 (Agent Teams, Plan 모드, Effort 설정)
+- VIBE_CODING_GUIDE.md 섹션 6 안티패턴: "과도한 기능 요청" Agent Teams 반영 완화
+- VIBE_CODING_GUIDE.md 섹션 9.4 트러블슈팅: Context Compaction, Agent Memory 반영
+- `templates/project-claude.md`: 메타 정보 버전 1.2 → 1.3, 세션 관리에 Agent Memory 안내 추가, SESSION_LOG 기록 형식 경량화
+- `templates/ai-folder-templates.md`: SESSION_LOG 템플릿 경량화 (요약 기록 방식)
+- `SECURITY_ISMS.md`: 섹션 7.3 "Agent Teams 보안" 신규 추가 (데이터 격리, deny 규칙 상속, 감사 추적)
+- `SECURITY_ISMS.md`: 섹션 7.4 "디버그 로그 보안" 신규 추가 (OAuth 토큰/API Key 노출 방지)
+- `SECURITY_ISMS.md`: 섹션 7.5 Claude Code 보안 설정에 SubagentStart hook 추가
+- `SECURITY_ISMS.md`: 섹션 8.6 체크리스트에 Agent Teams, 디버그 로그 보안 항목 추가
+- `ARCHITECTURE.md`: 섹션 7 "AI 협업 아키텍처 고려사항" 신규 추가 (1M 컨텍스트 활용 전략, Agent Teams 아키텍처 패턴)
+
+---
+
 ## [1.2] - 2026-02
 
 ### 추가

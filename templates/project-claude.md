@@ -5,7 +5,7 @@
 ---
 
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 1.2 -->
+<!-- jinhak_standard_version: 1.3 -->
 <!-- jinhak_standard_repo: [표준 저장소 URL - https://github.com/JinhakStandard/ai-vibecoding 로 교체] -->
 <!-- applied_date: [YYYY-MM-DD] -->
 
@@ -36,21 +36,22 @@
 ### 세션 시작 시
 1. `.ai/SESSION_LOG.md` 읽어 이전 작업 확인
 2. `.ai/CURRENT_SPRINT.md` 읽어 진행 중인 작업 파악
+3. Agent Memory가 자동으로 이전 세션 컨텍스트를 로드합니다
 
 ### 작업 완료 후 (필수)
-1. `.ai/SESSION_LOG.md`에 작업 내용 추가
-2. `.ai/CURRENT_SPRINT.md` 진행 상태 업데이트
+1. `.ai/CURRENT_SPRINT.md` 진행 상태 업데이트
+2. `.ai/SESSION_LOG.md`에 작업 요약 추가 (상세 내용은 Agent Memory가 관리)
 3. 중요 기술 결정 시 `.ai/DECISIONS.md` 업데이트
 
 ### SESSION_LOG.md 기록 형식
 ```markdown
 ## YYYY-MM-DD
 
-### 세션 작업 내용
+### 세션 요약
 - 작업 1 설명
 - 작업 2 설명
 
-### 변경 파일
+### 주요 변경
 - `파일경로` - 변경 내용
 
 ### 커밋

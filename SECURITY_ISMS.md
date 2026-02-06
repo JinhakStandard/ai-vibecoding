@@ -292,7 +292,38 @@ AI가 생성한 코드는 반드시 다음 보안 검증을 수행합니다:
 - [ ] 로깅: 민감 정보가 로그에 출력되지 않는지
 - [ ] 의존성: 알려진 취약점이 있는 라이브러리를 사용하지 않는지
 
-### 7.3 Claude Code 보안 설정 권장사항
+### 7.3 Agent Teams (멀티 에이전트) 보안
+
+Agent Teams를 사용할 때 다음 보안 규칙을 준수합니다:
+
+| 항목 | 규칙 |
+|------|------|
+| deny 규칙 상속 | 서브에이전트는 메인 에이전트의 deny 규칙을 상속받음 (자동) |
+| SubagentStart 알림 | 서브에이전트 시작 시 보안 규칙 전파 확인 hook 설정 |
+| 데이터 격리 | 서브에이전트 간 민감 데이터 직접 전달 금지, 파일 시스템을 통해 교환 |
+| 병렬 작업 범위 | 서브에이전트에게 프로덕션 환경 접근 명령 위임 금지 |
+| 감사 추적 | 서브에이전트가 수행한 파일 변경도 동일한 감사 기준 적용 |
+
+### 7.4 디버그 로그 보안
+
+개발 과정에서 생성되는 디버그 로그에 민감 정보가 노출되지 않도록 합니다:
+
+```typescript
+// 금지: 토큰/키를 로그에 출력
+console.log('API response:', response)  // response에 토큰 포함 가능
+console.log('Auth header:', headers.authorization)  // 토큰 직접 노출
+
+// 권장: 민감 필드 마스킹 후 출력
+console.log('API response status:', response.status)
+console.log('Auth header:', headers.authorization ? '[MASKED]' : 'none')
+```
+
+**주의 항목:**
+- OAuth 토큰, Refresh Token이 에러 응답에 포함되지 않는지 확인
+- API Key가 요청/응답 로깅에 노출되지 않는지 확인
+- Stack trace에 환경 변수 값이 포함되지 않는지 확인
+
+### 7.5 Claude Code 보안 설정 권장사항
 
 ```json
 {
@@ -314,6 +345,17 @@ AI가 생성한 코드는 반드시 다음 보안 검증을 수행합니다:
           {
             "type": "command",
             "command": "echo [SECURITY] 파일 수정 감지: ${file}"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo [SECURITY] 서브에이전트 시작 - deny 규칙이 상속됩니다"
           }
         ]
       }
@@ -370,6 +412,8 @@ AI가 생성한 코드는 반드시 다음 보안 검증을 수행합니다:
 - [ ] AI에게 민감 정보를 전달하지 않았는가
 - [ ] Claude Code deny 규칙이 설정되어 있는가
 - [ ] `.env` 파일이 `.gitignore`에 포함되어 있는가
+- [ ] Agent Teams 사용 시 SubagentStart hook이 설정되어 있는가
+- [ ] 디버그 로그에 OAuth 토큰, API Key 등 민감 정보가 노출되지 않는가
 
 ---
 

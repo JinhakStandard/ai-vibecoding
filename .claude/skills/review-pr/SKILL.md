@@ -15,6 +15,8 @@ $ARGUMENTS - PR 번호 또는 URL
 /review-pr https://github.com/JinhakStandard/ai-vibecoding/pull/123
 ```
 
+> **팁**: `claude --from-pr 123`으로 PR 컨텍스트에서 직접 세션을 시작할 수도 있습니다.
+
 ## 실행 절차
 
 ### 1단계: PR 정보 수집
@@ -46,6 +48,7 @@ $ARGUMENTS - PR 번호 또는 URL
 1. 버그 가능성 확인
 2. 크로스플랫폼 호환성 (Windows/Linux)
 3. 성능 이슈 (불필요한 리렌더링, 메모리 누수 등)
+4. Agent Teams 관련: 서브에이전트가 생성한 코드의 일관성 확인
 
 ### 3단계: 리뷰 결과 작성
 

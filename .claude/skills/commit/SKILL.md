@@ -24,6 +24,8 @@ JINHAK 표준에 맞게 변경사항을 분석하고 커밋을 생성합니다.
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
+> **Co-Authored-By 정책**: 모델 버전에 무관하게 `Claude <noreply@anthropic.com>`을 사용합니다. 시스템이 자동으로 모델명을 포함하더라도, 커밋 메시지에는 일관된 태그를 유지합니다.
+
 **Type 분류:**
 | Type | 설명 | 예시 |
 |------|------|------|
@@ -41,8 +43,8 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 3. `git status`로 커밋 성공 확인
 
 ### 4단계: 세션 기록 업데이트
-- `.ai/SESSION_LOG.md`에 커밋 해시와 메시지 기록
 - `.ai/CURRENT_SPRINT.md` 진행 상태 업데이트
+- `.ai/SESSION_LOG.md`에 커밋 해시와 메시지 요약 기록
 
 ## 금지 사항
 - `.env`, `credentials.json` 등 시크릿 파일 커밋 금지

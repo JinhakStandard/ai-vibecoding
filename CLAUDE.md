@@ -92,24 +92,26 @@ CLAUDE.md (전사 표준) < 프로젝트 CLAUDE.md < CLAUDE.local.md
 
 ### 2.2 세션 관리 규칙
 
+> **Agent Memory 활용**: Claude Code는 `memory: project` 설정을 통해 프로젝트별 메모리를 자동으로 기록/회상합니다. `.ai/` 파일은 Agent Memory의 보조 수단으로, 팀원 간 공유와 Git 추적이 필요한 핵심 사항만 기록합니다.
+
 **세션 시작 시:**
-1. `.ai/SESSION_LOG.md` 읽어 이전 작업 확인
-2. `.ai/CURRENT_SPRINT.md` 읽어 진행 중인 작업 파악
+1. `.ai/CURRENT_SPRINT.md` 읽어 진행 중인 작업 파악
+2. `.ai/SESSION_LOG.md`에서 최근 작업 확인 (필요 시)
 
 **작업 완료 후 (필수):**
-1. `.ai/SESSION_LOG.md`에 작업 내용 추가
-2. `.ai/CURRENT_SPRINT.md` 진행 상태 업데이트
-3. 중요 기술 결정 시 `.ai/DECISIONS.md` 업데이트
+1. `.ai/CURRENT_SPRINT.md` 진행 상태 업데이트
+2. 중요 기술 결정 시 `.ai/DECISIONS.md` 업데이트
+3. `.ai/SESSION_LOG.md`에 요약 기록 (핵심 변경사항 위주)
 
 **SESSION_LOG.md 기록 형식:**
 ```markdown
 ## YYYY-MM-DD
 
-### 세션 작업 내용
+### 세션 작업 요약
 - 작업 1 설명
 - 작업 2 설명
 
-### 변경 파일
+### 주요 변경
 - `파일경로` - 변경 내용
 
 ### 커밋
@@ -135,7 +137,7 @@ Claude는 다음 안티패턴을 감지하면 **즉시 경고하고 대안을 �
 | 민감 정보 노출 | 프롬프트에 비밀번호, API Key, 개인정보 포함 | 경고 + 마스킹/가명화 요청 |
 | 민감 정보 노출 | `.env` 파일 내용 공유 요청 | 거부 + Vault 사용 안내 |
 | 품질 저하 | "전체를 처음부터 다시 작성해줘" | 부분 수정 제안 |
-| 품질 저하 | 한번에 5개 이상 기능 동시 요청 | 단계별 분할 제안 |
+| 품질 저하 | 순차 의존성 있는 5개 이상 기능 동시 요청 | 단계별 분할 제안 (독립 작업은 Agent Teams 활용 가능) |
 
 **3중 방어 구조:**
 
@@ -258,12 +260,19 @@ body: { action: 'delete', id: '123' }
 
 **사용 가능한 Hook 이벤트:**
 
-| 이벤트 | 설명 | 주요 변수 |
-|--------|------|----------|
-| `UserPromptSubmit` | 사용자 프롬프트 제출 시 | - |
-| `PreToolUse` | 도구 실행 전 | `${tool}`, `${command}`, `${file}` |
-| `PostToolUse` | 도구 실행 후 | `${tool}`, `${file}` |
-| `Stop` | Claude 응답 완료 시 | - |
+| 이벤트 | 설명 | 주요 변수 | 비고 |
+|--------|------|----------|------|
+| `UserPromptSubmit` | 사용자 프롬프트 제출 시 | - | `once: true`로 세션 1회 실행 가능 |
+| `PreToolUse` | 도구 실행 전 | `${tool}`, `${command}`, `${file}` | `additionalContext` 반환 지원 |
+| `PostToolUse` | 도구 실행 후 | `${tool}`, `${file}` | |
+| `Stop` | Claude 응답 완료 시 | - | 세션 기록 자동화에 활용 |
+| `SubagentStart` | 서브에이전트 생성 시 | - | 보안 규칙 전파에 활용 (v1.3) |
+| `TaskCompleted` | Task 완료 시 | - | 작업 추적/알림에 활용 (v1.3) |
+| `TeammateIdle` | Agent Teams 팀원 유휴 시 | - | 팀 워크플로우 조정 (v1.3) |
+
+**Hook 옵션:**
+- `once: true` - 세션 중 1회만 실행 (반복 실행 방지, 토큰 절약)
+- `additionalContext` - PreToolUse에서 추가 컨텍스트를 반환하여 도구 실행에 영향
 
 **설정 예시:**
 ```json
@@ -272,13 +281,24 @@ body: { action: 'delete', id: '123' }
     "UserPromptSubmit": [
       {
         "matcher": "",
-        "command": "cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''",
+            "once": true
+          }
+        ]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
-        "command": "npx eslint --fix ${file} 2>/dev/null || true"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx eslint --fix ${file} 2>/dev/null || true"
+          }
+        ]
       }
     ]
   }
@@ -334,6 +354,76 @@ body: { action: 'delete', id: '123' }
 }
 ```
 
+### 6.4 Agent Teams (멀티 에이전트 협업)
+
+> Claude Code v2.1.32+에서 **연구 미리보기**로 제공됩니다.
+
+여러 에이전트를 팀으로 구성하여 병렬 작업을 수행할 수 있습니다.
+
+**활성화:**
+```json
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}
+```
+
+**적합한 작업:**
+- 코드베이스 전체 리뷰 (독립적인 파일/모듈별 분석)
+- 다중 파일 동시 분석/검색
+- 독립적인 기능의 병렬 구현
+- 대규모 리팩토링의 사전 조사
+
+**부적합한 작업:**
+- 순차 의존성이 높은 작업 (A 결과가 B 입력이 되는 경우)
+- 같은 파일을 동시에 수정하는 작업
+- 단일 파일의 간단한 수정
+
+**팀원 전환:** `Shift+Up/Down` 또는 tmux로 서브에이전트 직접 제어 가능
+
+### 6.5 Adaptive Thinking & Effort 설정
+
+Opus 4.6은 문맥 신호를 감지하여 추론 깊이를 자동 조절하는 **Adaptive Thinking**을 지원합니다.
+
+**Effort 4단계:**
+
+| Effort | 용도 | 비용/속도 |
+|--------|------|----------|
+| `low` | 간단한 포맷팅, 이름 변경, 오타 수정 | 최저 비용, 최고 속도 |
+| `medium` | 일반 CRUD 구현, 단순 컴포넌트 작업 | 균형 |
+| `high` (기본) | 복잡한 비즈니스 로직, 버그 분석 | 높은 품질 |
+| `max` | 아키텍처 설계, 보안 감사, 복잡한 알고리즘 | 최고 품질 |
+
+> 기본값은 `high`이며, 대부분의 작업에 적합합니다. `max`는 비용이 높으므로 핵심 설계/보안 작업에만 사용하세요.
+
+### 6.6 컨텍스트 & 출력 사양
+
+| 항목 | Opus 4.6 사양 | 활용 |
+|------|--------------|------|
+| 컨텍스트 윈도우 | **1M 토큰** (100만) | 대규모 코드베이스를 한 세션에서 분석 가능 |
+| 최대 출력 | **128K 토큰** | 대규모 코드 생성을 분할 없이 처리 |
+| Context Compaction | 자동 문맥 압축 | 장시간 세션에서 이전 대화를 자동 요약 |
+
+**활용 가이드:**
+- 1M 컨텍스트로 프로젝트 전체 구조를 한 번에 파악 가능 → 세션 초반에 주요 파일을 한꺼번에 읽기
+- 128K 출력으로 대규모 리팩토링이나 전체 모듈 생성을 한 번에 요청 가능
+- 장시간 세션 시 Context Compaction이 자동 작동하여 컨텍스트 초과 방지
+
+### 6.7 Plan 모드 & Task 관리
+
+**Plan 모드:**
+복잡한 구현 전에 Plan 모드를 활용하여 설계를 먼저 검토합니다.
+- 3개 이상 파일 수정이 예상되는 작업
+- 아키텍처 결정이 필요한 신규 기능
+- `.ai/DECISIONS.md`에 기록할 수준의 기술 결정
+
+**Task 관리 시스템:**
+Claude Code 내장 Task 시스템으로 복잡한 작업을 추적합니다.
+- 종속성 추적: 작업 간 선후 관계 설정
+- `.ai/CURRENT_SPRINT.md`와 연계하여 진행 상황 관리
+- `--from-pr` 옵션으로 PR 기반 세션 직접 재개 가능
+
 ---
 
 ## 7. 표준 적용 프로세스
@@ -354,9 +444,9 @@ body: { action: 'delete', id: '123' }
 각 프로젝트의 CLAUDE.md에 다음 메타 정보가 HTML 주석으로 포함됩니다:
 
 ```html
-<!-- jinhak_standard_version: 1.1 -->
+<!-- jinhak_standard_version: 1.3 -->
 <!-- jinhak_standard_repo: [저장소 URL] -->
-<!-- applied_date: 2025-02-20 -->
+<!-- applied_date: 2026-02-06 -->
 ```
 
 **세션 시작 시 (`/session-start`):**
@@ -455,4 +545,4 @@ new Intl.NumberFormat('ko-KR', {
 ---
 
 *마지막 업데이트: 2026-02*
-*버전: 1.2*
+*버전: 1.3*

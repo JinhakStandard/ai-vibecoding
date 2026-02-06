@@ -31,6 +31,9 @@
       "Bash(*--no-verify*)"
     ]
   },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -38,7 +41,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "type .ai\\CURRENT_SPRINT.md 2>nul || echo."
+            "command": "type .ai\\CURRENT_SPRINT.md 2>nul || echo.",
+            "once": true
           }
         ]
       }
@@ -50,6 +54,28 @@
           {
             "type": "command",
             "command": "echo [SECURITY] 파일 수정 감지: %file%"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo [SECURITY] 서브에이전트 시작 - deny 규칙이 상속됩니다"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo [SESSION] 응답 완료"
           }
         ]
       }

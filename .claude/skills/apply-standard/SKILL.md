@@ -60,7 +60,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 반드시 포함할 메타 정보:
 ```markdown
 <!-- JINHAK Standard Metadata -->
-<!-- jinhak_standard_version: 1.0 -->
+<!-- jinhak_standard_version: 1.3 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: YYYY-MM-DD -->
 ```
@@ -86,7 +86,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 ## YYYY-MM-DD
 
 ### 세션 작업 내용
-- JINHAK 전사 AI 개발 표준 적용 (v1.0)
+- JINHAK 전사 AI 개발 표준 적용 (v1.3)
 
 ### 변경 파일
 - `CLAUDE.md` - 프로젝트 AI 설정 파일 생성
@@ -118,7 +118,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 승인됨 (YYYY-MM-DD)
 
 ### 결정
-JINHAK 전사 AI 개발 표준 v1.0을 프로젝트에 적용한다.
+JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
 
 ### 참고
 - 표준 저장소: [URL]
@@ -148,21 +148,56 @@ JINHAK 전사 AI 개발 표준 v1.0을 프로젝트에 적용한다.
       "Bash(rm -rf *)",
       "Bash(git push --force*)",
       "Bash(git reset --hard*)",
-      "Bash(git config *)"
+      "Bash(git clean -f*)",
+      "Bash(git config *)",
+      "Bash(*--no-verify*)"
     ]
+  },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "hooks": {
     "UserPromptSubmit": [
       {
         "matcher": "",
-        "command": "cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''",
+            "once": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo [SECURITY] 파일 수정 감지: ${file}"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo [SECURITY] 서브에이전트 시작 - deny 규칙이 상속됩니다"
+          }
+        ]
       }
     ]
   }
 }
 ```
 
-> Windows 환경이면 hooks command를 `type .ai\\CURRENT_SPRINT.md 2>nul || echo.`로 변경
+> Windows 환경이면 hooks command를 적절히 변경합니다:
+> - `cat` → `type`, `head` → PowerShell, `${file}` → `%file%`
+> - 예: `type .ai\\CURRENT_SPRINT.md 2>nul || echo.`
 
 **Skills 복사** - 표준 저장소의 `.claude/skills/` 내용을 복사:
 - `commit/SKILL.md`
@@ -203,7 +238,7 @@ CLAUDE.md가 이미 있는 경우:
 ## JINHAK 표준 적용 완료
 
 ### 적용 버전
-- JINHAK Standard v1.0
+- JINHAK Standard v1.3
 
 ### 생성/수정된 파일
 - `CLAUDE.md` - [생성/업데이트]
@@ -244,10 +279,16 @@ CLAUDE.md가 이미 있는 경우:
 
 ### 기능 동작 검증
 - [ ] `/session-start` 명령이 정상 실행되는가
-- [ ] UserPromptSubmit hook이 CURRENT_SPRINT.md를 정상 출력하는가
+- [ ] UserPromptSubmit hook이 CURRENT_SPRINT.md를 정상 출력하는가 (세션 1회, `once: true`)
 - [ ] PreToolUse hook이 파일 수정 시 보안 경고를 출력하는가
+- [ ] SubagentStart hook이 서브에이전트 시작 시 알림을 출력하는가
 
 ### 보안 검증
-- [ ] settings.json deny 규칙에 `--no-verify`, `push --force`, `reset --hard`, `rm -rf`, `git config` 포함되었는가
+- [ ] settings.json deny 규칙에 `--no-verify`, `push --force`, `reset --hard`, `clean -f`, `rm -rf`, `git config` 포함되었는가
 - [ ] .env 파일이 .gitignore에 포함되었는가
 - [ ] SECURITY_ISMS.md 보안 가이드를 참조하도록 설정되었는가
+
+### v1.3 신규 항목 검증
+- [ ] settings.json에 `env` 섹션 (Agent Teams 활성화)이 포함되었는가
+- [ ] SubagentStart, Stop hook이 설정되었는가
+- [ ] UserPromptSubmit hook에 `once: true` 옵션이 설정되었는가
