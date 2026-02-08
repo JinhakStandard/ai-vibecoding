@@ -165,6 +165,8 @@ PORT=3000
 4. `git push --force` 금지
 5. 주석 처리된 코드 방치 금지
 
+> **참고**: 위 금지 사항 중 위험 명령(`push --force`, `reset --hard`, `--no-verify` 등)은 `.claude/settings.json`의 `deny` 규칙으로 **물리적으로 차단**됩니다. 이 규칙은 프로젝트 전체에 강제 적용되며, 개인 설정으로 우회할 수 없습니다.
+
 ---
 
 ## AI 안티패턴 금지

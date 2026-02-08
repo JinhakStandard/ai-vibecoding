@@ -330,6 +330,17 @@ body: { action: 'delete', id: '123' }
 
 ### 6.3 권한 설정
 
+**권한 강제 메커니즘:**
+
+| 규칙 | 동작 | 강제 여부 |
+|------|------|----------|
+| `deny` | 해당 명령을 물리적으로 차단 | **프로젝트 전체 강제** - `settings.local.json`이나 `~/.claude/settings.json`으로 우회 불가 |
+| `allow` | 해당 명령을 자동 승인 (매번 확인 불필요) | 편의 설정 - 로컬에서 조정 가능 |
+
+> **중요**: `.claude/settings.json`의 `deny` 규칙은 프로젝트에 참여하는 **모든 Claude Code 사용자에게 강제 적용**됩니다. 개인 설정(`settings.local.json`)이나 글로벌 설정(`~/.claude/settings.json`)으로 우회할 수 없으므로, 위험 명령 차단에 가장 확실한 방법입니다.
+
+**표준 권한 설정:**
+
 ```json
 {
   "permissions": {
@@ -342,17 +353,38 @@ body: { action: 'delete', id: '123' }
       "Bash(git log *)",
       "Bash(git add *)",
       "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git checkout *)",
+      "Bash(git branch *)",
+      "Bash(git fetch *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
       "Read", "Glob", "Grep"
     ],
     "deny": [
       "Bash(rm -rf *)",
       "Bash(git push --force*)",
       "Bash(git reset --hard*)",
-      "Bash(git config *)"
+      "Bash(git clean -f*)",
+      "Bash(git config *)",
+      "Bash(*--no-verify*)"
     ]
   }
 }
 ```
+
+**deny 규칙 설명:**
+
+| deny 규칙 | 차단 대상 | 이유 |
+|-----------|----------|------|
+| `rm -rf *` | 재귀 강제 삭제 | 복구 불가능한 파일 손실 |
+| `git push --force*` | 강제 푸시 | 원격 히스토리 덮어쓰기, 팀원 작업 손실 |
+| `git reset --hard*` | 하드 리셋 | 커밋되지 않은 변경사항 영구 삭제 |
+| `git clean -f*` | 추적되지 않는 파일 강제 삭제 | 의도치 않은 파일 삭제 |
+| `git config *` | Git 설정 변경 | 사용자 정보, hooks 경로 등 임의 변경 방지 |
+| `*--no-verify*` | Hook 건너뛰기 | pre-commit, pre-push 등 품질 검증 우회 방지 |
+
+> `git push *`는 allow에 포함되어 있지만, `git push --force*`는 deny에 있으므로 일반 push는 허용되고 force push만 차단됩니다. **deny가 allow보다 우선**합니다.
 
 ### 6.4 Agent Teams (멀티 에이전트 협업)
 

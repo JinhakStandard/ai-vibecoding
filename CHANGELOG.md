@@ -31,6 +31,9 @@ Claude Opus 4.6 출시 (2026-02-05) 및 Claude Code v2.1.30~2.1.34 업데이트�
 - `.claude/settings.json`에 `Stop` hook 추가 (세션 완료 알림)
 
 ### 변경
+- CLAUDE.md 섹션 6.3 권한 설정: deny 규칙 강제 메커니즘 설명 추가, allow에 `git push *`, `git checkout *`, `git branch *`, `git fetch *` 추가, deny 규칙별 차단 이유 테이블 추가
+- `apply-standard/SKILL.md`: settings.json 템플릿에 deny 강제 적용 안내 추가, allow 목록 보강
+- `templates/project-claude.md`: 금지 사항 섹션에 deny 규칙 강제 적용 안내 추가
 - CLAUDE.md 섹션 2.2 세션 관리 규칙: Agent Memory 활용 안내 추가, SESSION_LOG 경량화 (요약 기록 방식)
 - CLAUDE.md 섹션 2.4 안티패턴 테이블: "5개 이상 동시 요청" → "순차 의존성 있는 5개 이상" 으로 완화 (독립 작업은 Agent Teams 활용 가능)
 - `.claude/settings.json` UserPromptSubmit hook에 `once: true` 추가 (세션 1회 실행으로 토큰 절약)

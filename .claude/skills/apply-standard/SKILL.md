@@ -130,6 +130,9 @@ JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
 #### 2-3. .claude/ 폴더 설정
 
 **settings.json** 생성 (OS에 맞게):
+
+> **중요**: `deny` 규칙은 프로젝트 전체에 **강제 적용**됩니다. `settings.local.json`이나 `~/.claude/settings.json`으로 우회할 수 없으므로, 위험 명령 차단에 가장 확실한 방법입니다. `deny`가 `allow`보다 우선합니다.
+
 ```json
 {
   "permissions": {
@@ -142,6 +145,12 @@ JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
       "Bash(git log *)",
       "Bash(git add *)",
       "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git checkout *)",
+      "Bash(git branch *)",
+      "Bash(git fetch *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
       "Read", "Glob", "Grep"
     ],
     "deny": [
