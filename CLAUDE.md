@@ -352,7 +352,9 @@ body: { action: 'delete', id: '123' }
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git add *)",
+      "Bash(git * commit *)",
       "Bash(git commit *)",
+      "Bash(git * push *)",
       "Bash(git push *)",
       "Bash(git checkout *)",
       "Bash(git branch *)",
@@ -577,4 +579,4 @@ new Intl.NumberFormat('ko-KR', {
 ---
 
 *마지막 업데이트: 2026-02*
-*버전: 1.3*
+*버전: 1.4*

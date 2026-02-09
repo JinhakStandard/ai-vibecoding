@@ -5,6 +5,20 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [1.4] - 2026-02
+
+### 권한 설정 보강
+
+Git 서브커맨드 옵션이 포함된 commit/push 명령 패턴을 허용 목록에 추가합니다.
+
+### 변경
+- `.claude/settings.json` allow 목록에 `Bash(git * commit *)`, `Bash(git * push *)` 추가
+  - `git -c user.name=... commit ...` 등 옵션이 앞에 오는 패턴 허용
+- CLAUDE.md 섹션 6.3 권한 설정 예시에 동일 패턴 추가
+- CLAUDE.md 버전 1.3 → 1.4
+
+---
+
 ## [1.3] - 2026-02
 
 ### Opus 4.6 대응 업데이트
