@@ -147,6 +147,19 @@ Claude는 다음 안티패턴을 감지하면 **즉시 경고하고 대안을 �
 
 > 상세 안티패턴 목록과 대화 예시는 [VIBE_CODING_GUIDE.md](./VIBE_CODING_GUIDE.md) 섹션 6.4~6.5를 참조하세요.
 
+### 2.5 Windows 환경 규칙
+
+Windows에서 Claude Code 사용 시 `> nul` 리다이렉션이 예약 디바이스 이름 충돌로 `nul` 파일을 생성하는 문제가 있습니다.
+
+**필수 규칙:**
+- 출력 리다이렉션 시 반드시 `> /dev/null 2>&1`을 사용할 것 (`> nul`, `2>nul` 사용 금지)
+- Git Bash / MSYS2 환경에서는 Windows 스타일 NUL 디바이스(`nul`, `NUL`)를 사용하지 말 것
+- PowerShell 명령에서는 `$null` 또는 `Out-Null`을 사용할 것
+
+**방어 메커니즘:**
+- `settings.local.json`의 PostToolUse Hook으로 도구 실행 후 `nul` 파일 자동 삭제
+- 이 규칙으로 애초에 `nul` 파일이 생성되지 않도록 예방
+
 ---
 
 ## 3. 코드 품질 기준

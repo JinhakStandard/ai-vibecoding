@@ -44,7 +44,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "type .ai\\CURRENT_SPRINT.md 2>nul || echo.",
+            "command": "powershell -Command \"if (Test-Path '.ai\\CURRENT_SPRINT.md') { Get-Content '.ai\\CURRENT_SPRINT.md' -Head 50 } else { Write-Output '' }\"",
             "once": true
           }
         ]

@@ -1,7 +1,33 @@
 {
   "permissions": {
     "allow": [
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)",
+      "Bash(git remote:*)",
+      "Bash(gh api:*)",
+      "Bash(gh pr:*)",
+      "Bash(git branch:*)",
+      "Bash(git commit:*)",
+      "WebSearch",
+      "WebFetch(domain:www.anthropic.com)",
+      "Bash(git -C \"D:\\\\AI\\\\JabisStandard\" status)",
+      "Bash(git -C \"D:\\\\AI\\\\JabisStandard\" diff)",
+      "Bash(git -C \"D:\\\\AI\\\\JabisStandard\" log --oneline -5)",
+      "Bash(git -C \"D:\\\\AI\\\\JabisStandard\" add CLAUDE.md .claude/settings.json .claude/settings.local.json)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -Command \"if (Test-Path 'D:\\AI\\JabisStandard\\nul') { Remove-Item -Path '\\\\?\\D:\\AI\\JabisStandard\\nul' -Force -ErrorAction SilentlyContinue }\""
+          }
+        ]
+      }
     ]
   }
 }
