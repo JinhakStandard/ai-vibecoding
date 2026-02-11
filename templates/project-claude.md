@@ -184,7 +184,7 @@ Claude에게 다음 요청은 금지되며, 감지 시 경고 후 대안이 제�
 
 개인 개발 환경에 맞는 설정이 필요하면 프로젝트 루트에 `CLAUDE.local.md`를 생성하세요.
 
-- `.gitignore`에 포함되어 커밋되지 않음
+- `CLAUDE.local.md`와 `.claude/settings.local.json`은 `.gitignore`에 포함되어 커밋되지 않음
 - 보안 규칙 및 핵심 품질 규칙은 오버라이드 불가
 - 작성 가이드: 표준 저장소의 `templates/claude-local-template.md` 참고
 

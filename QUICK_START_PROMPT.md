@@ -57,6 +57,7 @@ mkdir -p .ai
 ### 5단계: .gitignore 업데이트
 다음 항목이 없으면 추가:
 CLAUDE.local.md
+.claude/settings.local.json
 .env
 .env.*
 

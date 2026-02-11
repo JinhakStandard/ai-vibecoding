@@ -234,6 +234,7 @@ JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
 다음 항목이 포함되어 있는지 확인하고, 없으면 추가:
 ```
 CLAUDE.local.md
+.claude/settings.local.json
 .env
 .env.local
 .env.*.local
@@ -299,7 +300,7 @@ CLAUDE.md가 이미 있는 경우:
 - [ ] .ai/ 폴더와 5개 파일이 모두 생성되었는가 (SESSION_LOG, CURRENT_SPRINT, DECISIONS, ARCHITECTURE, CONVENTIONS)
 - [ ] .claude/settings.json이 OS에 맞게 설정되었는가
 - [ ] .claude/skills/ 에 5개 스킬이 모두 있는가 (apply-standard, commit, review-pr, session-start, test)
-- [ ] .gitignore에 CLAUDE.local.md와 .env가 포함되었는가
+- [ ] .gitignore에 CLAUDE.local.md, .claude/settings.local.json, .env가 포함되었는가
 - [ ] jinhak_standard_version 메타 정보가 기록되었는가
 
 ### 기능 동작 검증
