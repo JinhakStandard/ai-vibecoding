@@ -5,6 +5,21 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [1.5.1] - 2026-02
+
+### .gitignore 지침 보강
+
+`.claude/settings.local.json`이 모든 적용 프로젝트의 `.gitignore`에 포함되도록 표준 문서 전체의 지침을 업데이트합니다.
+
+### 변경
+- CLAUDE.md 섹션 2.1.1: `.gitignore` 필수 포함 항목에 `.claude/settings.local.json` 명시
+- CLAUDE.md 섹션 10 체크리스트: `.gitignore` 항목에 `.claude/settings.local.json` 추가
+- `templates/project-claude.md`: 로컬 오버라이드 섹션에 `settings.local.json` 안내 추가
+- `apply-standard/SKILL.md`: 2-4단계 `.gitignore` 확인 목록 및 검증 체크리스트에 추가
+- `QUICK_START_PROMPT.md`: 5단계 `.gitignore` 업데이트 항목에 추가
+
+---
+
 ## [1.5] - 2026-02
 
 ### 빠른 적용 프롬프트 추가
