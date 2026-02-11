@@ -1,0 +1,15 @@
+# 로컬 개발자 설정 (커밋 금지)
+CLAUDE.local.md
+.claude/settings.local.json
+
+# 환경 변수
+.env
+.env.*
+
+# OS 파일
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Node
+node_modules/
