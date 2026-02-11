@@ -8,6 +8,22 @@ JINHAK 전사에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하�
 
 > **[QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md)의 프롬프트를 Claude Code에 복사-붙여넣기 하면 됩니다.**
 
+### 방법 0: 글로벌 Hook 설치 (최초 1회, 권장)
+
+글로벌 Hook을 설치하면 **모든 프로젝트**에서 Claude Code 세션 시작 시 표준 적용 여부가 자동 감지됩니다.
+
+```bash
+# 표준 레포 클론 (이미 있으면 생략)
+git clone https://github.com/JinhakStandard/ai-vibecoding.git /tmp/jinhak-standards
+
+# 글로벌 Hook 설치
+node /tmp/jinhak-standards/scripts/install-global-hook.js
+```
+
+설치 후 아무 프로젝트에서 Claude Code를 열면:
+- 표준 미적용 프로젝트 → `/apply-standard` 안내 자동 표시
+- 표준 적용된 프로젝트 → `/session-start` 안내 자동 표시
+
 ### 방법 1: 빠른 적용 프롬프트 (권장)
 
 1. 프로젝트 디렉토리에서 Claude Code 실행
@@ -106,6 +122,8 @@ JinhakStandard/
 ├── ARCHITECTURE.md               # 아키텍처 원칙 및 패턴
 ├── VIBE_CODING_GUIDE.md          # 바이브 코딩 방법론 (비개발자 포함)
 ├── PROJECT_STRUCTURE.md          # 표준 프로젝트 구조
+├── scripts/
+│   └── install-global-hook.js    # 글로벌 Hook 설치/제거 스크립트
 ├── .claude/                      # Claude Code 설정 (표준 템플릿)
 │   ├── settings.json             #   권한, hooks 설정
 │   └── skills/                   #   슬래시 명령어
@@ -227,6 +245,7 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
+| 1.6 | 2026-02 | 글로벌 Hook 자동 감지: 세션 시작 시 표준 적용 여부 자동 감지, install-global-hook.js 추가 |
 | 1.5 | 2026-02 | 빠른 적용 프롬프트 추가: 로컬 클론 방식 표준화, QUICK_START_PROMPT.md 신규 |
 | 1.4 | 2026-02 | 권한 설정 보강: git 서브커맨드 옵션 포함 commit/push 패턴 허용 추가 |
 | 1.3 | 2026-02 | Opus 4.6 대응: Agent Teams, Plan 모드, Effort 설정, 1M 컨텍스트, 신규 Hooks |

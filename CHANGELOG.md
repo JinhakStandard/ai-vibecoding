@@ -5,6 +5,28 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [1.6] - 2026-02
+
+### 글로벌 Hook 자동 감지
+
+모든 프로젝트에서 Claude Code 세션 시작 시 JINHAK 표준 적용 여부를 자동 감지하는 글로벌 Hook 시스템을 추가합니다. 비개발자도 별도 명령 없이 표준 적용 안내를 받을 수 있습니다.
+
+### 추가
+- `scripts/install-global-hook.js` 신규 추가 - 글로벌 Hook 설치/제거 스크립트
+  - `~/.claude/settings.json`에 JINHAK 표준 자동 감지 Hook 추가
+  - 기존 설정 보존, 백업 자동 생성, 중복 설치 방지
+  - `--remove` 옵션으로 깔끔한 제거 지원
+  - Node.js 기반 크로스 플랫폼 (Windows/Mac/Linux)
+- CLAUDE.md 섹션 6.1.1 "글로벌 Hook (자동 표준 감지)" 신규 추가
+- CLAUDE.md 섹션 10 체크리스트에 글로벌 Hook 설치 안내 추가
+
+### 변경
+- README.md: "방법 0: 글로벌 Hook 설치" 섹션 추가, 문서 구조에 scripts/ 반영
+- `.gitignore` 지침에 `.claude/settings.local.json` 추가 (CLAUDE.md, templates, apply-standard, QUICK_START_PROMPT)
+- CLAUDE.md 버전 1.5 → 1.6
+
+---
+
 ## [1.5.1] - 2026-02
 
 ### .gitignore 지침 보강

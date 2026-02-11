@@ -320,6 +320,30 @@ body: { action: 'delete', id: '123' }
 
 > Windows 환경에서는 `cat` 대신 `type`, `head` 대신 PowerShell 명령을 사용하세요.
 
+### 6.1.1 글로벌 Hook (자동 표준 감지)
+
+개발자의 `~/.claude/settings.json`에 글로벌 Hook을 설치하면, **모든 프로젝트**에서 Claude Code 세션 시작 시 JINHAK 표준 적용 여부가 자동 감지됩니다.
+
+**설치 방법:**
+```bash
+# 표준 저장소를 클론한 뒤 설치 스크립트 실행
+node /tmp/jinhak-standards/scripts/install-global-hook.js
+
+# 제거
+node /tmp/jinhak-standards/scripts/install-global-hook.js --remove
+```
+
+**동작 방식:**
+| 상황 | Claude에게 전달되는 컨텍스트 |
+|------|---------------------------|
+| CLAUDE.md 없음 | `[JINHAK 표준 미적용]` → `/apply-standard` 안내 |
+| CLAUDE.md 있으나 메타정보 없음 | `[JINHAK 표준 미적용]` → `/apply-standard` 안내 |
+| 표준 적용됨 (버전 감지) | `[JINHAK 표준 v{버전} 감지]` → `/session-start` 안내 |
+
+- `once: true`로 세션당 1회만 실행 (토큰 절약)
+- 기존 `~/.claude/settings.json` 설정을 보존하며 추가
+- 팀원 온보딩 시 1회 설치하면 이후 모든 프로젝트에서 자동 동작
+
 ### 6.2 Skills (슬래시 명령어)
 
 `.claude/skills/` 디렉토리에 반복 작업을 자동화하는 명령어를 정의합니다.
@@ -572,6 +596,12 @@ new Intl.NumberFormat('ko-KR', {
 
 새 프로젝트에서 AI 개발 환경을 설정할 때:
 
+**글로벌 Hook 설치 (최초 1회, 권장):**
+```bash
+node /tmp/jinhak-standards/scripts/install-global-hook.js
+```
+> 설치 후 모든 프로젝트에서 Claude Code 시작 시 표준 적용 여부가 자동 감지됩니다.
+
 **자동 적용 (권장):**
 1. [QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md)의 프롬프트를 Claude Code에 복사-붙여넣기 (가장 빠름)
 2. 또는 이 표준 저장소 URL을 주며 "적용해줘"라고 요청
@@ -601,4 +631,4 @@ new Intl.NumberFormat('ko-KR', {
 ---
 
 *마지막 업데이트: 2026-02*
-*버전: 1.5*
+*버전: 1.6*
