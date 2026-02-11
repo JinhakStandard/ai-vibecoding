@@ -29,6 +29,20 @@ $ARGUMENTS - 표준 저장소 URL (선택사항. 없으면 기본 URL 사용)
 
 ## 실행 절차
 
+### 0단계: 표준 레포 로컬 클론
+
+표준 저장소를 로컬에 클론하여 파일을 직접 참고합니다 (웹 크롤링보다 빠르고 안정적):
+
+```bash
+git clone https://github.com/JinhakStandard/ai-vibecoding.git /tmp/jinhak-standards
+```
+
+- 이미 `/tmp/jinhak-standards`가 있으면 `git -C /tmp/jinhak-standards pull`로 최신화만 수행
+- `/tmp/jinhak-standards`는 참고용일 뿐, 현재 프로젝트의 git에 포함시키지 않음
+- 이후 단계에서 표준 파일을 참조할 때 `/tmp/jinhak-standards/` 경로의 로컬 파일을 읽기
+
+---
+
 ### 1단계: 현재 프로젝트 분석
 
 프로젝트의 현재 상태를 파악합니다:
@@ -60,7 +74,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 반드시 포함할 메타 정보:
 ```markdown
 <!-- JINHAK Standard Metadata -->
-<!-- jinhak_standard_version: 1.3 -->
+<!-- jinhak_standard_version: 1.5 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: YYYY-MM-DD -->
 ```

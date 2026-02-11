@@ -5,6 +5,30 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [1.5] - 2026-02
+
+### 빠른 적용 프롬프트 추가
+
+표준을 프로젝트에 적용할 때 Claude Code에 복사-붙여넣기할 수 있는 표준화된 프롬프트를 제공합니다.
+
+### 추가
+- `QUICK_START_PROMPT.md` 신규 추가 - 표준 적용용 복사-붙여넣기 프롬프트
+  - 0단계 로컬 클론 방식으로 웹 크롤링 대비 속도/안정성 개선
+  - 신규/기존 프로젝트 동일 프롬프트 사용 가능
+  - FAQ 및 기존 방식 대비 개선점 비교표 포함
+- `apply-standard/SKILL.md`에 0단계 "표준 레포 로컬 클론" 절차 추가
+
+### 변경
+- CLAUDE.md 섹션 7.1: 빠른 적용 프롬프트를 권장 방법으로 추가, 0단계 클론 절차 반영
+- CLAUDE.md 섹션 9: 문서 참조 테이블에 QUICK_START_PROMPT.md 추가
+- CLAUDE.md 섹션 10: 빠른 시작 체크리스트에 QUICK_START_PROMPT.md 참조 추가
+- CLAUDE.md 버전 1.4 → 1.5
+- README.md: "내 프로젝트에 적용하는 방법" 섹션에 빠른 적용 프롬프트 방식 추가
+- README.md: 문서 구조 및 설명 테이블에 QUICK_START_PROMPT.md 추가
+- `apply-standard/SKILL.md` 메타 정보 버전 1.3 → 1.5
+
+---
+
 ## [1.4] - 2026-02
 
 ### 권한 설정 보강

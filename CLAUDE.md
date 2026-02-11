@@ -477,14 +477,21 @@ Claude Code 내장 Task 시스템으로 복잡한 작업을 추적합니다.
 
 ### 7.1 다른 프로젝트에 이 표준을 적용하는 방법
 
+**방법 1: 빠른 적용 프롬프트 (권장)**
+
+[QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md)의 프롬프트를 Claude Code에 복사-붙여넣기합니다. 표준 레포를 로컬에 클론한 뒤 자동으로 적용됩니다.
+
+**방법 2: URL 전달 방식**
+
 사용자가 이 저장소의 URL을 제공하며 "여기를 참고해서 프로젝트에 적용해줘"라고 요청하면, 다음 절차를 따릅니다:
 
-1. **표준 저장소 내용 확인**: URL에서 CLAUDE.md, CHANGELOG.md, templates/, .claude/skills/ 내용을 읽습니다.
-2. **현재 프로젝트 분석**: package.json, tsconfig.json 등을 읽어 기술 스택을 파악합니다.
-3. **표준 적용**: `/apply-standard` 스킬의 절차에 따라 파일을 생성/수정합니다.
-4. **결과 보고**: 생성/수정된 파일 목록과 다음 단계를 안내합니다.
+0. **표준 저장소 로컬 클론**: `git clone`으로 `/tmp/jinhak-standards`에 전체 다운로드 (이미 있으면 `git pull`로 최신화)
+1. **현재 프로젝트 분석**: package.json, tsconfig.json 등을 읽어 기술 스택을 파악합니다.
+2. **표준 적용**: `/apply-standard` 스킬의 절차에 따라 로컬 파일을 참고하여 생성/수정합니다.
+3. **결과 보고**: 생성/수정된 파일 목록과 다음 단계를 안내합니다.
 
 > Claude Code에서 `/apply-standard` 명령을 사용하면 이 과정이 자동으로 실행됩니다.
+> `/tmp/jinhak-standards`는 참고용일 뿐, 현재 프로젝트의 git에 포함시키지 않습니다.
 
 ### 7.2 버전 추적
 
@@ -547,6 +554,7 @@ new Intl.NumberFormat('ko-KR', {
 
 | 문서 | 내용 |
 |------|------|
+| [QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md) | 빠른 적용 프롬프트 (복사-붙여넣기용) |
 | [CODING_CONVENTIONS.md](./CODING_CONVENTIONS.md) | 코딩 컨벤션 상세 가이드 |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | 아키텍처 원칙 및 패턴 |
 | [VIBE_CODING_GUIDE.md](./VIBE_CODING_GUIDE.md) | 바이브 코딩 방법론 |
@@ -565,8 +573,9 @@ new Intl.NumberFormat('ko-KR', {
 새 프로젝트에서 AI 개발 환경을 설정할 때:
 
 **자동 적용 (권장):**
-1. Claude Code에서 이 표준 저장소 URL을 주며 "적용해줘"라고 요청
-2. 또는 `/apply-standard` 실행
+1. [QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md)의 프롬프트를 Claude Code에 복사-붙여넣기 (가장 빠름)
+2. 또는 이 표준 저장소 URL을 주며 "적용해줘"라고 요청
+3. 또는 `/apply-standard` 실행
 
 **수동 적용:**
 - [ ] `CLAUDE.md` 생성 (templates/project-claude.md 참고, 메타 정보 포함)
@@ -592,4 +601,4 @@ new Intl.NumberFormat('ko-KR', {
 ---
 
 *마지막 업데이트: 2026-02*
-*버전: 1.4*
+*버전: 1.5*

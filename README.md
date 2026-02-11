@@ -6,16 +6,22 @@ JINHAK 전사에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하�
 
 ## 내 프로젝트에 적용하는 방법
 
-> **이 저장소의 URL을 Claude Code에 알려주기만 하면 됩니다.**
+> **[QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md)의 프롬프트를 Claude Code에 복사-붙여넣기 하면 됩니다.**
 
-### 1단계: 프로젝트에서 Claude Code 실행
+### 방법 1: 빠른 적용 프롬프트 (권장)
+
+1. 프로젝트 디렉토리에서 Claude Code 실행
+2. [QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md)의 프롬프트를 복사-붙여넣기
+3. 표준 레포를 로컬에 클론한 뒤 자동으로 적용 완료
+
+> 신규/기존 프로젝트 모두 동일한 프롬프트를 사용합니다. 두 번째 프로젝트부터는 이미 클론된 레포를 재사용하므로 더 빠릅니다.
+
+### 방법 2: URL 전달 방식
 
 ```bash
 cd my-project
 claude
 ```
-
-### 2단계: 이 저장소 URL을 주고 적용 요청
 
 ```
 > https://github.com/JinhakStandard/ai-vibecoding 여기를 참고해서 프로젝트에 적용해줘
@@ -25,6 +31,7 @@ claude
 
 | 순서 | 작업 | 설명 |
 |------|------|------|
+| 0 | **표준 레포 클론** | `/tmp/jinhak-standards`에 전체 레포 다운로드 (이미 있으면 pull) |
 | 1 | **프로젝트 분석** | package.json, tsconfig.json 등을 읽어 기술 스택 파악 |
 | 2 | **CLAUDE.md 생성** | 프로젝트 정보가 채워진 AI 설정 파일 생성 |
 | 3 | **`.ai/` 폴더 생성** | SESSION_LOG, CURRENT_SPRINT, DECISIONS 등 세션 관리 파일 |
@@ -92,6 +99,7 @@ claude
 ```
 JinhakStandard/
 ├── README.md                     ← 지금 보고 있는 문서
+├── QUICK_START_PROMPT.md         # 빠른 적용 프롬프트 (복사-붙여넣기용)
 ├── CLAUDE.md                     # 메인 AI 개발 가이드 (핵심 원칙)
 ├── CHANGELOG.md                  # 버전별 변경 이력
 ├── CODING_CONVENTIONS.md         # 코딩 컨벤션 상세
@@ -115,6 +123,7 @@ JinhakStandard/
 
 | 문서 | 대상 | 내용 |
 |------|------|------|
+| **QUICK_START_PROMPT.md** | 전체 | 표준을 프로젝트에 적용할 때 Claude Code에 복사-붙여넣기하는 프롬프트 |
 | **CLAUDE.md** | 전체 | 전사 AI 개발 표준의 핵심 원칙. 기술 스택, 코드 품질 기준, Git 규칙, API 규칙 등 |
 | **CODING_CONVENTIONS.md** | 개발자 | 네이밍 규칙, import 순서, 컴포넌트 구조, 상태 관리 패턴, 에러 처리 등 상세 가이드 |
 | **ARCHITECTURE.md** | 개발자/설계자 | 프론트엔드/백엔드 아키텍처, API 설계, DB 선택 기준, Vault 보안, 서비스 간 통신 |
@@ -125,7 +134,7 @@ JinhakStandard/
 
 ## 빠른 시작
 
-> 자동 적용은 위의 "내 프로젝트에 적용하는 방법" 섹션을 참고하세요.
+> **자동 적용(권장):** [QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md)의 프롬프트를 사용하세요.
 
 ### 수동 적용 (필요 시)
 
@@ -218,6 +227,7 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
+| 1.5 | 2026-02 | 빠른 적용 프롬프트 추가: 로컬 클론 방식 표준화, QUICK_START_PROMPT.md 신규 |
 | 1.4 | 2026-02 | 권한 설정 보강: git 서브커맨드 옵션 포함 commit/push 패턴 허용 추가 |
 | 1.3 | 2026-02 | Opus 4.6 대응: Agent Teams, Plan 모드, Effort 설정, 1M 컨텍스트, 신규 Hooks |
 | 1.2 | 2026-02 | ISMS 보안 가이드, CLAUDE.local.md 오버라이드, AI 안티패턴 자동 감지 |
