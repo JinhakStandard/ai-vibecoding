@@ -163,6 +163,93 @@ Claude는 다음 안티패턴을 감지하면 **즉시 경고하고 대안을 �
 - `> nul`, `2>nul` 사용 금지 (예약 디바이스 이름 충돌로 `nul` 파일 생성)
 - `settings.local.json`의 PostToolUse Hook으로 도구 실행 후 `nul` 파일 자동 삭제
 
+### 2.6 Windows 개발 환경 규칙
+
+JINHAK 개발팀은 주로 Windows 환경에서 Claude Code를 사용합니다. Windows 환경에서 자주 실패하는 명령과 대체 방법을 숙지하세요.
+
+**개발 환경:**
+- OS: Windows (PowerShell / Git Bash)
+- 쉘: Git Bash (MINGW64) 사용
+- 경로 형식: `/d/Apply/...` 대신 `D:/Apply/...` 또는 `//d/Apply/...` 사용
+
+#### 2.6.1 경로 규칙
+
+| 금지 | 사용 | 이유 |
+|------|------|------|
+| `cd /d/path` | `cd D:/Apply/path` | MSYS 경로는 일부 도구에서 인식 불가 |
+| `C:\Users\name\file` | `C:/Users/name/file` | 백슬래시는 이스케이프 문자로 해석될 수 있음 |
+| 따옴표 없는 한글/공백 경로 | `"D:/프로젝트/My App"` | 공백/한글 경로는 반드시 따옴표로 감싸기 |
+| `/tmp/some-path` | `$TEMP/some-path` 또는 `os.tmpdir()` | Windows에 `/tmp/` 경로 없음 |
+
+#### 2.6.2 명령어 호환성
+
+**Windows에서 실패하는 Unix 명령과 대체 방법:**
+
+| Unix 명령 | Windows 대체 (Git Bash) | Windows 대체 (PowerShell) | 비고 |
+|-----------|------------------------|--------------------------|------|
+| `cat file` | `cat file` (사용 가능) | `Get-Content file` | Git Bash에서는 동작 |
+| `head -n 10` | `head -n 10` (사용 가능) | `Get-Content -Head 10` | Git Bash에서는 동작 |
+| `tail -n 10` | `tail -n 10` (사용 가능) | `Get-Content -Tail 10` | Git Bash에서는 동작 |
+| `grep pattern` | `grep pattern` | `Select-String -Pattern pattern` | 명시적으로 구분 |
+| `touch file` | `touch file` (사용 가능) | `New-Item file -ItemType File` | |
+| `rm -rf dir` | 사용 금지 (deny 규칙) | `Remove-Item -Recurse -Force` | deny로 차단됨 |
+| `chmod +x file` | 무시됨 (효과 없음) | - | Windows에서 실행 권한 불필요 |
+| `which command` | `which command` | `Get-Command command` | |
+| `ln -s target link` | 관리자 권한 필요 | `New-Item -ItemType SymbolicLink` | 심볼릭 링크 제한 |
+| `sed 's/a/b/g'` | `sed 's/a/b/g'` (Git Bash) | - | PowerShell에서 사용 불가 |
+| `awk '{print $1}'` | `awk '{print $1}'` (Git Bash) | - | PowerShell에서 사용 불가 |
+| `wc -l file` | `wc -l file` (Git Bash) | `(Get-Content file).Count` | |
+| `mktemp` | `mktemp` (Git Bash) | `[System.IO.Path]::GetTempFileName()` | |
+| `xargs` | `xargs` (Git Bash) | `ForEach-Object` | |
+| `2>/dev/null` | `2>/dev/null` (Git Bash) | `2>$null` 또는 `-ErrorAction SilentlyContinue` | Git Bash에서만 사용 |
+
+#### 2.6.3 명령 체이닝 규칙
+
+```bash
+# 금지: && 체이닝 시 경로 형식 혼용
+cd /d/Apply && npm install
+
+# 권장: 각 명령이 독립적으로 실행 가능한지 확인
+cd D:/Apply && npm install
+
+# 금지: PowerShell 5.x에서 && 사용 (7.0+ 에서만 지원)
+Get-ChildItem && Write-Host "done"
+
+# 권장: PowerShell에서는 ; 또는 별도 명령 사용
+Get-ChildItem; Write-Host "done"
+```
+
+#### 2.6.4 자주 발생하는 Windows 실패 패턴
+
+| 실패 패턴 | 원인 | 해결 방법 |
+|-----------|------|----------|
+| `ENOENT: no such file or directory` | 백슬래시 경로 또는 MSYS 경로 사용 | 슬래시(`/`) 경로로 통일 |
+| `nul` 파일 생성 | `> nul` 리다이렉션 사용 | `> /dev/null 2>&1` 사용 (Git Bash) |
+| `Permission denied` | 파일이 다른 프로세스에 의해 잠김 | 에디터/서버 종료 후 재시도 |
+| `EPERM: operation not permitted` | 심볼릭 링크 생성 시 관리자 권한 부족 | 관리자 권한 터미널 사용 또는 복사로 대체 |
+| `'command' is not recognized` | Unix 전용 명령 사용 | Git Bash에서 실행하거나 PowerShell 대체 명령 사용 |
+| `line ending` 경고 | CRLF/LF 불일치 | `.gitattributes`에 `* text=auto` 설정 |
+| `The filename, directory name, or volume label syntax is incorrect` | 경로에 특수문자 또는 예약어 포함 | 경로 따옴표 감싸기, 예약어(`con`, `nul`, `aux`) 회피 |
+| `ENAMETOOLONG` | `node_modules` 등 깊은 경로 | 프로젝트를 드라이브 루트에 가깝게 배치 |
+
+#### 2.6.5 환경 변수
+
+```bash
+# Git Bash
+export NODE_ENV=production
+echo $NODE_ENV
+
+# PowerShell
+$env:NODE_ENV = "production"
+echo $env:NODE_ENV
+
+# 크로스 플랫폼 (package.json scripts)
+# cross-env 패키지 사용 권장
+"scripts": {
+  "build": "cross-env NODE_ENV=production node build.js"
+}
+```
+
 ---
 
 ## 3. 코드 품질 기준

@@ -12,6 +12,12 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 모든 Hook 명령을 Node.js 기반으로 통일하여 Windows/macOS/Linux에서 동일하게 동작하도록 개선합니다. OS 종속 명령(`powershell`, `echo`, `cat`, `sed` 등)을 제거하고 `node` 또는 `node -e`로 대체합니다.
 
 ### 추가
+- CLAUDE.md 섹션 2.6 "Windows 개발 환경 규칙" 신규 추가
+  - 경로 규칙 (MSYS 경로 금지, 슬래시 통일, 한글/공백 경로 따옴표)
+  - Unix ↔ Windows 명령어 호환성 대응표 (15개 명령)
+  - 명령 체이닝 규칙 (&&, PowerShell 5.x 제한)
+  - 자주 발생하는 Windows 실패 패턴 8종 및 해결 방법
+  - 환경 변수 설정 방법 (Git Bash / PowerShell / cross-env)
 - `scripts/check-standard.js` 신규 추가 - 글로벌 Hook용 크로스 플랫폼 표준 감지 스크립트
   - 기존 `install-global-hook.js`의 bash 인라인 명령(`sed`, `tr`, `if [ ... ]`)을 Node.js로 대체
   - CLAUDE.md에서 `jinhak_standard_version` 확인 → 버전 있으면 `session-briefing.js` 위임 실행, 없으면 경고 출력
