@@ -1,3 +1,8 @@
+<!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
+<!-- jinhak_standard_version: 1.8 -->
+<!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
+<!-- applied_date: 2026-02-06 -->
+
 # JINHAK 전사 AI 개발 표준 v1.8
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
@@ -612,7 +617,7 @@ Claude Code 내장 Task 시스템으로 복잡한 작업을 추적합니다.
 각 프로젝트의 CLAUDE.md에 다음 메타 정보가 HTML 주석으로 포함됩니다:
 
 ```html
-<!-- jinhak_standard_version: 1.3 -->
+<!-- jinhak_standard_version: 1.8 -->
 <!-- jinhak_standard_repo: [저장소 URL] -->
 <!-- applied_date: 2026-02-06 -->
 ```

@@ -5,7 +5,7 @@
 ---
 
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 1.3 -->
+<!-- jinhak_standard_version: 1.8 -->
 <!-- jinhak_standard_repo: [표준 저장소 URL - https://github.com/JinhakStandard/ai-vibecoding 로 교체] -->
 <!-- applied_date: [YYYY-MM-DD] -->
 

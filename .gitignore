@@ -11,5 +11,8 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 
+# 표준 참조 폴더
+*vibecoding-ref/
+
 # Node
 node_modules/
