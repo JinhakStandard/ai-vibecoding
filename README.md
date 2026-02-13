@@ -1,4 +1,4 @@
-# JINHAK AI 개발 표준 v1.6 (AI Vibe Coding Standards)
+# JINHAK AI 개발 표준 v1.7 (AI Vibe Coding Standards)
 
 JINHAK 전사에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 개발 표준 문서입니다.
 

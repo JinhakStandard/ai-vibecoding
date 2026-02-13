@@ -1,4 +1,4 @@
-# JINHAK 전사 AI 개발 표준 v1.6
+# JINHAK 전사 AI 개발 표준 v1.7
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
 
@@ -633,4 +633,4 @@ node /tmp/jinhak-standards/scripts/install-global-hook.js
 ---
 
 *마지막 업데이트: 2026-02*
-*버전: 1.6*
+*버전: 1.7*

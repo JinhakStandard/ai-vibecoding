@@ -5,6 +5,30 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [1.7] - 2026-02
+
+### 세션 브리핑 자동화 및 표준 미적용 경고 강화
+
+세션 시작 시 `/session-start` 스킬의 핵심 동작을 자동으로 수행하는 브리핑 스크립트를 추가하고, 표준 미적용 프로젝트에서의 경고를 강화합니다.
+
+### 추가
+- `scripts/session-briefing.js` 신규 추가 - 세션 자동 브리핑 스크립트
+  - 현재 스프린트, 최근 작업, git 상태, 최근 커밋, 표준 버전을 한 번에 출력
+  - `UserPromptSubmit` Hook에서 자동 실행 (세션 1회, `once: true`)
+  - `/session-start` 스킬의 1~3단계를 자동화하여 별도 실행 불필요
+  - Node.js 기반 크로스 플랫폼 (Windows/Mac/Linux)
+- CLAUDE.md 프로젝트 구조에 `.claude/scripts/` 폴더 추가
+- `apply-standard/SKILL.md`에 Scripts 복사 단계 추가 (session-briefing.js)
+
+### 변경
+- `UserPromptSubmit` Hook: 단순 `cat` 명령 → `session-briefing.js` 우선 실행 (폴백 유지)
+- 글로벌 Hook 경고 강화: 표준 미적용 시 강조 박스(`!!`) 형식으로 표시
+- 글로벌 Hook: 표준 적용 프로젝트에서 session-briefing.js 자동 실행
+- `.gitignore` 지침에 `*vibecoding-ref/` 추가 (참조 저장소 사본 커밋 방지)
+- CLAUDE.md 버전 1.6 → 1.7
+
+---
+
 ## [1.6] - 2026-02
 
 ### 글로벌 Hook 자동 감지
