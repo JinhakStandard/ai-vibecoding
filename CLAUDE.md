@@ -61,6 +61,8 @@
 ├── CLAUDE.local.md        # 로컬 개발자 설정 (git 제외, 선택사항)
 ├── .claude/               # Claude Code 설정 폴더
 │   ├── settings.json      # 권한, 환경변수, 훅 설정
+│   ├── scripts/           # Hook 실행 스크립트
+│   │   └── session-briefing.js  # 세션 시작 시 자동 브리핑
 │   └── skills/            # 슬래시 명령어 (Skills) 정의
 │       ├── apply-standard/SKILL.md  # 표준 적용/업데이트
 │       ├── commit/SKILL.md          # 커밋 생성
@@ -297,7 +299,7 @@ body: { action: 'delete', id: '123' }
         "hooks": [
           {
             "type": "command",
-            "command": "cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''",
+            "command": "node .claude/scripts/session-briefing.js 2>/dev/null || cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''",
             "once": true
           }
         ]

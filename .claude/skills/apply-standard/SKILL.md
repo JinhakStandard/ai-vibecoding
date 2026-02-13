@@ -188,7 +188,7 @@ JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
         "hooks": [
           {
             "type": "command",
-            "command": "cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''",
+            "command": "node .claude/scripts/session-briefing.js 2>/dev/null || cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''",
             "once": true
           }
         ]
@@ -223,6 +223,11 @@ JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
 > Windows 환경이면 hooks command를 적절히 변경합니다:
 > - `cat` → `type`, `head` → PowerShell, `${file}` → `%file%`
 > - 예: `type .ai\\CURRENT_SPRINT.md 2>nul || echo.`
+
+**Scripts 복사** - 표준 저장소의 세션 브리핑 스크립트를 복사:
+- `/tmp/jinhak-standards/scripts/session-briefing.js` → `.claude/scripts/session-briefing.js`
+
+> 이 스크립트는 `UserPromptSubmit` Hook에서 실행되어 세션 시작 시 자동으로 프로젝트 상태(현재 스프린트, 최근 작업, git 상태, 표준 버전)를 Claude에게 주입합니다.
 
 **Skills 복사** - 표준 저장소의 `.claude/skills/` 내용을 복사:
 - `commit/SKILL.md`
