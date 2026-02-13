@@ -24,6 +24,9 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
   - `install-global-hook.js`가 `~/.claude/scripts/`에 자동 복사
 - CLAUDE.md 섹션 2.5 "Hook 크로스 플랫폼 원칙" 추가 (기존 "Windows 환경 규칙" 대체)
 
+### 수정
+- `.claude/scripts/session-briefing.js` 누락 수정 - Hook이 참조하는 경로에 파일이 없어 에러 발생하던 문제
+
 ### 변경
 - `install-global-hook.js`: bash 인라인 명령 → `node ~/.claude/scripts/check-standard.js` 호출로 변경
   - 설치 시 `check-standard.js`를 `~/.claude/scripts/`에 자동 복사
