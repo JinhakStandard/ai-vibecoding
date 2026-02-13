@@ -100,7 +100,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 ## YYYY-MM-DD
 
 ### 세션 작업 내용
-- JINHAK 전사 AI 개발 표준 적용 (v1.3)
+- JINHAK 전사 AI 개발 표준 적용 (v1.8)
 
 ### 변경 파일
 - `CLAUDE.md` - 프로젝트 AI 설정 파일 생성
@@ -132,7 +132,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 승인됨 (YYYY-MM-DD)
 
 ### 결정
-JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
+JINHAK 전사 AI 개발 표준 v1.8을 프로젝트에 적용한다.
 
 ### 참고
 - 표준 저장소: [URL]
@@ -261,6 +261,15 @@ CLAUDE.md가 이미 있는 경우:
    - 새로 추가된 스킬 파일 복사
    - settings.json 규칙 업데이트
    - `jinhak_standard_version` 메타 정보 업데이트
+6. **파일 무결성 검증** (버전 일치 시에도 반드시 수행):
+   다음 필수 파일이 존재하고 올바른지 확인하여, 누락/불일치 파일은 표준 저장소에서 복사/수정:
+   - [ ] `.claude/scripts/session-briefing.js` 존재 여부
+   - [ ] `.claude/settings.json` Hook 경로가 `node .claude/scripts/session-briefing.js`인지
+   - [ ] `.claude/skills/` 내 5개 스킬 존재 (commit, review-pr, session-start, test, apply-standard)
+   - [ ] `.ai/` 폴더 5개 파일 존재
+   - [ ] `.gitignore`에 필수 항목 포함
+
+   누락/불일치 항목이 있으면 사용자에게 보고하고 수정 적용
 
 ---
 
@@ -270,7 +279,7 @@ CLAUDE.md가 이미 있는 경우:
 ## JINHAK 표준 적용 완료
 
 ### 적용 버전
-- JINHAK Standard v1.3
+- JINHAK Standard v1.8
 
 ### 생성/수정된 파일
 - `CLAUDE.md` - [생성/업데이트]
@@ -320,7 +329,7 @@ CLAUDE.md가 이미 있는 경우:
 - [ ] .env 파일이 .gitignore에 포함되었는가
 - [ ] SECURITY_ISMS.md 보안 가이드를 참조하도록 설정되었는가
 
-### v1.3 신규 항목 검증
-- [ ] settings.json에 `env` 섹션 (Agent Teams 활성화)이 포함되었는가
-- [ ] SubagentStart, Stop hook이 설정되었는가
-- [ ] UserPromptSubmit hook에 `once: true` 옵션이 설정되었는가
+### v1.8 신규 항목 검증
+- [ ] `.claude/scripts/session-briefing.js` 파일이 존재하고 실행 가능한가
+- [ ] settings.json Hook이 Node.js 기반(`node` 또는 `node -e`)으로 통일되었는가
+- [ ] OS 종속 명령(`echo`, `cat`, `powershell` 등)이 Hook에 포함되지 않았는가

@@ -26,6 +26,9 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ### 수정
 - `.claude/scripts/session-briefing.js` 누락 수정 - Hook이 참조하는 경로에 파일이 없어 에러 발생하던 문제
+- `apply-standard/SKILL.md` 3단계에 파일 무결성 검증 추가 - 버전 일치 시에도 필수 파일 존재 확인
+- `apply-standard/SKILL.md` 버전 참조 v1.3 → v1.8 일괄 수정 (4곳)
+- `apply-standard/SKILL.md` 검증 체크리스트 v1.8 기준으로 업데이트
 
 ### 변경
 - `install-global-hook.js`: bash 인라인 명령 → `node ~/.claude/scripts/check-standard.js` 호출로 변경
