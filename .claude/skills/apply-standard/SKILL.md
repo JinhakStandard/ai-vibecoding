@@ -238,7 +238,10 @@ CLAUDE.local.md
 .env
 .env.local
 .env.*.local
+*vibecoding-ref/
 ```
+
+> `*vibecoding-ref/` 패턴은 표준 적용 시 프로젝트 폴더 내에 클론된 참조 저장소 사본(예: `프로젝트명_vibecoding-ref/`)이 커밋되지 않도록 방지합니다.
 
 ---
 

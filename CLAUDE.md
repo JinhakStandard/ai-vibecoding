@@ -612,7 +612,7 @@ node /tmp/jinhak-standards/scripts/install-global-hook.js
 - [ ] `.ai/` 폴더 및 하위 문서 생성 (SESSION_LOG, CURRENT_SPRINT, DECISIONS, ARCHITECTURE, CONVENTIONS)
 - [ ] `.claude/settings.json` 생성 (권한, hooks, deny 규칙 포함)
 - [ ] `.claude/skills/` 스킬 파일 생성 (commit, review-pr, session-start, test)
-- [ ] `.gitignore`에 `CLAUDE.local.md`, `.claude/settings.local.json`, `.env` 추가
+- [ ] `.gitignore`에 `CLAUDE.local.md`, `.claude/settings.local.json`, `.env`, `*vibecoding-ref/` 추가
 - [ ] `CLAUDE.local.md` 필요 시 생성 (templates/claude-local-template.md 참고)
 - [ ] ISMS 보안 체크리스트 확인 (SECURITY_ISMS.md 섹션 8)
 - [ ] 팀원에게 이 표준 문서 공유

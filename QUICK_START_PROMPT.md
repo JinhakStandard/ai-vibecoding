@@ -60,6 +60,7 @@ CLAUDE.local.md
 .claude/settings.local.json
 .env
 .env.*
+*vibecoding-ref/
 
 ### 6단계: 적용 결과 요약
 완료 후 다음을 알려줘:
