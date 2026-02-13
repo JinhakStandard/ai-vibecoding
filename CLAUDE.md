@@ -1,4 +1,4 @@
-# JINHAK 전사 AI 개발 표준 v1.7
+# JINHAK 전사 AI 개발 표준 v1.8
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
 
@@ -149,18 +149,19 @@ Claude는 다음 안티패턴을 감지하면 **즉시 경고하고 대안을 �
 
 > 상세 안티패턴 목록과 대화 예시는 [VIBE_CODING_GUIDE.md](./VIBE_CODING_GUIDE.md) 섹션 6.4~6.5를 참조하세요.
 
-### 2.5 Windows 환경 규칙
+### 2.5 Hook 크로스 플랫폼 원칙
 
-Windows에서 Claude Code 사용 시 `> nul` 리다이렉션이 예약 디바이스 이름 충돌로 `nul` 파일을 생성하는 문제가 있습니다.
+**모든 Hook 명령은 Node.js 기반으로 작성**하여 OS(Windows/macOS/Linux)에 관계없이 동일하게 동작하도록 합니다. Claude Code는 Node.js를 필수 의존성으로 요구하므로, `node` 명령은 모든 환경에서 사용 가능합니다.
 
 **필수 규칙:**
-- 출력 리다이렉션 시 반드시 `> /dev/null 2>&1`을 사용할 것 (`> nul`, `2>nul` 사용 금지)
-- Git Bash / MSYS2 환경에서는 Windows 스타일 NUL 디바이스(`nul`, `NUL`)를 사용하지 말 것
-- PowerShell 명령에서는 `$null` 또는 `Out-Null`을 사용할 것
+- Hook command는 `node` 또는 `node -e` 로 시작할 것
+- `echo`, `cat`, `head`, `sed`, `powershell` 등 OS 종속 명령을 Hook에서 사용하지 말 것
+- 출력 리다이렉션(`> nul`, `2>/dev/null`) 대신 Node.js 내부에서 에러를 처리할 것
+- 파일 경로는 `path.join()`으로 생성하고 슬래시(`/`)로 통일할 것
 
-**방어 메커니즘:**
+**Windows `nul` 파일 방지:**
+- `> nul`, `2>nul` 사용 금지 (예약 디바이스 이름 충돌로 `nul` 파일 생성)
 - `settings.local.json`의 PostToolUse Hook으로 도구 실행 후 `nul` 파일 자동 삭제
-- 이 규칙으로 애초에 `nul` 파일이 생성되지 않도록 예방
 
 ---
 
@@ -299,7 +300,7 @@ body: { action: 'delete', id: '123' }
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/scripts/session-briefing.js 2>/dev/null || cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''",
+            "command": "node .claude/scripts/session-briefing.js",
             "once": true
           }
         ]
@@ -320,7 +321,7 @@ body: { action: 'delete', id: '123' }
 }
 ```
 
-> Windows 환경에서는 `cat` 대신 `type`, `head` 대신 PowerShell 명령을 사용하세요.
+> Hook은 Node.js 기반으로 OS에 무관하게 동작합니다. 세션 브리핑, 보안 경고 등 모든 Hook command가 `node`로 시작하도록 작성하세요.
 
 ### 6.1.1 글로벌 Hook (자동 표준 감지)
 
@@ -633,4 +634,4 @@ node /tmp/jinhak-standards/scripts/install-global-hook.js
 ---
 
 *마지막 업데이트: 2026-02*
-*버전: 1.7*
+*버전: 1.8*

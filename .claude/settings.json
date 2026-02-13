@@ -44,7 +44,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -Command \"if (Test-Path '.ai\\CURRENT_SPRINT.md') { Get-Content '.ai\\CURRENT_SPRINT.md' -Head 50 } else { Write-Output '' }\"",
+            "command": "node .claude/scripts/session-briefing.js",
             "once": true
           }
         ]
@@ -56,7 +56,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo [SECURITY] 파일 수정 감지: %file%"
+            "command": "node -e \"console.log('[SECURITY] 파일 수정 감지: ${file}')\""
           }
         ]
       }
@@ -67,7 +67,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo [SECURITY] 서브에이전트 시작 - deny 규칙이 상속됩니다"
+            "command": "node -e \"console.log('[SECURITY] 서브에이전트 시작 - deny 규칙이 상속됩니다')\""
           }
         ]
       }
@@ -78,7 +78,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo [SESSION] 응답 완료"
+            "command": "node -e \"console.log('[SESSION] 응답 완료')\""
           }
         ]
       }

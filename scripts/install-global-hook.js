@@ -16,30 +16,13 @@ const path = require('path');
 const os = require('os');
 
 const CLAUDE_DIR = path.join(os.homedir(), '.claude');
+const SCRIPTS_DIR = path.join(CLAUDE_DIR, 'scripts');
 const SETTINGS_PATH = path.join(CLAUDE_DIR, 'settings.json');
+const CHECK_SCRIPT_DEST = path.join(SCRIPTS_DIR, 'check-standard.js');
 
-// Hook이 실행할 체크 명령어 (Git Bash 호환)
-const CHECK_COMMAND = [
-  'v=$(sed -n \'s/.*jinhak_standard_version: *//p\' CLAUDE.md 2>/dev/null | tr -d \' \\r\\n\');',
-  'if [ -n "$v" ]; then',
-  '  node .claude/scripts/session-briefing.js 2>/dev/null || echo "[JINHAK 표준 v${v} 감지] /session-start 를 실행하세요.";',
-  'elif [ -f CLAUDE.md ]; then',
-  '  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";',
-  '  echo "!!  [JINHAK 표준 미적용]                        !!";',
-  '  echo "!!  CLAUDE.md는 있으나 표준 메타정보가 없음     !!";',
-  '  echo "!!                                              !!";',
-  '  echo "!!  반드시 /apply-standard 를 실행하여          !!";',
-  '  echo "!!  JINHAK AI 개발 표준을 적용하세요!           !!";',
-  '  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";',
-  'else',
-  '  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";',
-  '  echo "!!  [JINHAK 표준 미적용]                        !!";',
-  '  echo "!!                                              !!";',
-  '  echo "!!  반드시 /apply-standard 를 실행하여          !!";',
-  '  echo "!!  JINHAK AI 개발 표준을 적용하세요!           !!";',
-  '  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";',
-  'fi',
-].join(' ');
+// Hook이 실행할 체크 명령어 (Node.js 기반 크로스 플랫폼)
+// 경로를 슬래시로 통일하여 Windows/Mac/Linux 모두 호환
+const CHECK_COMMAND = 'node "' + CHECK_SCRIPT_DEST.replace(/\\/g, '/') + '"';
 
 const JINHAK_HOOK_ENTRY = {
   matcher: '',
@@ -53,7 +36,9 @@ const JINHAK_HOOK_ENTRY = {
 };
 
 // JINHAK Hook 식별자 (이 문자열이 command에 포함되면 JINHAK Hook으로 간주)
-const JINHAK_IDENTIFIER = 'jinhak_standard_version';
+const JINHAK_IDENTIFIER = 'check-standard.js';
+// 레거시 식별자 (이전 bash 버전 Hook 감지용)
+const LEGACY_IDENTIFIER = 'jinhak_standard_version';
 
 function readSettings() {
   if (fs.existsSync(SETTINGS_PATH)) {
@@ -81,12 +66,50 @@ function createBackup() {
   return null;
 }
 
+function isJinhakHook(entry) {
+  return entry.hooks?.some(
+    (h) => h.command?.includes(JINHAK_IDENTIFIER) || h.command?.includes(LEGACY_IDENTIFIER)
+  );
+}
+
 function hasJinhakHook(settings) {
   const hooks = settings.hooks?.UserPromptSubmit;
   if (!Array.isArray(hooks)) return false;
-  return hooks.some((entry) =>
-    entry.hooks?.some((h) => h.command?.includes(JINHAK_IDENTIFIER))
-  );
+  return hooks.some(isJinhakHook);
+}
+
+function copyCheckScript() {
+  // scripts 디렉토리 생성
+  if (!fs.existsSync(SCRIPTS_DIR)) {
+    fs.mkdirSync(SCRIPTS_DIR, { recursive: true });
+  }
+
+  // check-standard.js를 ~/.claude/scripts/에 복사
+  const srcPath = path.join(__dirname, 'check-standard.js');
+  if (fs.existsSync(srcPath)) {
+    fs.copyFileSync(srcPath, CHECK_SCRIPT_DEST);
+    console.log(`  스크립트 복사: ${CHECK_SCRIPT_DEST}`);
+  } else {
+    console.error(`  경고: ${srcPath} 파일을 찾을 수 없습니다.`);
+    console.error('  check-standard.js가 install-global-hook.js와 같은 폴더에 있어야 합니다.');
+    process.exit(1);
+  }
+}
+
+function removeCheckScript() {
+  if (fs.existsSync(CHECK_SCRIPT_DEST)) {
+    fs.unlinkSync(CHECK_SCRIPT_DEST);
+    console.log(`  스크립트 삭제: ${CHECK_SCRIPT_DEST}`);
+  }
+
+  // scripts 디렉토리가 비었으면 삭제
+  if (fs.existsSync(SCRIPTS_DIR)) {
+    const remaining = fs.readdirSync(SCRIPTS_DIR);
+    if (remaining.length === 0) {
+      fs.rmdirSync(SCRIPTS_DIR);
+      console.log(`  빈 디렉토리 삭제: ${SCRIPTS_DIR}`);
+    }
+  }
 }
 
 function install() {
@@ -102,6 +125,9 @@ function install() {
 
   createBackup();
 
+  // check-standard.js 복사
+  copyCheckScript();
+
   // hooks 구조 확보
   if (!settings.hooks) settings.hooks = {};
   if (!Array.isArray(settings.hooks.UserPromptSubmit)) {
@@ -115,12 +141,13 @@ function install() {
 
   console.log('  설치 완료!\n');
   console.log(`  설정 파일: ${SETTINGS_PATH}`);
+  console.log(`  감지 스크립트: ${CHECK_SCRIPT_DEST}`);
   console.log('');
   console.log('  동작 방식:');
   console.log('  - 모든 프로젝트에서 Claude Code 세션 시작 시 자동 실행 (1회)');
   console.log('  - CLAUDE.md의 jinhak_standard_version 메타정보를 확인');
   console.log('  - 표준 미적용 시 /apply-standard 안내');
-  console.log('  - 표준 적용됨 시 /session-start 안내');
+  console.log('  - 표준 적용됨 시 session-briefing.js 자동 실행 또는 /session-start 안내');
   console.log('');
 }
 
@@ -136,9 +163,9 @@ function remove() {
 
   createBackup();
 
-  // JINHAK Hook만 제거
+  // JINHAK Hook만 제거 (신규 + 레거시 모두)
   settings.hooks.UserPromptSubmit = settings.hooks.UserPromptSubmit.filter(
-    (entry) => !entry.hooks?.some((h) => h.command?.includes(JINHAK_IDENTIFIER))
+    (entry) => !isJinhakHook(entry)
   );
 
   // 빈 배열이면 정리
@@ -150,6 +177,9 @@ function remove() {
   }
 
   writeSettings(settings);
+
+  // check-standard.js 삭제
+  removeCheckScript();
 
   console.log('  제거 완료!\n');
   console.log(`  설정 파일: ${SETTINGS_PATH}\n`);

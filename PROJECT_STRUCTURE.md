@@ -303,7 +303,7 @@ cat > .claude/settings.json << 'EOF'
     "UserPromptSubmit": [
       {
         "matcher": "",
-        "command": "cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''"
+        "command": "node .claude/scripts/session-briefing.js"
       }
     ]
   }
@@ -379,7 +379,7 @@ if ($StandardRepo -and (Test-Path "$StandardRepo\.claude\skills")) {
     "UserPromptSubmit": [
       {
         "matcher": "",
-        "command": "powershell -Command \"if (Test-Path .ai\\CURRENT_SPRINT.md) { Get-Content .ai\\CURRENT_SPRINT.md -Head 50 } else { Write-Output '' }\""
+        "command": "node .claude/scripts/session-briefing.js"
       }
     ]
   }

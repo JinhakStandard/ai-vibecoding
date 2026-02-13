@@ -344,7 +344,7 @@ console.log('Auth header:', headers.authorization ? '[MASKED]' : 'none')
         "hooks": [
           {
             "type": "command",
-            "command": "echo [SECURITY] 파일 수정 감지: ${file}"
+            "command": "node -e \"console.log('[SECURITY] 파일 수정 감지: ${file}')\""
           }
         ]
       }
@@ -355,7 +355,7 @@ console.log('Auth header:', headers.authorization ? '[MASKED]' : 'none')
         "hooks": [
           {
             "type": "command",
-            "command": "echo [SECURITY] 서브에이전트 시작 - deny 규칙이 상속됩니다"
+            "command": "node -e \"console.log('[SECURITY] 서브에이전트 시작 - deny 규칙이 상속됩니다')\""
           }
         ]
       }

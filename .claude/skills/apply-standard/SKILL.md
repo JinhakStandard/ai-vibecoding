@@ -188,7 +188,7 @@ JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/scripts/session-briefing.js 2>/dev/null || cat .ai/CURRENT_SPRINT.md 2>/dev/null | head -50 || echo ''",
+            "command": "node .claude/scripts/session-briefing.js",
             "once": true
           }
         ]
@@ -200,7 +200,7 @@ JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
         "hooks": [
           {
             "type": "command",
-            "command": "echo [SECURITY] 파일 수정 감지: ${file}"
+            "command": "node -e \"console.log('[SECURITY] 파일 수정 감지: ${file}')\""
           }
         ]
       }
@@ -211,7 +211,7 @@ JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
         "hooks": [
           {
             "type": "command",
-            "command": "echo [SECURITY] 서브에이전트 시작 - deny 규칙이 상속됩니다"
+            "command": "node -e \"console.log('[SECURITY] 서브에이전트 시작 - deny 규칙이 상속됩니다')\""
           }
         ]
       }
@@ -220,9 +220,7 @@ JINHAK 전사 AI 개발 표준 v1.3을 프로젝트에 적용한다.
 }
 ```
 
-> Windows 환경이면 hooks command를 적절히 변경합니다:
-> - `cat` → `type`, `head` → PowerShell, `${file}` → `%file%`
-> - 예: `type .ai\\CURRENT_SPRINT.md 2>nul || echo.`
+> Hook은 Node.js 기반으로 작성되어 OS별 변환이 필요 없습니다. Windows/macOS/Linux 모두 동일한 설정을 사용합니다.
 
 **Scripts 복사** - 표준 저장소의 세션 브리핑 스크립트를 복사:
 - `/tmp/jinhak-standards/scripts/session-briefing.js` → `.claude/scripts/session-briefing.js`
@@ -306,7 +304,7 @@ CLAUDE.md가 이미 있는 경우:
 ### 파일 생성 검증
 - [ ] CLAUDE.md에 프로젝트 정보가 정확한가
 - [ ] .ai/ 폴더와 5개 파일이 모두 생성되었는가 (SESSION_LOG, CURRENT_SPRINT, DECISIONS, ARCHITECTURE, CONVENTIONS)
-- [ ] .claude/settings.json이 OS에 맞게 설정되었는가
+- [ ] .claude/settings.json이 Node.js 기반으로 설정되었는가
 - [ ] .claude/skills/ 에 5개 스킬이 모두 있는가 (apply-standard, commit, review-pr, session-start, test)
 - [ ] .gitignore에 CLAUDE.local.md, .claude/settings.local.json, .env가 포함되었는가
 - [ ] jinhak_standard_version 메타 정보가 기록되었는가

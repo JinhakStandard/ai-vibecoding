@@ -5,6 +5,37 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [1.8] - 2026-02
+
+### Hook 시스템 크로스 플랫폼 통일
+
+모든 Hook 명령을 Node.js 기반으로 통일하여 Windows/macOS/Linux에서 동일하게 동작하도록 개선합니다. OS 종속 명령(`powershell`, `echo`, `cat`, `sed` 등)을 제거하고 `node` 또는 `node -e`로 대체합니다.
+
+### 추가
+- `scripts/check-standard.js` 신규 추가 - 글로벌 Hook용 크로스 플랫폼 표준 감지 스크립트
+  - 기존 `install-global-hook.js`의 bash 인라인 명령(`sed`, `tr`, `if [ ... ]`)을 Node.js로 대체
+  - CLAUDE.md에서 `jinhak_standard_version` 확인 → 버전 있으면 `session-briefing.js` 위임 실행, 없으면 경고 출력
+  - `install-global-hook.js`가 `~/.claude/scripts/`에 자동 복사
+- CLAUDE.md 섹션 2.5 "Hook 크로스 플랫폼 원칙" 추가 (기존 "Windows 환경 규칙" 대체)
+
+### 변경
+- `install-global-hook.js`: bash 인라인 명령 → `node ~/.claude/scripts/check-standard.js` 호출로 변경
+  - 설치 시 `check-standard.js`를 `~/.claude/scripts/`에 자동 복사
+  - 제거 시 `check-standard.js`도 함께 삭제
+  - 레거시 bash 버전 Hook 자동 감지 및 호환
+- `.claude/settings.json` Hook 전면 Node.js화:
+  - `UserPromptSubmit`: `powershell -Command "..."` → `node .claude/scripts/session-briefing.js`
+  - `PreToolUse`: `echo ... %file%` → `node -e "console.log(...)"`
+  - `SubagentStart`: `echo ...` → `node -e "console.log(...)"`
+  - `Stop`: `echo ...` → `node -e "console.log(...)"`
+- `apply-standard/SKILL.md`: settings.json 템플릿 Hook을 Node.js 기반으로 변경, "Windows 환경 변경 안내" 제거
+- `SECURITY_ISMS.md`: 보안 설정 예시의 Hook command를 `node -e` 기반으로 변경
+- `PROJECT_STRUCTURE.md`: bash/PowerShell 두 버전의 Hook을 `node .claude/scripts/session-briefing.js`로 통일
+- CLAUDE.md 섹션 6.1 설정 예시에서 OS 종속 폴백 제거, Node.js 기반 안내로 변경
+- CLAUDE.md 버전 1.7 → 1.8
+
+---
+
 ## [1.7] - 2026-02
 
 ### 세션 브리핑 자동화 및 표준 미적용 경고 강화
