@@ -21,8 +21,9 @@ const SETTINGS_PATH = path.join(CLAUDE_DIR, 'settings.json');
 const CHECK_SCRIPT_DEST = path.join(SCRIPTS_DIR, 'check-standard.js');
 
 // Hook이 실행할 체크 명령어 (Node.js 기반 크로스 플랫폼)
-// 경로를 슬래시로 통일하여 Windows/Mac/Linux 모두 호환
-const CHECK_COMMAND = 'node "' + CHECK_SCRIPT_DEST.replace(/\\/g, '/') + '"';
+// os.homedir()로 런타임에 홈 경로를 결정하여 어떤 환경에서든 동작
+const CHECK_COMMAND = "node -e \"require(require('path').join(require('os').homedir(),'.claude','scripts','check-standard.js'))\"";
+
 
 const JINHAK_HOOK_ENTRY = {
   matcher: '',
@@ -112,14 +113,36 @@ function removeCheckScript() {
   }
 }
 
+function isLegacyHook(entry) {
+  return entry.hooks?.some(
+    (h) => h.command?.includes(LEGACY_IDENTIFIER) || (h.command?.includes(JINHAK_IDENTIFIER) && !h.command?.includes("require('os').homedir()"))
+  );
+}
+
+function hasLegacyHook(settings) {
+  const hooks = settings.hooks?.UserPromptSubmit;
+  if (!Array.isArray(hooks)) return false;
+  return hooks.some(isLegacyHook);
+}
+
 function install() {
   console.log('\n=== JINHAK AI 개발 표준 - 글로벌 Hook 설치 ===\n');
 
   const settings = readSettings();
 
-  if (hasJinhakHook(settings)) {
-    console.log('  이미 설치되어 있습니다. 재설치하려면 --remove 후 다시 실행하세요.');
-    console.log(`  설정 파일: ${SETTINGS_PATH}\n`);
+  // 레거시(bash/절대경로) Hook이 있으면 자동 업그레이드
+  if (hasLegacyHook(settings)) {
+    console.log('  레거시 Hook 감지 → Node.js 기반으로 업그레이드합니다.');
+    createBackup();
+
+    settings.hooks.UserPromptSubmit = settings.hooks.UserPromptSubmit.filter(
+      (entry) => !isJinhakHook(entry)
+    );
+  } else if (hasJinhakHook(settings)) {
+    console.log('  이미 최신 버전으로 설치되어 있습니다.');
+    // check-standard.js만 최신으로 갱신
+    copyCheckScript();
+    console.log(`  감지 스크립트 갱신 완료: ${CHECK_SCRIPT_DEST}\n`);
     return;
   }
 
