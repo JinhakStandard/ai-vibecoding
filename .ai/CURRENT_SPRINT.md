@@ -6,9 +6,7 @@
 
 ## 진행 중 (In Progress)
 
-### JINHAK 표준 v1.8 일괄 정비
-- **상태**: 진행 중
-- **설명**: 표준 적용 프로젝트 11개 전수 조사 후 5개 프로젝트 정비
+없음
 
 ---
 
@@ -21,10 +19,15 @@
 ## 최근 완료
 
 ### 2026-02-13
-- [x] JabisStandard 메타 태그 추가
-- [x] 섹션 7.2 예시 버전 수정
-- [x] 템플릿 메타 버전 수정
-- [x] .ai/ 폴더 생성
+- [x] JINHAK 표준 v1.8 일괄 정비 (5개 프로젝트)
+  - [x] JabisStandard 메타 태그 추가, .ai/ 폴더 생성
+  - [x] 섹션 7.2 예시 버전 수정, 템플릿 메타 버전 수정
+  - [x] batch-apply.js 일괄 적용 스크립트 작성 및 실행
+  - [x] 외부 4개 프로젝트 업데이트 (JabisTemplate, jabis-api-gateway, jabis-lab, JabisCert)
+  - [x] 전 프로젝트 커밋 & 푸시 완료
+- [x] 글로벌 Hook Node.js 크로스 플랫폼 전환
+  - [x] ~/.claude/settings.json sed/tr → check-standard.js 방식 교체
+  - [x] install-global-hook.js 레거시 자동 업그레이드 기능 추가
 
 ---
 
@@ -34,6 +37,7 @@
 |------|--------|------|
 | JabisStandard 자체 정비 | 100% | 완료 |
 | 외부 프로젝트 일괄 정비 | 100% | 완료 |
+| 글로벌 Hook 크로스 플랫폼 전환 | 100% | 완료 |
 
 ---
 
