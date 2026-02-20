@@ -539,6 +539,22 @@ node /tmp/jinhak-standards/scripts/install-global-hook.js --remove
 
 > `git push *`는 allow에 포함되어 있지만, `git push --force*`는 deny에 있으므로 일반 push는 허용되고 force push만 차단됩니다. **deny가 allow보다 우선**합니다.
 
+### 6.3.1 설정 변경 반영 시점
+
+Claude Code에서 설정 파일을 변경했을 때 반영 시점이 다릅니다:
+
+| 변경 항목 | 즉시 반영 | 세션 재시작 필요 |
+|-----------|:--------:|:--------------:|
+| 스킬 파일 (`.claude/skills/*/SKILL.md`) | O | |
+| `CLAUDE.md` 수정 | O | |
+| `settings.json` permissions (allow/deny) | | O |
+| `settings.json` hooks | | O |
+| `settings.json` env | | O |
+| `scripts/` 파일 추가/수정 | O | |
+
+> `settings.json`은 **세션 시작 시 캐싱**되므로, 변경 후 반드시 세션을 재시작(`Ctrl+C` → `claude`)해야 합니다.
+> `/apply-standard`로 표준을 적용한 뒤에도 settings.json 반영을 위해 세션 재시작이 필요합니다.
+
 ### 6.4 Agent Teams (멀티 에이전트 협업)
 
 > Claude Code v2.1.32+에서 **연구 미리보기**로 제공됩니다.
