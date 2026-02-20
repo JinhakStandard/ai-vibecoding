@@ -264,15 +264,17 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
-| **2.0** | **2026-02** | **AI 보안 가이드레일: 7-Layer Defense, OWASP LLM Top 10, 금지 패턴 12종, 데이터 분류, 인시던트 대응, /security-check 스킬** |
-| 1.8 | 2026-02 | Hook 크로스 플랫폼 통일: 모든 Hook을 Node.js 기반으로, Windows 개발 환경 규칙 |
-| 1.6 | 2026-02 | 글로벌 Hook 자동 감지: 세션 시작 시 표준 적용 여부 자동 감지, install-global-hook.js 추가 |
-| 1.5 | 2026-02 | 빠른 적용 프롬프트 추가: 로컬 클론 방식 표준화, QUICK_START_PROMPT.md 신규 |
-| 1.4 | 2026-02 | 권한 설정 보강: git 서브커맨드 옵션 포함 commit/push 패턴 허용 추가 |
-| 1.3 | 2026-02 | Opus 4.6 대응: Agent Teams, Plan 모드, Effort 설정, 1M 컨텍스트, 신규 Hooks |
-| 1.2 | 2026-02 | ISMS 보안 가이드, CLAUDE.local.md 오버라이드, AI 안티패턴 자동 감지 |
-| 1.1 | 2025-02 | 자동 적용 프로세스, 버전 추적, 스킬 보강 |
-| 1.0 | 2025-02 | 초기 버전 - JINHAK Template 프로젝트 기반으로 작성 |
+| **2.0** | **2026-02-20** | **AI 보안 가이드레일: 7-Layer Defense, OWASP LLM Top 10, 금지 패턴 12종, 데이터 분류, 인시던트 대응, /security-check 스킬** |
+| 1.8 | 2026-02-13 | Hook 크로스 플랫폼 통일: 모든 Hook을 Node.js 기반으로, Windows 개발 환경 규칙 |
+| 1.7 | 2026-02-13 | 세션 브리핑 자동화: session-briefing.js로 세션 시작 시 자동 컨텍스트 로드 |
+| 1.6 | 2026-02-12 | 글로벌 Hook 자동 감지: 세션 시작 시 표준 적용 여부 자동 감지, install-global-hook.js 추가 |
+| 1.5.1 | 2026-02-12 | .gitignore 지침 보강: settings.local.json 추가 |
+| 1.5 | 2026-02-11 | 빠른 적용 프롬프트 추가: 로컬 클론 방식 표준화, QUICK_START_PROMPT.md 신규 |
+| 1.4 | 2026-02-10 | 권한 설정 보강: git 서브커맨드 옵션 포함 commit/push 패턴 허용 추가 |
+| 1.3 | 2026-02-06 | Opus 4.6 대응: Agent Teams, Plan 모드, Effort 설정, 1M 컨텍스트, 신규 Hooks |
+| 1.2 | 2026-02-04 | ISMS 보안 가이드, CLAUDE.local.md 오버라이드, AI 안티패턴 자동 감지 |
+| 1.1 | 2026-02-04 | 자동 적용 프로세스, 버전 추적, 스킬 보강 |
+| 1.0 | 2026-02-04 | 초기 버전 - JINHAK Template 프로젝트 기반으로 작성 |
 
 > 파일별 상세 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요.
 
