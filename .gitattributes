@@ -1,0 +1,7 @@
+# 기본 설정
+* text=auto
+
+# SKILL.md 파일은 반드시 LF로 유지 (Claude Code YAML frontmatter 파싱 호환)
+.claude/skills/*/SKILL.md text eol=lf
+.claude/scripts/*.js text eol=lf
+scripts/*.js text eol=lf
