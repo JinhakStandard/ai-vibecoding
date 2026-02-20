@@ -98,6 +98,18 @@ if (gitLog) {
 const version = getStandardVersion();
 if (version) {
   output.push('[JINHAK 표준] v' + version + ' 적용됨');
+  // v2.0 보안 가이드레일 확인
+  const vNum = parseFloat(version);
+  if (vNum >= 2.0) {
+    const securityDir = fs.existsSync('security');
+    const securitySkill = fs.existsSync('.claude/skills/security-check/SKILL.md');
+    const securityHook = fs.existsSync('scripts/security-check-hook.js');
+    if (securityDir && securitySkill) {
+      output.push('[보안 가이드레일] v2.0 활성 (/security-check 사용 가능)');
+    } else {
+      output.push('[보안 가이드레일] v2.0 파일 일부 누락 - /apply-standard로 복구하세요');
+    }
+  }
 } else {
   output.push('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   output.push('!!  [JINHAK 표준 미적용]                        !!');

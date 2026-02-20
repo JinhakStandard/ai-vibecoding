@@ -5,6 +5,75 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [2.0] - 2026-02
+
+### AI 보안 가이드레일 도입 (7-Layer Defense)
+
+OWASP LLM Top 10 2025 기반의 7-Layer AI 보안 프레임워크를 도입합니다. 기존 3중 방어 구조(자연어 감지, deny 블로킹, hooks 경고)를 7-Layer Defense로 확장하고, AI 코드 생성 보안, 의존성 보안, 데이터 분류, 인시던트 대응 체계를 추가합니다.
+
+### 추가
+- `security/` 폴더 신규 생성 (6개 문서):
+  - `AI_SECURITY_GUARDRAILS.md` - 7-Layer Defense 마스터 문서
+  - `OWASP_LLM_CHECKLIST.md` - OWASP LLM Top 10 2025 + Web Top 10 교차 체크리스트
+  - `FORBIDDEN_PATTERNS.md` - AI 금지 코드 패턴 카탈로그 (12개 패턴, 위험/안전 코드 비교)
+  - `DATA_CLASSIFICATION.md` - 진학어플라이 특화 데이터 분류/처리 기준 (극비/대외비/내부용/공개 4등급)
+  - `INCIDENT_RESPONSE.md` - AI 보안 인시던트 대응 가이드 (P1~P4 분류, SLA, 보고서 템플릿)
+  - `NIGHTBUILDER_SECURITY.md` - NightBuilder(24/7 AI 개발) 보안 규칙
+- `scripts/security-check-hook.js` - PreToolUse 보안 검사 Hook (민감 파일/금지 명령 감지)
+- `.claude/skills/security-check/SKILL.md` - `/security-check` 슬래시 명령어 (보안 점검 7항목, Security Score)
+- `templates/.eslintrc.security.js` - ESLint 보안 규칙 템플릿 (eslint-plugin-security)
+- `templates/.secretlintrc.json` - Secretlint 시크릿 스캔 설정 (JINHAK 커스텀 패턴 포함)
+- `templates/.semgreprc.yml` - Semgrep SAST 설정 (금지 패턴 탐지 규칙)
+- `templates/husky-security-hooks.md` - husky + lint-staged 기반 Git Hooks 보안 설정 가이드
+- CLAUDE.md 섹션 11 "AI 보안 가이드레일" 신규 추가 (~50줄)
+  - 보안 등급별 행동 규칙 (BLOCK/WARN/LOG)
+  - 금지 코드 패턴 요약 (12개)
+  - Human-in-the-Loop 필수 영역 (6개)
+  - /security-check 명령어 안내
+- CODING_CONVENTIONS.md 섹션 9.1 "보안 금지 패턴" + 섹션 10 "보안 코딩 체크리스트" 신규
+- SECURITY_ISMS.md 섹션 7.6~7.8 신규 (AI 코드 생성/의존성/추적 보안) + 체크리스트 8.7
+- VIBE_CODING_GUIDE.md 섹션 6.7 "AI 보안 체크 워크플로우" 신규
+
+### 변경
+- CLAUDE.md 3중 방어 구조 → 7-Layer Defense 매핑 테이블로 확장 (제거하지 않고 확장)
+- CLAUDE.md 프로젝트 구조에 `security/` 폴더 + `security-check` 스킬 반영
+- CLAUDE.md 섹션 6.2 Skills 목록에 `/security-check` 추가
+- CLAUDE.md 섹션 9 문서 참조에 security/ 6개 문서 추가
+- CLAUDE.md 섹션 10 체크리스트에 보안 가이드레일 확인 항목 추가
+- CLAUDE.md 버전 1.8 → 2.0
+- `.claude/settings.json` deny 규칙 3개 추가: `curl|sh`, `wget|bash`, `curl|bash`
+- `.claude/settings.json` PreToolUse에 Bash 보안 검사 Hook 추가
+- `.claude/settings.json` PostToolUse에 npm install 감시 Hook 추가
+- `apply-standard/SKILL.md`: v2.0 파일 복사/검증 절차 추가 (security/, security-check 스킬, 보안 Hook, 템플릿)
+- `review-pr/SKILL.md`: 필수 검토에 보안 항목 3개 추가 (금지 패턴, 의존성 보안, 데이터 분류)
+- `session-start/SKILL.md`: 세션 브리핑에 보안 상태 항목 추가
+- `scripts/session-briefing.js`: v2.0 보안 가이드레일 존재 확인 로직 추가
+- `templates/project-claude.md`: "AI 보안 가이드레일" 섹션 추가, 메타 버전 2.0
+- `README.md`: 버전 2.0, 문서 구조에 security/ + 보안 템플릿 반영, 히스토리 추가
+- `PROJECT_STRUCTURE.md`: security/ 폴더 + security-check 스킬 반영
+- `QUICK_START_PROMPT.md`: 보안 가이드레일 복사 단계(4.5) + security-check 명령어 추가
+- VIBE_CODING_GUIDE.md 섹션 6.1 "절대 하지 말 것" 보안 항목 3개 추가
+
+### Migration Guide (v1.8 → v2.0)
+
+기존 v1.8 프로젝트를 v2.0으로 업그레이드하는 방법:
+
+1. **표준 저장소 최신화**: `git -C /tmp/jinhak-standards pull`
+2. **security/ 폴더 복사**: `/tmp/jinhak-standards/security/` → 프로젝트 루트
+3. **보안 스킬 복사**: `/tmp/jinhak-standards/.claude/skills/security-check/` → `.claude/skills/`
+4. **보안 Hook 복사**: `/tmp/jinhak-standards/scripts/security-check-hook.js` → `scripts/`
+5. **settings.json 업데이트**:
+   - deny에 `curl|sh`, `wget|bash`, `curl|bash` 추가
+   - PreToolUse에 보안 검사 Hook 추가
+   - PostToolUse에 패키지 설치 감시 Hook 추가
+6. **CLAUDE.md 업데이트**: 섹션 11 추가, 버전 메타 2.0으로 변경
+7. **보안 도구 템플릿 복사 (선택)**: `templates/.eslintrc.security.js` 등
+8. **검증**: `/security-check` 명령어 실행하여 정상 동작 확인
+
+또는 `/apply-standard`를 실행하면 위 절차가 자동으로 수행됩니다.
+
+---
+
 ## [1.8] - 2026-02
 
 ### Hook 시스템 크로스 플랫폼 통일

@@ -16,6 +16,10 @@ project-root/
 │   └── skills/                  #   슬래시 명령어
 │       ├── commit/SKILL.md
 │       └── review-pr/SKILL.md
+├── security/                    # [권장] AI 보안 가이드레일 (v2.0)
+│   ├── AI_SECURITY_GUARDRAILS.md
+│   ├── FORBIDDEN_PATTERNS.md
+│   └── ...                      #   OWASP, 데이터 분류, 인시던트 등
 ├── .ai/                         # [필수] 프로젝트 문서화
 │   ├── SESSION_LOG.md           #   세션별 작업 기록
 │   ├── CURRENT_SPRINT.md        #   현재 작업 현황
@@ -192,11 +196,36 @@ project-root/
     │   └── SKILL.md           # /commit 명령어
     ├── review-pr/
     │   └── SKILL.md           # /review-pr 명령어
+    ├── security-check/
+    │   └── SKILL.md           # /security-check 명령어 (v2.0)
     ├── test/
     │   └── SKILL.md           # /test 명령어
     └── session-start/
         └── SKILL.md           # /session-start 명령어
 ```
+
+### 4.3 security/ 폴더 (v2.0)
+
+AI 보안 가이드레일 문서를 관리합니다.
+
+```
+security/
+├── AI_SECURITY_GUARDRAILS.md   # 7-Layer Defense 마스터 문서
+├── OWASP_LLM_CHECKLIST.md     # OWASP LLM Top 10 체크리스트
+├── FORBIDDEN_PATTERNS.md       # 금지 코드 패턴 (12개)
+├── DATA_CLASSIFICATION.md      # 데이터 분류/처리 기준
+├── INCIDENT_RESPONSE.md        # 인시던트 대응 가이드
+└── NIGHTBUILDER_SECURITY.md    # NightBuilder 보안 규칙
+```
+
+| 파일 | 목적 | 업데이트 빈도 |
+|------|------|--------------|
+| `AI_SECURITY_GUARDRAILS.md` | 7-Layer 보안 아키텍처 종합 | 분기별 또는 정책 변경 시 |
+| `OWASP_LLM_CHECKLIST.md` | OWASP 기반 체크리스트 | OWASP 업데이트 시 |
+| `FORBIDDEN_PATTERNS.md` | AI 금지 코드 패턴 | 새 패턴 발견 시 |
+| `DATA_CLASSIFICATION.md` | 데이터 분류 기준 | 규제 변경 시 |
+| `INCIDENT_RESPONSE.md` | 인시던트 대응 절차 | 연 1회 이상 |
+| `NIGHTBUILDER_SECURITY.md` | 자동화 개발 보안 | NightBuilder 정책 변경 시 |
 
 ---
 

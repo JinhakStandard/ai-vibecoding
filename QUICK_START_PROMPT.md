@@ -52,7 +52,11 @@ mkdir -p .ai
 ### 4단계: .claude/ 설정 복사
 - /tmp/jinhak-standards/.claude/settings.json → .claude/settings.json 으로 복사
 - /tmp/jinhak-standards/.claude/skills/ 폴더 전체를 .claude/skills/ 로 복사
-  (apply-standard, commit, review-pr, session-start, test 스킬 포함)
+  (apply-standard, commit, review-pr, security-check, session-start, test 스킬 포함)
+
+### 4.5단계: 보안 가이드레일 복사 (v2.0)
+- /tmp/jinhak-standards/security/ 폴더 전체를 security/ 로 복사
+- /tmp/jinhak-standards/scripts/security-check-hook.js → scripts/ 로 복사
 
 ### 5단계: .gitignore 업데이트
 다음 항목이 없으면 추가:
@@ -67,7 +71,7 @@ CLAUDE.local.md
 - 파악된 기술 스택
 - 생성/수정된 파일 목록
 - 적용된 표준 버전
-- 사용 가능한 슬래시 명령어 (/session-start, /commit, /review-pr, /test)
+- 사용 가능한 슬래시 명령어 (/session-start, /commit, /review-pr, /security-check, /test)
 ```
 
 ---

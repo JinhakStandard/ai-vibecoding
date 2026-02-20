@@ -34,6 +34,9 @@ $ARGUMENTS - PR 번호 또는 URL
 5. **프로덕션 console.log**: 프로덕션 코드에 console.log 잔존 여부
 6. **ISMS 보안**: 개인정보 처리 규칙 준수, 감사 로깅 누락, 암호화 미적용 (SECURITY_ISMS.md 참조)
 7. **AI 안티패턴**: `--no-verify`, `push --force` 등 위험 명령 포함 여부, 하드코딩된 민감 정보 존재 여부
+8. **금지 코드 패턴 (v2.0)**: eval(), SQL 문자열 연결, 취약 해시 등 12개 금지 패턴 (`security/FORBIDDEN_PATTERNS.md` 참조)
+9. **의존성 보안 (v2.0)**: 새로 추가된 패키지의 npm audit 결과, 다운로드 수, CVE 확인
+10. **데이터 분류 (v2.0)**: AI 컨텍스트에 극비/대외비 데이터 포함 여부 (`security/DATA_CLASSIFICATION.md` 참조)
 
 **품질 검토 (권장):**
 1. **네이밍 컨벤션**: PascalCase(컴포넌트), camelCase(함수/변수), UPPER_SNAKE_CASE(상수)

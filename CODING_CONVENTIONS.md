@@ -497,6 +497,62 @@ describe('UserCard', () => {
 | 미사용 import/변수 | 불필요한 번들 크기 증가 |
 | `.env` 파일 커밋 | 보안 위험 |
 
+### 9.1 보안 금지 패턴 (v2.0)
+
+아래 코드 패턴은 AI 생성 코드 포함 모든 코드에서 금지됩니다. 상세 내용은 [security/FORBIDDEN_PATTERNS.md](./security/FORBIDDEN_PATTERNS.md)를 참조하세요.
+
+| 금지 패턴 | 위험 | 안전한 대안 |
+|-----------|------|-----------|
+| `eval()`, `new Function()` | 동적 코드 실행 (RCE) | JSON.parse(), 정적 매핑 객체 |
+| `child_process.exec(userInput)` | 커맨드 인젝션 | `execFile()` + 인자 배열 |
+| SQL 문자열 연결 | SQL Injection | Prisma ORM, `$queryRaw` 템플릿 |
+| `crypto.createHash('md5')` | 취약한 해시 | SHA-256 이상, bcrypt (비밀번호) |
+| `cors({ origin: '*' })` 프로덕션 | 무제한 CORS | 명시적 도메인 허용 목록 |
+
+---
+
+## 10. 보안 코딩 체크리스트 (v2.0)
+
+코드 리뷰 또는 PR 제출 전 확인해야 하는 보안 체크리스트입니다.
+
+### 10.1 입력 검증
+
+- [ ] 모든 API 입력값이 Zod/Joi 스키마로 검증되는가
+- [ ] 파일 업로드 시 확장자 화이트리스트 + MIME 타입 검증 + 크기 제한이 적용되는가
+- [ ] 정수형 ID가 `parseInt()` + 범위 검증을 거치는가
+- [ ] URL 파라미터가 직접 DOM에 삽입되지 않는가
+
+### 10.2 인증/인가
+
+- [ ] JWT 토큰이 httpOnly + Secure + SameSite=Strict 쿠키로 전달되는가
+- [ ] 모든 API 엔드포인트에 인증 미들웨어가 적용되었는가
+- [ ] RBAC 패턴이 준수되는가
+- [ ] 비밀번호가 bcrypt(saltRounds >= 12)로 해시되는가
+
+### 10.3 출력 보안
+
+- [ ] 프로덕션 환경에서 스택 트레이스가 노출되지 않는가
+- [ ] 에러 메시지에 내부 시스템 정보가 포함되지 않는가
+- [ ] `dangerouslySetInnerHTML` 사용 없이 렌더링되는가 (예외: 승인된 리치 텍스트)
+- [ ] 사용자 입력값이 DOMPurify 등으로 sanitize 후 렌더링되는가
+
+### 10.4 데이터 보호
+
+- [ ] 민감 정보(API Key, 토큰)가 로그에 출력되지 않는가
+- [ ] 암호화 관련 코드가 검증된 라이브러리(crypto, bcrypt)를 사용하는가
+- [ ] HTTPS(TLS 1.2+)가 적용되는가
+- [ ] 개인정보가 마스킹/가명화 처리되는가
+
+### 10.5 의존성
+
+- [ ] 새로 추가된 패키지에 알려진 취약점(CVE)이 없는가
+- [ ] `npm audit` 결과에 High/Critical 취약점이 없는가
+- [ ] 패키지 다운로드 수가 충분한가 (10,000+/주)
+- [ ] 라이선스가 호환되는가
+
+> 이 체크리스트는 `/security-check` 스킬을 통해 자동으로 검사할 수 있습니다.
+> OWASP LLM Top 10 기반 상세 체크리스트: [security/OWASP_LLM_CHECKLIST.md](./security/OWASP_LLM_CHECKLIST.md)
+
 ---
 
 *이 문서는 [JINHAK 전사 AI 개발 표준](./CLAUDE.md)의 상세 문서입니다.*

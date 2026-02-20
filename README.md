@@ -1,4 +1,4 @@
-# JINHAK AI 개발 표준 v1.8 (AI Vibe Coding Standards)
+# JINHAK AI 개발 표준 v2.0 (AI Vibe Coding Standards)
 
 JINHAK 전사에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 개발 표준 문서입니다.
 
@@ -122,19 +122,33 @@ JinhakStandard/
 ├── ARCHITECTURE.md               # 아키텍처 원칙 및 패턴
 ├── VIBE_CODING_GUIDE.md          # 바이브 코딩 방법론 (비개발자 포함)
 ├── PROJECT_STRUCTURE.md          # 표준 프로젝트 구조
+├── SECURITY_ISMS.md              # ISMS 보안 가이드
+├── security/                     # AI 보안 가이드레일 (v2.0)
+│   ├── AI_SECURITY_GUARDRAILS.md #   7-Layer Defense 마스터 문서
+│   ├── OWASP_LLM_CHECKLIST.md   #   OWASP LLM Top 10 체크리스트
+│   ├── FORBIDDEN_PATTERNS.md     #   금지 코드 패턴 (12개)
+│   ├── DATA_CLASSIFICATION.md    #   데이터 분류/처리 기준
+│   ├── INCIDENT_RESPONSE.md      #   인시던트 대응 가이드
+│   └── NIGHTBUILDER_SECURITY.md  #   NightBuilder 보안 규칙
 ├── scripts/
-│   └── install-global-hook.js    # 글로벌 Hook 설치/제거 스크립트
+│   ├── install-global-hook.js    # 글로벌 Hook 설치/제거 스크립트
+│   └── security-check-hook.js    # 보안 검사 Hook (v2.0)
 ├── .claude/                      # Claude Code 설정 (표준 템플릿)
 │   ├── settings.json             #   권한, hooks 설정
 │   └── skills/                   #   슬래시 명령어
 │       ├── apply-standard/       #   /apply-standard - 표준 적용
 │       ├── commit/               #   /commit - 커밋 생성
 │       ├── review-pr/            #   /review-pr - PR 리뷰
+│       ├── security-check/       #   /security-check - 보안 점검 (v2.0)
 │       ├── session-start/        #   /session-start - 세션 시작
 │       └── test/                 #   /test - 테스트 실행
 └── templates/
     ├── project-claude.md         # 개별 프로젝트용 CLAUDE.md 템플릿
-    └── component-template.md     # 컴포넌트 생성 템플릿
+    ├── component-template.md     # 컴포넌트 생성 템플릿
+    ├── .eslintrc.security.js     # ESLint 보안 규칙 (v2.0)
+    ├── .secretlintrc.json        # 시크릿 스캔 설정 (v2.0)
+    ├── .semgreprc.yml            # SAST 설정 (v2.0)
+    └── husky-security-hooks.md   # Git Hooks 보안 가이드 (v2.0)
 ```
 
 ### 각 문서 설명
@@ -147,6 +161,8 @@ JinhakStandard/
 | **ARCHITECTURE.md** | 개발자/설계자 | 프론트엔드/백엔드 아키텍처, API 설계, DB 선택 기준, Vault 보안, 서비스 간 통신 |
 | **VIBE_CODING_GUIDE.md** | 전체 (비개발자 포함) | AI와 협업하는 방법, 프롬프트 작성법, 주의사항, 팀 협업 방법 |
 | **PROJECT_STRUCTURE.md** | 개발자 | 표준 디렉토리 구조, 파일 배치 규칙, 초기 설정 스크립트 |
+| **SECURITY_ISMS.md** | 개발자/보안 | ISMS 인증 기준 AI 개발 보안 가이드 |
+| **security/** | 개발자/보안 | 7-Layer AI 보안 가이드레일 (OWASP LLM Top 10, 금지 패턴, 데이터 분류, 인시던트 대응) |
 
 ---
 
@@ -245,6 +261,8 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
+| **2.0** | **2026-02** | **AI 보안 가이드레일: 7-Layer Defense, OWASP LLM Top 10, 금지 패턴 12종, 데이터 분류, 인시던트 대응, /security-check 스킬** |
+| 1.8 | 2026-02 | Hook 크로스 플랫폼 통일: 모든 Hook을 Node.js 기반으로, Windows 개발 환경 규칙 |
 | 1.6 | 2026-02 | 글로벌 Hook 자동 감지: 세션 시작 시 표준 적용 여부 자동 감지, install-global-hook.js 추가 |
 | 1.5 | 2026-02 | 빠른 적용 프롬프트 추가: 로컬 클론 방식 표준화, QUICK_START_PROMPT.md 신규 |
 | 1.4 | 2026-02 | 권한 설정 보강: git 서브커맨드 옵션 포함 commit/push 패턴 허용 추가 |

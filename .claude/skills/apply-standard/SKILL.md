@@ -74,7 +74,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 반드시 포함할 메타 정보:
 ```markdown
 <!-- JINHAK Standard Metadata -->
-<!-- jinhak_standard_version: 1.8 -->
+<!-- jinhak_standard_version: 2.0 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: YYYY-MM-DD -->
 ```
@@ -230,8 +230,26 @@ JINHAK 전사 AI 개발 표준 v1.8을 프로젝트에 적용한다.
 **Skills 복사** - 표준 저장소의 `.claude/skills/` 내용을 복사:
 - `commit/SKILL.md`
 - `review-pr/SKILL.md`
+- `security-check/SKILL.md` (v2.0 신규)
 - `session-start/SKILL.md`
 - `test/SKILL.md`
+
+**보안 문서 복사 (v2.0)** - 표준 저장소의 `security/` 폴더를 복사:
+- `security/AI_SECURITY_GUARDRAILS.md`
+- `security/OWASP_LLM_CHECKLIST.md`
+- `security/FORBIDDEN_PATTERNS.md`
+- `security/DATA_CLASSIFICATION.md`
+- `security/INCIDENT_RESPONSE.md`
+- `security/NIGHTBUILDER_SECURITY.md`
+
+**보안 Hook 스크립트 복사 (v2.0)**:
+- `/tmp/jinhak-standards/scripts/security-check-hook.js` → `scripts/security-check-hook.js`
+
+**보안 도구 템플릿 복사 (v2.0, 선택)**:
+- `templates/.eslintrc.security.js` (ESLint 보안 규칙)
+- `templates/.secretlintrc.json` (시크릿 스캔)
+- `templates/.semgreprc.yml` (SAST 설정)
+- `templates/husky-security-hooks.md` (Git Hooks 가이드)
 
 #### 2-4. .gitignore 확인
 다음 항목이 포함되어 있는지 확인하고, 없으면 추가:
@@ -265,7 +283,7 @@ CLAUDE.md가 이미 있는 경우:
    다음 필수 파일이 존재하고 올바른지 확인하여, 누락/불일치 파일은 표준 저장소에서 복사/수정:
    - [ ] `.claude/scripts/session-briefing.js` 존재 여부
    - [ ] `.claude/settings.json` Hook 경로가 `node .claude/scripts/session-briefing.js`인지
-   - [ ] `.claude/skills/` 내 5개 스킬 존재 (commit, review-pr, session-start, test, apply-standard)
+   - [ ] `.claude/skills/` 내 6개 스킬 존재 (apply-standard, commit, review-pr, security-check, session-start, test)
    - [ ] `.ai/` 폴더 5개 파일 존재
    - [ ] `.gitignore`에 필수 항목 포함
 
@@ -279,7 +297,7 @@ CLAUDE.md가 이미 있는 경우:
 ## JINHAK 표준 적용 완료
 
 ### 적용 버전
-- JINHAK Standard v1.8
+- JINHAK Standard v2.0
 
 ### 생성/수정된 파일
 - `CLAUDE.md` - [생성/업데이트]
@@ -333,3 +351,13 @@ CLAUDE.md가 이미 있는 경우:
 - [ ] `.claude/scripts/session-briefing.js` 파일이 존재하고 실행 가능한가
 - [ ] settings.json Hook이 Node.js 기반(`node` 또는 `node -e`)으로 통일되었는가
 - [ ] OS 종속 명령(`echo`, `cat`, `powershell` 등)이 Hook에 포함되지 않았는가
+
+### v2.0 신규 항목 검증
+- [ ] `security/` 폴더에 6개 보안 문서가 모두 존재하는가
+- [ ] `.claude/skills/security-check/SKILL.md` 스킬이 존재하는가
+- [ ] `scripts/security-check-hook.js` 보안 Hook 스크립트가 존재하는가
+- [ ] settings.json deny 규칙에 `curl|sh`, `wget|bash`, `curl|bash`가 추가되었는가
+- [ ] settings.json에 PreToolUse Bash 보안 검사 Hook이 설정되었는가
+- [ ] settings.json에 PostToolUse 패키지 설치 감시 Hook이 설정되었는가
+- [ ] CLAUDE.md에 섹션 11 "AI 보안 가이드레일"이 존재하는가
+- [ ] CLAUDE.md 메타 정보가 `jinhak_standard_version: 2.0`인가

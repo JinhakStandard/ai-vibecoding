@@ -5,7 +5,7 @@
 ---
 
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 1.8 -->
+<!-- jinhak_standard_version: 2.0 -->
 <!-- jinhak_standard_repo: [표준 저장소 URL - https://github.com/JinhakStandard/ai-vibecoding 로 교체] -->
 <!-- applied_date: [YYYY-MM-DD] -->
 
@@ -153,6 +153,26 @@ VAULT_ADDR=http://vault.internal:8200
 VAULT_TOKEN=
 NODE_ENV=development
 PORT=3000
+```
+
+---
+
+## AI 보안 가이드레일 (v2.0)
+
+> 상세 내용: 표준 저장소의 `security/` 폴더 참조
+
+### 보안 등급별 행동
+- **BLOCK**: 시크릿 유출, 프로덕션 DB 접근, 개인정보 하드코딩 → 즉시 중단
+- **WARN**: 의심스러운 패키지, 보안 민감 영역 수정 → 경고 + 확인
+- **LOG**: 일반 보안 규칙 준수 현황 → 기록만
+
+### 금지 코드 패턴 (핵심)
+- `eval()`, SQL 문자열 연결, `cors({ origin: '*' })`, `crypto.createHash('md5')` 등 12개 패턴
+- 상세: `security/FORBIDDEN_PATTERNS.md`
+
+### 보안 점검
+```
+/security-check    # 변경사항 보안 스캔
 ```
 
 ---

@@ -1,9 +1,9 @@
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 1.8 -->
+<!-- jinhak_standard_version: 2.0 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
-<!-- applied_date: 2026-02-06 -->
+<!-- applied_date: 2026-02-20 -->
 
-# JINHAK 전사 AI 개발 표준 v1.8
+# JINHAK 전사 AI 개발 표준 v2.0
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
 
@@ -69,11 +69,19 @@
 │   ├── scripts/           # Hook 실행 스크립트
 │   │   └── session-briefing.js  # 세션 시작 시 자동 브리핑
 │   └── skills/            # 슬래시 명령어 (Skills) 정의
-│       ├── apply-standard/SKILL.md  # 표준 적용/업데이트
-│       ├── commit/SKILL.md          # 커밋 생성
-│       ├── review-pr/SKILL.md       # PR 리뷰
-│       ├── session-start/SKILL.md   # 세션 시작
-│       └── test/SKILL.md            # 테스트 실행
+│       ├── apply-standard/SKILL.md   # 표준 적용/업데이트
+│       ├── commit/SKILL.md           # 커밋 생성
+│       ├── review-pr/SKILL.md        # PR 리뷰
+│       ├── security-check/SKILL.md   # 보안 점검 (v2.0)
+│       ├── session-start/SKILL.md    # 세션 시작
+│       └── test/SKILL.md             # 테스트 실행
+├── security/              # AI 보안 가이드레일 (v2.0)
+│   ├── AI_SECURITY_GUARDRAILS.md   # 7-Layer Defense 마스터 문서
+│   ├── OWASP_LLM_CHECKLIST.md     # OWASP LLM Top 10 체크리스트
+│   ├── FORBIDDEN_PATTERNS.md       # 금지 코드 패턴 (12개)
+│   ├── DATA_CLASSIFICATION.md      # 데이터 분류/처리 기준
+│   ├── INCIDENT_RESPONSE.md        # 인시던트 대응 가이드
+│   └── NIGHTBUILDER_SECURITY.md    # NightBuilder 보안 규칙
 └── .ai/                   # 프로젝트 문서화 폴더
     ├── SESSION_LOG.md     # 세션별 작업 기록
     ├── CURRENT_SPRINT.md  # 현재 진행/대기 작업 현황
@@ -146,12 +154,21 @@ Claude는 다음 안티패턴을 감지하면 **즉시 경고하고 대안을 �
 | 품질 저하 | "전체를 처음부터 다시 작성해줘" | 부분 수정 제안 |
 | 품질 저하 | 순차 의존성 있는 5개 이상 기능 동시 요청 | 단계별 분할 제안 (독립 작업은 Agent Teams 활용 가능) |
 
-**3중 방어 구조:**
+**7-Layer Defense (3중 방어 확장):**
 
-1. **CLAUDE.md 규칙 (자연어 감지)**: 이 테이블을 기반으로 프롬프트 해석 시 안티패턴을 감지하여 경고 + 대안 제시
-2. **settings.json deny 규칙 (하드 블로킹)**: `--no-verify`, `push --force` 등 위험 명령어 물리적 차단
-3. **hooks 보조 경고 (소프트 알림)**: PreToolUse hook으로 파일 수정 전 보안 경고 주입
+기존 3중 방어 구조를 7-Layer AI 보안 가이드레일로 확장합니다:
 
+| Layer | 방어 영역 | 구현 메커니즘 | 기존 3중 방어 매핑 |
+|-------|----------|-------------|------------------|
+| L1 | 입력 보안 | Prompt Injection 방어, 민감 파일 제외 | 자연어 감지 |
+| L2 | 코드 생성 보안 | 금지 패턴 12종, 보안 코딩 표준 | 자연어 감지 |
+| L3 | 의존성 보안 | 패키지 검증, Lock 파일 보호 | hooks 보조 경고 |
+| L4 | 출력 검증 | ESLint Security, Secretlint, Semgrep | hooks 보조 경고 |
+| L5 | 런타임 보안 | deny 규칙, 실행 환경 격리 | deny 블로킹 |
+| L6 | 데이터 보안 | 데이터 분류, 로그 보안 | 자연어 감지 |
+| L7 | 거버넌스 | 역할/책임, 인시던트 대응, 정기 활동 | - |
+
+> 상세 내용: [security/AI_SECURITY_GUARDRAILS.md](./security/AI_SECURITY_GUARDRAILS.md)
 > 상세 안티패턴 목록과 대화 예시는 [VIBE_CODING_GUIDE.md](./VIBE_CODING_GUIDE.md) 섹션 6.4~6.5를 참조하세요.
 
 ### 2.5 Hook 크로스 플랫폼 원칙
@@ -445,11 +462,12 @@ node /tmp/jinhak-standards/scripts/install-global-hook.js --remove
 
 ```
 .claude/skills/
-├── apply-standard/SKILL.md  # /apply-standard - JINHAK 표준 적용/업데이트
-├── commit/SKILL.md           # /commit - 커밋 생성
-├── review-pr/SKILL.md        # /review-pr - PR 리뷰
-├── session-start/SKILL.md    # /session-start - 세션 시작
-└── test/SKILL.md             # /test - 테스트 실행
+├── apply-standard/SKILL.md   # /apply-standard - JINHAK 표준 적용/업데이트
+├── commit/SKILL.md            # /commit - 커밋 생성
+├── review-pr/SKILL.md         # /review-pr - PR 리뷰
+├── security-check/SKILL.md   # /security-check - 보안 점검 (v2.0)
+├── session-start/SKILL.md     # /session-start - 세션 시작
+└── test/SKILL.md              # /test - 테스트 실행
 ```
 
 | 명령어 | 용도 |
@@ -458,6 +476,7 @@ node /tmp/jinhak-standards/scripts/install-global-hook.js --remove
 | `/session-start` | 세션 시작, 이전 작업 확인, 표준 버전 체크 |
 | `/commit` | 변경사항 분석 후 표준에 맞는 커밋 생성 |
 | `/review-pr <번호>` | PR을 표준 기준으로 리뷰 |
+| `/security-check` | 변경사항 보안 점검 (금지 패턴, 시크릿, 의존성) |
 | `/test` | 테스트 실행 및 결과 분석 |
 
 ### 6.3 권한 설정
@@ -683,6 +702,12 @@ new Intl.NumberFormat('ko-KR', {
 | [templates/ai-folder-templates.md](./templates/ai-folder-templates.md) | .ai/ 폴더 파일 초기 템플릿 |
 | [templates/claude-local-template.md](./templates/claude-local-template.md) | CLAUDE.local.md 가이드 및 템플릿 |
 | [SECURITY_ISMS.md](./SECURITY_ISMS.md) | ISMS 보안 가이드 (AI 개발) |
+| [security/AI_SECURITY_GUARDRAILS.md](./security/AI_SECURITY_GUARDRAILS.md) | 7-Layer AI 보안 가이드레일 마스터 문서 |
+| [security/OWASP_LLM_CHECKLIST.md](./security/OWASP_LLM_CHECKLIST.md) | OWASP LLM Top 10 체크리스트 |
+| [security/FORBIDDEN_PATTERNS.md](./security/FORBIDDEN_PATTERNS.md) | 금지 코드 패턴 카탈로그 (12개) |
+| [security/DATA_CLASSIFICATION.md](./security/DATA_CLASSIFICATION.md) | 데이터 분류 및 처리 기준 |
+| [security/INCIDENT_RESPONSE.md](./security/INCIDENT_RESPONSE.md) | AI 보안 인시던트 대응 가이드 |
+| [security/NIGHTBUILDER_SECURITY.md](./security/NIGHTBUILDER_SECURITY.md) | NightBuilder 보안 규칙 |
 | [CHANGELOG.md](./CHANGELOG.md) | 버전별 변경 이력 |
 
 ---
@@ -706,11 +731,67 @@ node /tmp/jinhak-standards/scripts/install-global-hook.js
 - [ ] `CLAUDE.md` 생성 (templates/project-claude.md 참고, 메타 정보 포함)
 - [ ] `.ai/` 폴더 및 하위 문서 생성 (SESSION_LOG, CURRENT_SPRINT, DECISIONS, ARCHITECTURE, CONVENTIONS)
 - [ ] `.claude/settings.json` 생성 (권한, hooks, deny 규칙 포함)
-- [ ] `.claude/skills/` 스킬 파일 생성 (commit, review-pr, session-start, test)
+- [ ] `.claude/skills/` 스킬 파일 생성 (apply-standard, commit, review-pr, security-check, session-start, test)
 - [ ] `.gitignore`에 `CLAUDE.local.md`, `.claude/settings.local.json`, `.env`, `*vibecoding-ref/` 추가
 - [ ] `CLAUDE.local.md` 필요 시 생성 (templates/claude-local-template.md 참고)
 - [ ] ISMS 보안 체크리스트 확인 (SECURITY_ISMS.md 섹션 8)
+- [ ] AI 보안 가이드레일 확인 (security/ 폴더 6개 문서)
 - [ ] 팀원에게 이 표준 문서 공유
+
+---
+
+## 11. AI 보안 가이드레일
+
+> v2.0에서 도입된 7-Layer AI 보안 프레임워크의 핵심 요약입니다.
+> 상세 내용: [security/AI_SECURITY_GUARDRAILS.md](./security/AI_SECURITY_GUARDRAILS.md)
+
+### 11.1 보안 등급별 행동 규칙
+
+| 등급 | 동작 | 예시 |
+|------|------|------|
+| **BLOCK** | 즉시 중단 + 개발자 알림 | 시크릿 유출, 프로덕션 DB 접근, 개인정보 하드코딩 |
+| **WARN** | 경고 표시 + 개발자 확인 요청 | 의심스러운 패키지 설치, 보안 민감 영역 수정, eval() 사용 |
+| **LOG** | 기록만 (정상 흐름) | 일반 보안 규칙 준수 현황, AI 코드 생성 이력 |
+
+### 11.2 금지 코드 패턴 (요약)
+
+AI가 생성해서는 안 되는 12가지 위험 패턴:
+
+| # | 패턴 | 위험 |
+|---|------|------|
+| 1 | `eval()`, `Function()`, `new Function()` | 동적 코드 실행 |
+| 2 | `child_process.exec()` + 사용자 입력 | 커맨드 인젝션 |
+| 3 | `fs.readFile()` + 미검증 경로 | Path Traversal |
+| 4 | `crypto.createHash('md5'/'sha1')` | 취약한 해시 |
+| 5 | `http://` (프로덕션) | 평문 전송 |
+| 6 | `cors({ origin: '*' })` (프로덕션) | 무제한 CORS |
+| 7 | `console.log(password/token)` | 민감정보 로깅 |
+| 8 | SQL 문자열 연결 | SQL Injection |
+| 9 | `res.send(error.stack)` | 스택 트레이스 노출 |
+| 10 | `jwt.verify()` 알고리즘 미지정 | 알고리즘 혼동 |
+| 11 | `Math.random()` 보안 목적 사용 | 예측 가능 난수 |
+| 12 | 하드코딩 IP/포트/도메인 | 환경 의존성 |
+
+> 상세 설명 및 안전한 대안: [security/FORBIDDEN_PATTERNS.md](./security/FORBIDDEN_PATTERNS.md)
+
+### 11.3 Human-in-the-Loop 필수 영역
+
+아래 영역의 AI 생성 코드는 반드시 시니어 개발자 리뷰 필요:
+
+1. **인증/인가 로직** - 로그인, JWT, 세션, RBAC
+2. **결제/정산 처리** - 수수료 계산, PG 연동, 환불
+3. **개인정보 처리** - 수험생 정보, 성적 데이터 CRUD
+4. **암호화/복호화** - 데이터 암복호화, 키 관리
+5. **인프라 설정** - Docker, 네트워크 정책
+6. **데이터 마이그레이션** - 스키마 변경, 데이터 이전
+
+### 11.4 보안 점검 명령어
+
+```
+/security-check    # 현재 변경사항 보안 스캔 (금지 패턴, 시크릿, 의존성)
+```
+
+> 관련 문서: [security/](./security/) 폴더 전체, [SECURITY_ISMS.md](./SECURITY_ISMS.md)
 
 ---
 
@@ -726,4 +807,4 @@ node /tmp/jinhak-standards/scripts/install-global-hook.js
 ---
 
 *마지막 업데이트: 2026-02*
-*버전: 1.8*
+*버전: 2.0*

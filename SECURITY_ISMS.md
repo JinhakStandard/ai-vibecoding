@@ -323,6 +323,77 @@ console.log('Auth header:', headers.authorization ? '[MASKED]' : 'none')
 - API Key가 요청/응답 로깅에 노출되지 않는지 확인
 - Stack trace에 환경 변수 값이 포함되지 않는지 확인
 
+### 7.6 AI 코드 생성 보안 (v2.0)
+
+AI가 생성한 코드에 대한 보안 강화 규칙입니다.
+
+#### 7.6.1 금지 코드 패턴
+
+AI가 생성해서는 안 되는 12가지 위험 패턴을 정의합니다. 상세 내용은 [security/FORBIDDEN_PATTERNS.md](./security/FORBIDDEN_PATTERNS.md)를 참조하세요.
+
+**핵심 금지 패턴:**
+- `eval()`, `Function()`, `new Function()` - 동적 코드 실행
+- `child_process.exec()` + 사용자 입력 - 커맨드 인젝션
+- SQL 문자열 연결 - SQL Injection
+- `res.send(error.stack)` - 스택 트레이스 노출
+- `jwt.verify()` 알고리즘 미지정 - 알고리즘 혼동 공격
+
+#### 7.6.2 보안 리뷰 필수 영역 (Human-in-the-Loop)
+
+아래 영역의 AI 생성 코드는 반드시 시니어 개발자 리뷰가 필요합니다:
+
+| 영역 | 리뷰 포인트 |
+|------|-----------|
+| 인증/인가 로직 | JWT 설정, 세션 관리, RBAC 구현 |
+| 결제/정산 처리 | PG 연동, 수수료 계산, 환불 로직 |
+| 개인정보 처리 | 수험생 정보, 성적 데이터 CRUD |
+| 암호화/복호화 | 키 관리, 알고리즘 선택 |
+| API Gateway/라우팅 | 접근 제어, Rate Limiting |
+| 데이터 마이그레이션 | 스키마 변경, 데이터 이전 |
+| 인프라 설정 | Docker, 네트워크 정책 |
+
+### 7.7 의존성 보안 강화 (v2.0)
+
+AI가 추천/설치하는 패키지에 대한 보안 검증 규칙입니다.
+
+#### 7.7.1 패키지 설치 전 검증
+
+AI가 새 패키지를 추천할 때 반드시 확인할 사항:
+1. `npm audit` / `pnpm audit` 결과 확인
+2. 주간 다운로드 수 10,000 이상 (소규모 패키지는 수동 리뷰)
+3. 최근 6개월 이내 업데이트 이력 확인
+4. 알려진 CVE 존재 여부 확인
+5. 라이선스 호환성 확인 (GPL 계열 주의)
+
+#### 7.7.2 금지 패키지 유형
+- 보안 취약점이 알려졌으나 패치되지 않은 패키지
+- 6개월 이상 유지보수 중단된 패키지
+- Typosquatting 의심 패키지 (예: `lodashs`, `reacct`)
+
+#### 7.7.3 Lock 파일 보호
+- `package-lock.json` / `pnpm-lock.yaml` 변경은 PR 리뷰 필수
+- AI가 직접 lock 파일을 수정하는 것은 금지
+- Lock 파일 충돌은 개발자가 직접 해결
+
+### 7.8 AI 생성 코드 추적 (v2.0)
+
+AI가 생성한 코드의 식별 및 감사 추적 체계입니다.
+
+#### 7.8.1 커밋 추적
+
+기존 `Co-Authored-By` 규칙을 유지하면서, 보안 민감 영역의 코드는 추가 표시를 권장합니다:
+
+```
+feat: 사용자 인증 로직 추가
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+AI-Review: required
+```
+
+#### 7.8.2 보안 민감 코드 표시
+
+보안 민감 영역(7.6.2)의 AI 생성 코드는 PR에서 별도 표시하여 리뷰어가 주의 깊게 확인할 수 있도록 합니다.
+
 ### 7.5 Claude Code 보안 설정 권장사항
 
 ```json
@@ -414,6 +485,29 @@ console.log('Auth header:', headers.authorization ? '[MASKED]' : 'none')
 - [ ] `.env` 파일이 `.gitignore`에 포함되어 있는가
 - [ ] Agent Teams 사용 시 SubagentStart hook이 설정되어 있는가
 - [ ] 디버그 로그에 OAuth 토큰, API Key 등 민감 정보가 노출되지 않는가
+
+### 8.7 AI 보안 가이드레일 (v2.0)
+
+- [ ] 7-Layer Defense 가이드레일이 적용되었는가 (security/ 폴더)
+- [ ] AI 생성 코드에 금지 패턴 12종이 포함되지 않았는가 (FORBIDDEN_PATTERNS.md)
+- [ ] 보안 민감 영역(인증, 결제, 개인정보 등)의 AI 코드에 시니어 리뷰가 수행되었는가
+- [ ] AI가 추천한 패키지의 보안 검증이 수행되었는가 (npm audit)
+- [ ] 데이터 분류 기준에 따라 AI 컨텍스트에 극비/대외비 데이터가 포함되지 않았는가
+- [ ] `/security-check` 스킬이 사용 가능한 상태인가
+- [ ] 인시던트 대응 절차가 팀에 공유되었는가 (INCIDENT_RESPONSE.md)
+
+---
+
+### 관련 보안 문서
+
+| 문서 | 내용 |
+|------|------|
+| [security/AI_SECURITY_GUARDRAILS.md](./security/AI_SECURITY_GUARDRAILS.md) | 7-Layer AI 보안 가이드레일 |
+| [security/OWASP_LLM_CHECKLIST.md](./security/OWASP_LLM_CHECKLIST.md) | OWASP LLM Top 10 체크리스트 |
+| [security/FORBIDDEN_PATTERNS.md](./security/FORBIDDEN_PATTERNS.md) | 금지 코드 패턴 카탈로그 |
+| [security/DATA_CLASSIFICATION.md](./security/DATA_CLASSIFICATION.md) | 데이터 분류/처리 기준 |
+| [security/INCIDENT_RESPONSE.md](./security/INCIDENT_RESPONSE.md) | 인시던트 대응 가이드 |
+| [security/NIGHTBUILDER_SECURITY.md](./security/NIGHTBUILDER_SECURITY.md) | NightBuilder 보안 규칙 |
 
 ---
 

@@ -6,6 +6,58 @@
 
 ---
 
+## 2026-02-20
+
+### 세션 요약
+- JINHAK 표준 v1.8 → v2.0 메이저 업그레이드 실행
+- 7-Layer AI 보안 가이드레일 아키텍처 도입 (OWASP LLM Top 10 2025 기반)
+- security/ 폴더 6개 보안 문서 신규 생성
+- 자동화 도구 생성 (Hook 스크립트, /security-check 스킬, ESLint/Secretlint/Semgrep 템플릿)
+- 기존 문서 4개 보안 강화 (CLAUDE.md, SECURITY_ISMS.md, CODING_CONVENTIONS.md, VIBE_CODING_GUIDE.md)
+- settings.json deny 3개 추가 + PreToolUse/PostToolUse Hook 추가
+- 스킬/템플릿 5개 업데이트 + CHANGELOG/README/PROJECT_STRUCTURE/QUICK_START_PROMPT 갱신
+- 통합 검증 통과 (JSON 파싱, Hook node 기반, 버전 메타, 줄 수 확인)
+
+### 주요 변경 (신규 파일 13개)
+- `security/AI_SECURITY_GUARDRAILS.md` - 7-Layer Defense 마스터 문서 (~379줄)
+- `security/OWASP_LLM_CHECKLIST.md` - OWASP LLM Top 10 체크리스트 (~231줄)
+- `security/FORBIDDEN_PATTERNS.md` - 금지 코드 패턴 12개 카탈로그 (~484줄)
+- `security/DATA_CLASSIFICATION.md` - 데이터 분류/처리 기준 (~242줄)
+- `security/INCIDENT_RESPONSE.md` - 인시던트 대응 가이드 (~301줄)
+- `security/NIGHTBUILDER_SECURITY.md` - NightBuilder 보안 규칙 (~182줄)
+- `scripts/security-check-hook.js` - PreToolUse 보안 Hook (~139줄)
+- `.claude/skills/security-check/SKILL.md` - /security-check 스킬 (~117줄)
+- `templates/.eslintrc.security.js` - ESLint 보안 규칙 템플릿 (~98줄)
+- `templates/.secretlintrc.json` - Secretlint 설정 (~69줄)
+- `templates/.semgreprc.yml` - Semgrep SAST 설정 (~137줄)
+- `templates/husky-security-hooks.md` - husky 보안 설정 가이드 (~182줄)
+
+### 주요 변경 (기존 파일 수정 14개)
+- `CLAUDE.md` - v2.0, 섹션 11 AI 보안 가이드레일 추가, 3중방어→7-Layer 매핑 (810줄)
+- `SECURITY_ISMS.md` - 섹션 7.6~7.8 AI 코드 보안, 체크리스트 8.7 추가
+- `CODING_CONVENTIONS.md` - 섹션 9.1 보안 금지 패턴, 섹션 10 보안 코딩 체크리스트
+- `VIBE_CODING_GUIDE.md` - 섹션 6.1 확장, 섹션 6.7 보안 체크 워크플로우
+- `.claude/settings.json` - deny 3개, PreToolUse/PostToolUse Hook 추가
+- `.claude/skills/apply-standard/SKILL.md` - v2.0 파일 목록, 검증 체크리스트
+- `.claude/skills/review-pr/SKILL.md` - 보안 리뷰 항목 3개 추가
+- `.claude/skills/session-start/SKILL.md` - 보안 상태 섹션 추가
+- `scripts/session-briefing.js` - v2.0 보안 감지 로직 추가
+- `templates/project-claude.md` - v2.0, 보안 요약 섹션
+- `CHANGELOG.md` - v2.0 변경 이력 + Migration Guide
+- `README.md` - v2.0, 구조 트리, 버전 이력
+- `PROJECT_STRUCTURE.md` - security/ 폴더 반영
+- `QUICK_START_PROMPT.md` - 4.5단계 보안, /security-check 명령
+
+### 검증 결과
+- settings.json JSON 파싱: OK
+- CLAUDE.md 줄 수: 810줄 (목표 850줄 미만)
+- security/ 폴더: 6개 파일 확인
+- skills/ 디렉토리: 6개 확인
+- jinhak_standard_version 2.0: 9개 파일 확인
+- 모든 Hook command: node 기반 확인
+
+---
+
 ## 2026-02-13
 
 ### 세션 요약

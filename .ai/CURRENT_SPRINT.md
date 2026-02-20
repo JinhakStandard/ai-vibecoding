@@ -1,6 +1,6 @@
 # 현재 진행 중인 작업
 
-> 마지막 업데이트: 2026-02-13
+> 마지막 업데이트: 2026-02-20
 
 ---
 
@@ -17,6 +17,17 @@
 ---
 
 ## 최근 완료
+
+### 2026-02-20
+- [x] JINHAK 표준 v1.8 → v2.0 메이저 업그레이드
+  - [x] security/ 폴더 6개 보안 문서 생성 (AI_SECURITY_GUARDRAILS, OWASP_LLM_CHECKLIST, FORBIDDEN_PATTERNS, DATA_CLASSIFICATION, INCIDENT_RESPONSE, NIGHTBUILDER_SECURITY)
+  - [x] 자동화 도구 생성 (security-check-hook.js, /security-check 스킬, ESLint/Secretlint/Semgrep 템플릿, husky 가이드)
+  - [x] 기존 문서 보안 강화 (CLAUDE.md, SECURITY_ISMS.md, CODING_CONVENTIONS.md, VIBE_CODING_GUIDE.md)
+  - [x] settings.json 보안 강화 (deny 3개 추가, PreToolUse/PostToolUse Hook 추가)
+  - [x] 스킬/템플릿 업데이트 (apply-standard, review-pr, session-start, project-claude.md)
+  - [x] CHANGELOG v2.0 작성 (Migration Guide 포함)
+  - [x] README, PROJECT_STRUCTURE, QUICK_START_PROMPT 업데이트
+  - [x] 통합 검증 (JSON 파싱, Hook node 기반, 버전 메타, 줄 수 확인)
 
 ### 2026-02-13
 - [x] JINHAK 표준 v1.8 일괄 정비 (5개 프로젝트)
@@ -35,6 +46,7 @@
 
 | 영역 | 완성도 | 상태 |
 |------|--------|------|
+| v2.0 보안 가이드레일 도입 | 100% | 완료 |
 | JabisStandard 자체 정비 | 100% | 완료 |
 | 외부 프로젝트 일괄 정비 | 100% | 완료 |
 | 글로벌 Hook 크로스 플랫폼 전환 | 100% | 완료 |

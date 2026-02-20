@@ -31,7 +31,10 @@
       "Bash(git reset --hard*)",
       "Bash(git clean -f*)",
       "Bash(git config *)",
-      "Bash(*--no-verify*)"
+      "Bash(*--no-verify*)",
+      "Bash(*curl*|*sh*)",
+      "Bash(*wget*|*bash*)",
+      "Bash(*curl*|*bash*)"
     ]
   },
   "env": {
@@ -57,6 +60,26 @@
           {
             "type": "command",
             "command": "node -e \"console.log('[SECURITY] 파일 수정 감지: ${file}')\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/security-check-hook.js"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"const cmd='${command}';if(cmd&&(cmd.includes('npm install')||cmd.includes('pnpm add'))){console.log('[SECURITY] 패키지 설치 감지 - npm audit 실행을 권장합니다')}\""
           }
         ]
       }
