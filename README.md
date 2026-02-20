@@ -117,7 +117,8 @@ JinhakStandard/
 ├── README.md                     ← 지금 보고 있는 문서
 ├── QUICK_START_PROMPT.md         # 빠른 적용 프롬프트 (복사-붙여넣기용)
 ├── CLAUDE.md                     # 메인 AI 개발 가이드 (핵심 원칙)
-├── CHANGELOG.md                  # 버전별 변경 이력
+├── RELEASE_NOTES.md              # 버전별 업데이트 상세 (v1.3~)
+├── CHANGELOG.md                  # 전체 변경 이력 (파일별 diff)
 ├── CODING_CONVENTIONS.md         # 코딩 컨벤션 상세
 ├── ARCHITECTURE.md               # 아키텍처 원칙 및 패턴
 ├── VIBE_CODING_GUIDE.md          # 바이브 코딩 방법론 (비개발자 포함)
@@ -259,6 +260,8 @@ claude
 
 ## 버전 히스토리
 
+> **버전별 업데이트 상세 내용은 [RELEASE_NOTES.md](./RELEASE_NOTES.md)를 참조하세요.**
+
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
 | **2.0** | **2026-02** | **AI 보안 가이드레일: 7-Layer Defense, OWASP LLM Top 10, 금지 패턴 12종, 데이터 분류, 인시던트 대응, /security-check 스킬** |
@@ -271,7 +274,7 @@ claude
 | 1.1 | 2025-02 | 자동 적용 프로세스, 버전 추적, 스킬 보강 |
 | 1.0 | 2025-02 | 초기 버전 - JINHAK Template 프로젝트 기반으로 작성 |
 
-> 상세 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요.
+> 파일별 상세 변경 이력은 [CHANGELOG.md](./CHANGELOG.md)를 참조하세요.
 
 ---
 
