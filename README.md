@@ -280,6 +280,12 @@ claude
 
 ---
 
+## 부록
+
+- [JABIS Gateway API 연동 매뉴얼](./JABIS_GATEWAY_API_MANUAL.md) - JABIS API Gateway 연동이 필요한 프로젝트용 가이드
+
+---
+
 ## 라이선스
 
 JINHAK 내부 사용 전용. 외부 공개 시 별도 라이선스 결정 필요.
