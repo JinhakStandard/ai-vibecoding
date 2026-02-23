@@ -5,6 +5,20 @@
 
 ---
 
+## v2.0.1 (2026-02-23) - ESM 호환성 수정
+
+### 핵심 변경
+
+`package.json`에 `"type": "module"`이 설정된 프로젝트에서 Hook 스크립트(`require()` 사용)가 ESM으로 해석되어 에러가 발생하는 문제를 수정합니다. 모든 CommonJS 스크립트 확장자를 `.js` → `.cjs`로 변경하여 `package.json`의 `type` 설정과 무관하게 항상 CommonJS로 동작합니다.
+
+### 변경 파일
+- 스크립트 6개 `.js` → `.cjs` 확장자 변경
+- `.claude/settings.json` Hook 경로 업데이트
+- `.gitattributes`에 `.cjs` LF 강제 규칙 추가
+- `install-global-hook.cjs` 레거시 `.js` Hook 미제거 버그 수정
+
+---
+
 ## v2.0 (2026-02) - AI 보안 가이드레일 도입
 
 ### 핵심 변경

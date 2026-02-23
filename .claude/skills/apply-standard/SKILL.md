@@ -74,7 +74,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 반드시 포함할 메타 정보:
 ```markdown
 <!-- JINHAK Standard Metadata -->
-<!-- jinhak_standard_version: 2.0 -->
+<!-- jinhak_standard_version: 2.0.1 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: YYYY-MM-DD -->
 ```
@@ -360,4 +360,4 @@ CLAUDE.md가 이미 있는 경우:
 - [ ] settings.json에 PreToolUse Bash 보안 검사 Hook이 설정되었는가
 - [ ] settings.json에 PostToolUse 패키지 설치 감시 Hook이 설정되었는가
 - [ ] CLAUDE.md에 섹션 11 "AI 보안 가이드레일"이 존재하는가
-- [ ] CLAUDE.md 메타 정보가 `jinhak_standard_version: 2.0`인가
+- [ ] CLAUDE.md 메타 정보가 `jinhak_standard_version: 2.0.1`인가

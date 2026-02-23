@@ -5,6 +5,36 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [2.0.1] - 2026-02-23
+
+### ESM 호환성 수정
+
+`package.json`에 `"type": "module"`이 설정된 프로젝트에서 Hook 스크립트가 `require()` 사용으로 인해 `ERR_REQUIRE_ESM` 에러가 발생하는 문제를 수정합니다.
+
+### 변경
+- 모든 CommonJS 스크립트 확장자 `.js` → `.cjs` 변경 (6개 파일)
+  - `.claude/scripts/session-briefing.js` → `.cjs`
+  - `scripts/session-briefing.js` → `.cjs`
+  - `scripts/batch-apply.js` → `.cjs`
+  - `scripts/check-standard.js` → `.cjs`
+  - `scripts/install-global-hook.js` → `.cjs`
+  - `scripts/security-check-hook.js` → `.cjs`
+- `.claude/settings.json` Hook 경로 업데이트 (`session-briefing.cjs`, `security-check-hook.cjs`)
+- `.gitattributes`에 `.cjs` 파일 LF 강제 규칙 추가
+
+### 수정
+- `install-global-hook.cjs`: 레거시 `.js` Hook 항목이 제거되지 않고 `.cjs`와 공존하던 버그 수정
+
+### Migration Guide (v2.0 → v2.0.1)
+
+기존 v2.0 프로젝트에서 업데이트 시:
+1. `.claude/scripts/session-briefing.js` → `session-briefing.cjs`로 이름 변경
+2. `.claude/settings.json` Hook 경로에서 `.js` → `.cjs` 변경
+3. `scripts/security-check-hook.js` → `security-check-hook.cjs`로 이름 변경
+4. 글로벌 Hook 재설치: `node /tmp/jinhak-standards/scripts/install-global-hook.cjs`
+
+---
+
 ## [2.0] - 2026-02
 
 ### AI 보안 가이드레일 도입 (7-Layer Defense)
