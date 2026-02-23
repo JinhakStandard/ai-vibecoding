@@ -3,12 +3,12 @@
 /**
  * JINHAK 표준 v1.8 일괄 적용 스크립트
  *
- * 대상 프로젝트들의 CLAUDE.md 메타 버전, Hook, session-briefing.js,
+ * 대상 프로젝트들의 CLAUDE.md 메타 버전, Hook, session-briefing.cjs,
  * settings.json, .gitignore를 표준에 맞게 업데이트합니다.
  *
  * 사용법:
- *   node scripts/batch-apply.js           # 실제 적용
- *   node scripts/batch-apply.js --dry-run # 변경 사항만 미리보기
+ *   node scripts/batch-apply.cjs           # 실제 적용
+ *   node scripts/batch-apply.cjs --dry-run # 변경 사항만 미리보기
  */
 
 const fs = require('fs');
@@ -18,9 +18,9 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const STANDARD_VERSION = '1.8';
 const TODAY = new Date().toISOString().split('T')[0];
 
-// 표준 session-briefing.js 소스 경로
+// 표준 session-briefing.cjs 소스 경로
 const STANDARD_ROOT = path.resolve(__dirname, '..');
-const SESSION_BRIEFING_SRC = path.join(STANDARD_ROOT, '.claude', 'scripts', 'session-briefing.js');
+const SESSION_BRIEFING_SRC = path.join(STANDARD_ROOT, '.claude', 'scripts', 'session-briefing.cjs');
 
 // ============================================================
 // 대상 프로젝트 정의
@@ -67,7 +67,7 @@ function getStandardHooks(project) {
         hooks: [
           {
             type: 'command',
-            command: 'node .claude/scripts/session-briefing.js',
+            command: 'node .claude/scripts/session-briefing.cjs',
             once: true
           }
         ]
@@ -211,13 +211,13 @@ function updateClaudeMdMeta(project) {
 }
 
 // ============================================================
-// 2. session-briefing.js 복사
+// 2. session-briefing.cjs 복사
 // ============================================================
 function copySessionBriefing(project) {
-  const destPath = path.join(project.root, '.claude', 'scripts', 'session-briefing.js');
+  const destPath = path.join(project.root, '.claude', 'scripts', 'session-briefing.cjs');
 
   if (!fs.existsSync(SESSION_BRIEFING_SRC)) {
-    log(project.name, 'ERROR', 'session-briefing.js 소스를 찾을 수 없음');
+    log(project.name, 'ERROR', 'session-briefing.cjs 소스를 찾을 수 없음');
     return;
   }
 
@@ -225,12 +225,12 @@ function copySessionBriefing(project) {
   const existing = readFileSync(destPath);
   const source = readFileSync(SESSION_BRIEFING_SRC);
   if (existing === source) {
-    log(project.name, 'OK', 'session-briefing.js 이미 최신');
+    log(project.name, 'OK', 'session-briefing.cjs 이미 최신');
     return;
   }
 
   copyFileSync(SESSION_BRIEFING_SRC, destPath);
-  log(project.name, 'COPY', 'session-briefing.js 복사 완료');
+  log(project.name, 'COPY', 'session-briefing.cjs 복사 완료');
 }
 
 // ============================================================

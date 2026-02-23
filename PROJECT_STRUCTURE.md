@@ -332,7 +332,7 @@ cat > .claude/settings.json << 'EOF'
     "UserPromptSubmit": [
       {
         "matcher": "",
-        "command": "node .claude/scripts/session-briefing.js"
+        "command": "node .claude/scripts/session-briefing.cjs"
       }
     ]
   }
@@ -408,7 +408,7 @@ if ($StandardRepo -and (Test-Path "$StandardRepo\.claude\skills")) {
     "UserPromptSubmit": [
       {
         "matcher": "",
-        "command": "node .claude/scripts/session-briefing.js"
+        "command": "node .claude/scripts/session-briefing.cjs"
       }
     ]
   }

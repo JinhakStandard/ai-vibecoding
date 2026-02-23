@@ -17,7 +17,7 @@ JINHAK 전사에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하�
 git clone https://github.com/JinhakStandard/ai-vibecoding.git /tmp/jinhak-standards
 
 # 글로벌 Hook 설치
-node /tmp/jinhak-standards/scripts/install-global-hook.js
+node /tmp/jinhak-standards/scripts/install-global-hook.cjs
 ```
 
 설치 후 아무 프로젝트에서 Claude Code를 열면:
@@ -132,8 +132,8 @@ JinhakStandard/
 │   ├── INCIDENT_RESPONSE.md      #   인시던트 대응 가이드
 │   └── NIGHTBUILDER_SECURITY.md  #   NightBuilder 보안 규칙
 ├── scripts/
-│   ├── install-global-hook.js    # 글로벌 Hook 설치/제거 스크립트
-│   └── security-check-hook.js    # 보안 검사 Hook (v2.0)
+│   ├── install-global-hook.cjs    # 글로벌 Hook 설치/제거 스크립트
+│   └── security-check-hook.cjs    # 보안 검사 Hook (v2.0)
 ├── .claude/                      # Claude Code 설정 (표준 템플릿)
 │   ├── settings.json             #   권한, hooks 설정
 │   └── skills/                   #   슬래시 명령어
@@ -266,8 +266,8 @@ claude
 |------|------|----------|
 | **2.0** | **2026-02-20** | **AI 보안 가이드레일: 7-Layer Defense, OWASP LLM Top 10, 금지 패턴 12종, 데이터 분류, 인시던트 대응, /security-check 스킬** |
 | 1.8 | 2026-02-13 | Hook 크로스 플랫폼 통일: 모든 Hook을 Node.js 기반으로, Windows 개발 환경 규칙 |
-| 1.7 | 2026-02-13 | 세션 브리핑 자동화: session-briefing.js로 세션 시작 시 자동 컨텍스트 로드 |
-| 1.6 | 2026-02-12 | 글로벌 Hook 자동 감지: 세션 시작 시 표준 적용 여부 자동 감지, install-global-hook.js 추가 |
+| 1.7 | 2026-02-13 | 세션 브리핑 자동화: session-briefing.cjs로 세션 시작 시 자동 컨텍스트 로드 |
+| 1.6 | 2026-02-12 | 글로벌 Hook 자동 감지: 세션 시작 시 표준 적용 여부 자동 감지, install-global-hook.cjs 추가 |
 | 1.5.1 | 2026-02-12 | .gitignore 지침 보강: settings.local.json 추가 |
 | 1.5 | 2026-02-11 | 빠른 적용 프롬프트 추가: 로컬 클론 방식 표준화, QUICK_START_PROMPT.md 신규 |
 | 1.4 | 2026-02-10 | 권한 설정 보강: git 서브커맨드 옵션 포함 commit/push 패턴 허용 추가 |

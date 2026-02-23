@@ -145,7 +145,7 @@ Git Hooks와 Claude Code Hooks는 서로 다른 시점에 동작하므로, 함�
   │  │ PreToolUse Hook                    │ ← AI가 파일을    │
   │  │ - 민감 파일 접근 차단               │   읽거나 수정할 때│
   │  │ - 위험 명령 경고                    │   실시간 감시    │
-  │  │ (scripts/security-check-hook.js)   │                  │
+  │  │ (scripts/security-check-hook.cjs)  │                  │
   │  └────────────────────────────────────┘                  │
   │                                                          │
   │  ┌────────────────────────────────────┐                  │

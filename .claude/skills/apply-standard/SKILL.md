@@ -188,7 +188,7 @@ JINHAK 전사 AI 개발 표준 v1.8을 프로젝트에 적용한다.
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/scripts/session-briefing.js",
+            "command": "node .claude/scripts/session-briefing.cjs",
             "once": true
           }
         ]
@@ -223,7 +223,7 @@ JINHAK 전사 AI 개발 표준 v1.8을 프로젝트에 적용한다.
 > Hook은 Node.js 기반으로 작성되어 OS별 변환이 필요 없습니다. Windows/macOS/Linux 모두 동일한 설정을 사용합니다.
 
 **Scripts 복사** - 표준 저장소의 세션 브리핑 스크립트를 복사:
-- `/tmp/jinhak-standards/scripts/session-briefing.js` → `.claude/scripts/session-briefing.js`
+- `/tmp/jinhak-standards/scripts/session-briefing.cjs` → `.claude/scripts/session-briefing.cjs`
 
 > 이 스크립트는 `UserPromptSubmit` Hook에서 실행되어 세션 시작 시 자동으로 프로젝트 상태(현재 스프린트, 최근 작업, git 상태, 표준 버전)를 Claude에게 주입합니다.
 
@@ -243,7 +243,7 @@ JINHAK 전사 AI 개발 표준 v1.8을 프로젝트에 적용한다.
 - `security/NIGHTBUILDER_SECURITY.md`
 
 **보안 Hook 스크립트 복사 (v2.0)**:
-- `/tmp/jinhak-standards/scripts/security-check-hook.js` → `scripts/security-check-hook.js`
+- `/tmp/jinhak-standards/scripts/security-check-hook.cjs` → `scripts/security-check-hook.cjs`
 
 **보안 도구 템플릿 복사 (v2.0, 선택)**:
 - `templates/.eslintrc.security.js` (ESLint 보안 규칙)
@@ -281,8 +281,8 @@ CLAUDE.md가 이미 있는 경우:
    - `jinhak_standard_version` 메타 정보 업데이트
 6. **파일 무결성 검증** (버전 일치 시에도 반드시 수행):
    다음 필수 파일이 존재하고 올바른지 확인하여, 누락/불일치 파일은 표준 저장소에서 복사/수정:
-   - [ ] `.claude/scripts/session-briefing.js` 존재 여부
-   - [ ] `.claude/settings.json` Hook 경로가 `node .claude/scripts/session-briefing.js`인지
+   - [ ] `.claude/scripts/session-briefing.cjs` 존재 여부
+   - [ ] `.claude/settings.json` Hook 경로가 `node .claude/scripts/session-briefing.cjs`인지
    - [ ] `.claude/skills/` 내 6개 스킬 존재 (apply-standard, commit, review-pr, security-check, session-start, test)
    - [ ] `.ai/` 폴더 5개 파일 존재
    - [ ] `.gitignore`에 필수 항목 포함
@@ -348,14 +348,14 @@ CLAUDE.md가 이미 있는 경우:
 - [ ] SECURITY_ISMS.md 보안 가이드를 참조하도록 설정되었는가
 
 ### v1.8 신규 항목 검증
-- [ ] `.claude/scripts/session-briefing.js` 파일이 존재하고 실행 가능한가
+- [ ] `.claude/scripts/session-briefing.cjs` 파일이 존재하고 실행 가능한가
 - [ ] settings.json Hook이 Node.js 기반(`node` 또는 `node -e`)으로 통일되었는가
 - [ ] OS 종속 명령(`echo`, `cat`, `powershell` 등)이 Hook에 포함되지 않았는가
 
 ### v2.0 신규 항목 검증
 - [ ] `security/` 폴더에 6개 보안 문서가 모두 존재하는가
 - [ ] `.claude/skills/security-check/SKILL.md` 스킬이 존재하는가
-- [ ] `scripts/security-check-hook.js` 보안 Hook 스크립트가 존재하는가
+- [ ] `scripts/security-check-hook.cjs` 보안 Hook 스크립트가 존재하는가
 - [ ] settings.json deny 규칙에 `curl|sh`, `wget|bash`, `curl|bash`가 추가되었는가
 - [ ] settings.json에 PreToolUse Bash 보안 검사 Hook이 설정되었는가
 - [ ] settings.json에 PostToolUse 패키지 설치 감시 Hook이 설정되었는가

@@ -103,7 +103,7 @@ if (version) {
   if (vNum >= 2.0) {
     const securityDir = fs.existsSync('security');
     const securitySkill = fs.existsSync('.claude/skills/security-check/SKILL.md');
-    const securityHook = fs.existsSync('scripts/security-check-hook.js');
+    const securityHook = fs.existsSync('scripts/security-check-hook.cjs');
     if (securityDir && securitySkill) {
       output.push('[보안 가이드레일] v2.0 활성 (/security-check 사용 가능)');
     } else {

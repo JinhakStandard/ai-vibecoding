@@ -15,7 +15,7 @@
  *     "matcher": "",
  *     "hooks": [{
  *       "type": "command",
- *       "command": "node scripts/security-check-hook.js"
+ *       "command": "node scripts/security-check-hook.cjs"
  *     }]
  *   }]
  */

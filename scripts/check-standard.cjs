@@ -3,12 +3,12 @@
 /**
  * JINHAK AI 개발 표준 - 글로벌 Hook용 표준 감지 스크립트
  *
- * ~/.claude/scripts/check-standard.js 에 복사되어
+ * ~/.claude/scripts/check-standard.cjs 에 복사되어
  * 글로벌 UserPromptSubmit Hook에서 실행됩니다.
  *
  * 동작:
  * 1. CLAUDE.md에서 jinhak_standard_version 확인
- * 2. 버전이 있으면 session-briefing.js 위임 실행
+ * 2. 버전이 있으면 session-briefing.cjs 위임 실행
  * 3. 버전이 없으면 표준 미적용 경고 출력
  */
 
@@ -35,8 +35,8 @@ function getStandardVersion() {
 const version = getStandardVersion();
 
 if (version) {
-  // 표준 적용됨 → session-briefing.js 위임 실행
-  const briefingPath = path.join('.claude', 'scripts', 'session-briefing.js');
+  // 표준 적용됨 → session-briefing.cjs 위임 실행
+  const briefingPath = path.join('.claude', 'scripts', 'session-briefing.cjs');
   if (fs.existsSync(briefingPath)) {
     try {
       execSync(`node "${briefingPath}"`, { stdio: 'inherit', timeout: 10000 });

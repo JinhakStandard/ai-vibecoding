@@ -10,7 +10,7 @@ JINHAK 전사 표준을 기반으로 프로젝트 특화 규칙을 추가합니�
 ### 파일/폴더
 | 유형 | 규칙 | 예시 |
 |------|------|------|
-| 스크립트 | kebab-case | `session-briefing.js`, `batch-apply.js` |
+| 스크립트 | kebab-case | `session-briefing.cjs`, `batch-apply.cjs` |
 | 스킬 폴더 | kebab-case | `apply-standard/`, `review-pr/` |
 | 문서 | UPPER_SNAKE_CASE | `SESSION_LOG.md`, `CURRENT_SPRINT.md` |
 | 템플릿 | kebab-case | `project-claude.md` |

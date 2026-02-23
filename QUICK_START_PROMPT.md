@@ -56,7 +56,7 @@ mkdir -p .ai
 
 ### 4.5단계: 보안 가이드레일 복사 (v2.0)
 - /tmp/jinhak-standards/security/ 폴더 전체를 security/ 로 복사
-- /tmp/jinhak-standards/scripts/security-check-hook.js → scripts/ 로 복사
+- /tmp/jinhak-standards/scripts/security-check-hook.cjs → scripts/ 로 복사
 
 ### 5단계: .gitignore 업데이트
 다음 항목이 없으면 추가:

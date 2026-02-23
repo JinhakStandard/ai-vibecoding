@@ -67,7 +67,7 @@
 ├── .claude/               # Claude Code 설정 폴더
 │   ├── settings.json      # 권한, 환경변수, 훅 설정
 │   ├── scripts/           # Hook 실행 스크립트
-│   │   └── session-briefing.js  # 세션 시작 시 자동 브리핑
+│   │   └── session-briefing.cjs  # 세션 시작 시 자동 브리핑
 │   └── skills/            # 슬래시 명령어 (Skills) 정의
 │       ├── apply-standard/SKILL.md   # 표준 적용/업데이트
 │       ├── commit/SKILL.md           # 커밋 생성
@@ -409,7 +409,7 @@ body: { action: 'delete', id: '123' }
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/scripts/session-briefing.js",
+            "command": "node .claude/scripts/session-briefing.cjs",
             "once": true
           }
         ]
@@ -439,10 +439,10 @@ body: { action: 'delete', id: '123' }
 **설치 방법:**
 ```bash
 # 표준 저장소를 클론한 뒤 설치 스크립트 실행
-node /tmp/jinhak-standards/scripts/install-global-hook.js
+node /tmp/jinhak-standards/scripts/install-global-hook.cjs
 
 # 제거
-node /tmp/jinhak-standards/scripts/install-global-hook.js --remove
+node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 ```
 
 **동작 방식:**
@@ -734,7 +734,7 @@ new Intl.NumberFormat('ko-KR', {
 
 **글로벌 Hook 설치 (최초 1회, 권장):**
 ```bash
-node /tmp/jinhak-standards/scripts/install-global-hook.js
+node /tmp/jinhak-standards/scripts/install-global-hook.cjs
 ```
 > 설치 후 모든 프로젝트에서 Claude Code 시작 시 표준 적용 여부가 자동 감지됩니다.
 

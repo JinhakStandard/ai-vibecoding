@@ -47,7 +47,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/scripts/session-briefing.js",
+            "command": "node .claude/scripts/session-briefing.cjs",
             "once": true
           }
         ]
@@ -68,7 +68,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/security-check-hook.js"
+            "command": "node scripts/security-check-hook.cjs"
           }
         ]
       }
