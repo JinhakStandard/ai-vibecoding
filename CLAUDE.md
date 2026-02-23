@@ -49,7 +49,7 @@
 | 비밀키 관리 | **Vault** (모든 Private Key, 인증 정보, API Key 등) |
 | 버전관리 | Git (GitHub) |
 | CI/CD | GitHub Actions |
-| 컨테이너 | Docker |
+| 컨테이너 | Docker ([DOCKER_STANDARD.md](./DOCKER_STANDARD.md)) |
 | 모니터링 | 프로젝트별 선택 |
 
 ---
@@ -377,6 +377,22 @@ body: { action: 'create', data: {...} }
 body: { action: 'update', id: '123', data: {...} }
 body: { action: 'delete', id: '123' }
 ```
+
+---
+
+## 5.1 Docker 관련 규칙
+
+Dockerfile 작성/수정 시 반드시 [DOCKER_STANDARD.md](./DOCKER_STANDARD.md)를 참조합니다.
+
+**핵심 규칙:**
+- 멀티스테이지 빌드 필수 (dependencies → builder → production)
+- `RUN chown -R` 사용 금지 → `COPY --chown` 사용
+- BuildKit 캐시 마운트 필수 적용
+- non-root 유저 실행 필수
+- SPA는 `nginx:alpine` 사용 (`npm install -g serve` 지양)
+- `.env` 파일은 절대 Docker 이미지에 포함하지 않음
+
+**프로젝트 유형별 템플릿:** `templates/docker/` 디렉토리 참조
 
 ---
 
@@ -729,6 +745,7 @@ new Intl.NumberFormat('ko-KR', {
 | [security/DATA_CLASSIFICATION.md](./security/DATA_CLASSIFICATION.md) | 데이터 분류 및 처리 기준 |
 | [security/INCIDENT_RESPONSE.md](./security/INCIDENT_RESPONSE.md) | AI 보안 인시던트 대응 가이드 |
 | [security/NIGHTBUILDER_SECURITY.md](./security/NIGHTBUILDER_SECURITY.md) | NightBuilder 보안 규칙 |
+| [DOCKER_STANDARD.md](./DOCKER_STANDARD.md) | Docker 빌드 및 배포 표준 |
 | [CHANGELOG.md](./CHANGELOG.md) | 버전별 변경 이력 |
 
 ---

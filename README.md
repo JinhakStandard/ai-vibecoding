@@ -123,6 +123,7 @@ JinhakStandard/
 ├── ARCHITECTURE.md               # 아키텍처 원칙 및 패턴
 ├── VIBE_CODING_GUIDE.md          # 바이브 코딩 방법론 (비개발자 포함)
 ├── PROJECT_STRUCTURE.md          # 표준 프로젝트 구조
+├── DOCKER_STANDARD.md            # Docker 빌드 및 배포 표준
 ├── SECURITY_ISMS.md              # ISMS 보안 가이드
 ├── security/                     # AI 보안 가이드레일 (v2.0)
 │   ├── AI_SECURITY_GUARDRAILS.md #   7-Layer Defense 마스터 문서
@@ -146,6 +147,12 @@ JinhakStandard/
 └── templates/
     ├── project-claude.md         # 개별 프로젝트용 CLAUDE.md 템플릿
     ├── component-template.md     # 컴포넌트 생성 템플릿
+    ├── docker/                   # Docker 템플릿
+    │   ├── node-api.Dockerfile   #   Node.js API 서버용
+    │   ├── react-spa.Dockerfile  #   React/Vite SPA용
+    │   ├── monorepo.Dockerfile   #   pnpm 모노레포용
+    │   ├── .dockerignore         #   공통 .dockerignore
+    │   └── nginx.conf            #   SPA용 nginx 설정
     ├── .eslintrc.security.js     # ESLint 보안 규칙 (v2.0)
     ├── .secretlintrc.json        # 시크릿 스캔 설정 (v2.0)
     ├── .semgreprc.yml            # SAST 설정 (v2.0)
@@ -162,6 +169,7 @@ JinhakStandard/
 | **ARCHITECTURE.md** | 개발자/설계자 | 프론트엔드/백엔드 아키텍처, API 설계, DB 선택 기준, Vault 보안, 서비스 간 통신 |
 | **VIBE_CODING_GUIDE.md** | 전체 (비개발자 포함) | AI와 협업하는 방법, 프롬프트 작성법, 주의사항, 팀 협업 방법 |
 | **PROJECT_STRUCTURE.md** | 개발자 | 표준 디렉토리 구조, 파일 배치 규칙, 초기 설정 스크립트 |
+| **DOCKER_STANDARD.md** | 개발자/DevOps | Docker 빌드 및 배포 표준, Dockerfile 템플릿 |
 | **SECURITY_ISMS.md** | 개발자/보안 | ISMS 인증 기준 AI 개발 보안 가이드 |
 | **security/** | 개발자/보안 | 7-Layer AI 보안 가이드레일 (OWASP LLM Top 10, 금지 패턴, 데이터 분류, 인시던트 대응) |
 
