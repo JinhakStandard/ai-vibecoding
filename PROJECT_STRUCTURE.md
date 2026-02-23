@@ -198,10 +198,12 @@ project-root/
     │   └── SKILL.md           # /review-pr 명령어
     ├── security-check/
     │   └── SKILL.md           # /security-check 명령어 (v2.0)
-    ├── test/
-    │   └── SKILL.md           # /test 명령어
-    └── session-start/
-        └── SKILL.md           # /session-start 명령어
+    ├── session-end/
+    │   └── SKILL.md           # /session-end 명령어
+    ├── session-start/
+    │   └── SKILL.md           # /session-start 명령어
+    └── test/
+        └── SKILL.md           # /test 명령어
 ```
 
 ### 4.3 security/ 폴더 (v2.0)

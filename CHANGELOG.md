@@ -5,6 +5,40 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [2.0.2] - 2026-02-23
+
+### 세션 관리 개선
+
+세션 로그 기록 누락 방지 및 Hook 적용 시 프로젝트 고유 설정 보존 문제를 개선합니다.
+
+### 추가
+- `scripts/session-end-reminder.cjs` - Stop Hook 리마인더 스크립트 (미커밋 변경사항 + SESSION_LOG 미기록 시 알림)
+- `.claude/skills/session-end/SKILL.md` - `/session-end` 슬래시 명령어 (세션 종료 시 일괄 정리: 변경사항 수집, SESSION_LOG/CURRENT_SPRINT 업데이트, 종료 브리핑)
+
+### 변경
+- `.claude/settings.json` Stop Hook → `node scripts/session-end-reminder.cjs` 로 변경 (기존 단순 로그 출력 대체)
+- `scripts/batch-apply.cjs` 비파괴 Hook 병합 로직 도입 (`mergeHooksNonDestructive`)
+  - 기존: `settings.hooks` 통째 교체 → 프로젝트 고유 Hook 삭제됨
+  - 변경: JINHAK/orchestra Hook만 식별하여 교체, 프로젝트 고유 Hook 보존
+  - `JINHAK_HOOK_IDENTIFIERS` 배열로 표준 Hook 식별 (session-briefing, session-end-reminder, security-check-hook, [SECURITY], [SESSION])
+- `scripts/batch-apply.cjs` session-end-reminder.cjs 대상 프로젝트 복사 로직 추가
+- CLAUDE.md 섹션 2.1 skills 트리에 `session-end/SKILL.md` 추가
+- CLAUDE.md 섹션 2.2 세션 관리 규칙에 `/session-end` 명령 및 Stop Hook 리마인더 설명 추가
+- CLAUDE.md 섹션 6.2 Skills 표에 `/session-end` 행 추가
+- PROJECT_STRUCTURE.md 섹션 4.2 .claude/ 트리에 `session-end/` 추가
+- `.claude/skills/apply-standard/SKILL.md` Skills 복사 목록 및 검증 체크리스트 업데이트 (6개→7개 스킬)
+- QUICK_START_PROMPT.md 스킬 목록 및 슬래시 명령어 안내 업데이트
+
+### Migration Guide (v2.0.1 → v2.0.2)
+
+기존 v2.0.1 프로젝트에서 업데이트 시:
+1. `.claude/scripts/session-end-reminder.cjs` 파일 복사
+2. `.claude/settings.json` Stop Hook command를 `node .claude/scripts/session-end-reminder.cjs`로 변경
+3. `.claude/skills/session-end/SKILL.md` 파일 복사
+4. 세션 재시작 (settings.json 변경 반영)
+
+---
+
 ## [2.0.1] - 2026-02-23
 
 ### ESM 호환성 수정

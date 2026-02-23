@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * JINHAK 표준 v1.8 일괄 적용 스크립트
+ * JINHAK 표준 v2.0.1 일괄 적용 스크립트
  *
  * 대상 프로젝트들의 CLAUDE.md 메타 버전, Hook, session-briefing.cjs,
  * settings.json, .gitignore를 표준에 맞게 업데이트합니다.
@@ -15,12 +15,13 @@ const fs = require('fs');
 const path = require('path');
 
 const DRY_RUN = process.argv.includes('--dry-run');
-const STANDARD_VERSION = '1.8';
+const STANDARD_VERSION = '2.0.1';
 const TODAY = new Date().toISOString().split('T')[0];
 
-// 표준 session-briefing.cjs 소스 경로
+// 표준 스크립트 소스 경로
 const STANDARD_ROOT = path.resolve(__dirname, '..');
 const SESSION_BRIEFING_SRC = path.join(STANDARD_ROOT, '.claude', 'scripts', 'session-briefing.cjs');
+const SESSION_END_REMINDER_SRC = path.join(STANDARD_ROOT, 'scripts', 'session-end-reminder.cjs');
 
 // ============================================================
 // 대상 프로젝트 정의
@@ -101,7 +102,7 @@ function getStandardHooks(project) {
         hooks: [
           {
             type: 'command',
-            command: 'node -e "console.log(\'[SESSION] 응답 완료\')"'
+            command: 'node .claude/scripts/session-end-reminder.cjs'
           }
         ]
       }
@@ -117,6 +118,47 @@ function isOrchestraHook(hookEntry) {
   return hookEntry.hooks.some(h =>
     h.command && h.command.includes('ai-orchestra')
   );
+}
+
+// JINHAK 표준 Hook인지 식별하는 함수
+const JINHAK_HOOK_IDENTIFIERS = [
+  'session-briefing.cjs',
+  'session-end-reminder.cjs',
+  'security-check-hook.cjs',
+  '[SECURITY]',
+  '[SESSION]'
+];
+
+function isJinhakHook(hookEntry) {
+  if (!hookEntry || !hookEntry.hooks) return false;
+  return hookEntry.hooks.some(h =>
+    h.command && JINHAK_HOOK_IDENTIFIERS.some(id => h.command.includes(id))
+  );
+}
+
+// 비파괴 병합: 기존 Hook에서 JINHAK/orchestra Hook만 제거 후 표준 Hook 추가
+function mergeHooksNonDestructive(existingHooks, standardHooks) {
+  const merged = {};
+  const allEvents = new Set([
+    ...Object.keys(existingHooks || {}),
+    ...Object.keys(standardHooks)
+  ]);
+
+  for (const event of allEvents) {
+    const existing = existingHooks?.[event] || [];
+    const standard = standardHooks[event] || [];
+
+    // 기존에서 JINHAK/orchestra Hook 제거 -> 프로젝트 고유만 남음
+    const projectOnly = existing.filter(e => !isJinhakHook(e) && !isOrchestraHook(e));
+
+    // 표준 Hook + 프로젝트 고유 Hook 합침
+    merged[event] = [...standard, ...projectOnly];
+
+    // 빈 배열이면 제거
+    if (merged[event].length === 0) delete merged[event];
+  }
+
+  return merged;
 }
 
 // ============================================================
@@ -234,6 +276,28 @@ function copySessionBriefing(project) {
 }
 
 // ============================================================
+// 2-2. session-end-reminder.cjs 복사
+// ============================================================
+function copySessionEndReminder(project) {
+  const destPath = path.join(project.root, '.claude', 'scripts', 'session-end-reminder.cjs');
+
+  if (!fs.existsSync(SESSION_END_REMINDER_SRC)) {
+    log(project.name, 'ERROR', 'session-end-reminder.cjs 소스를 찾을 수 없음');
+    return;
+  }
+
+  const existing = readFileSync(destPath);
+  const source = readFileSync(SESSION_END_REMINDER_SRC);
+  if (existing === source) {
+    log(project.name, 'OK', 'session-end-reminder.cjs 이미 최신');
+    return;
+  }
+
+  copyFileSync(SESSION_END_REMINDER_SRC, destPath);
+  log(project.name, 'COPY', 'session-end-reminder.cjs 복사 완료');
+}
+
+// ============================================================
 // 3. settings.json Hook 정비
 // ============================================================
 function fixSettingsJson(project) {
@@ -252,39 +316,9 @@ function fixSettingsJson(project) {
     return;
   }
 
-  // ai-orchestra hooks 보존
-  const orchestraPreToolUse = [];
-  const orchestraPostToolUse = [];
-
-  if (settings.hooks) {
-    if (settings.hooks.PreToolUse) {
-      settings.hooks.PreToolUse.forEach(entry => {
-        if (isOrchestraHook(entry)) {
-          orchestraPreToolUse.push(entry);
-        }
-      });
-    }
-    if (settings.hooks.PostToolUse) {
-      settings.hooks.PostToolUse.forEach(entry => {
-        if (isOrchestraHook(entry)) {
-          orchestraPostToolUse.push(entry);
-        }
-      });
-    }
-  }
-
-  // 표준 Hook으로 교체
+  // 비파괴 병합: JINHAK/orchestra Hook만 교체, 프로젝트 고유 Hook 보존
   const standardHooks = getStandardHooks(project);
-
-  // ai-orchestra hooks 복원 (PreToolUse 앞에 삽입)
-  if (orchestraPreToolUse.length > 0) {
-    standardHooks.PreToolUse = [...orchestraPreToolUse, ...standardHooks.PreToolUse];
-  }
-  if (orchestraPostToolUse.length > 0) {
-    standardHooks.PostToolUse = orchestraPostToolUse;
-  }
-
-  settings.hooks = standardHooks;
+  settings.hooks = mergeHooksNonDestructive(settings.hooks, standardHooks);
 
   // allow 규칙 보완 (JabisCert 전용)
   if (project.fixAllow && settings.permissions && settings.permissions.allow) {
@@ -465,6 +499,7 @@ TARGET_PROJECTS.forEach(project => {
 
   updateClaudeMdMeta(project);
   copySessionBriefing(project);
+  copySessionEndReminder(project);
   fixSettingsJson(project);
   fixGitignore(project);
   createAiFolder(project);

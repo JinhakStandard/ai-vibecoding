@@ -1,9 +1,9 @@
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 2.0.1 -->
+<!-- jinhak_standard_version: 2.0.2 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: 2026-02-23 -->
 
-# JINHAK 전사 AI 개발 표준 v2.0.1
+# JINHAK 전사 AI 개발 표준 v2.0.2
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
 
@@ -73,6 +73,7 @@
 │       ├── commit/SKILL.md           # 커밋 생성
 │       ├── review-pr/SKILL.md        # PR 리뷰
 │       ├── security-check/SKILL.md   # 보안 점검 (v2.0)
+│       ├── session-end/SKILL.md      # 세션 종료
 │       ├── session-start/SKILL.md    # 세션 시작
 │       └── test/SKILL.md             # 테스트 실행
 ├── security/              # AI 보안 가이드레일 (v2.0)
@@ -113,10 +114,12 @@ CLAUDE.md (전사 표준) < 프로젝트 CLAUDE.md < CLAUDE.local.md
 1. `.ai/CURRENT_SPRINT.md` 읽어 진행 중인 작업 파악
 2. `.ai/SESSION_LOG.md`에서 최근 작업 확인 (필요 시)
 
-**작업 완료 후 (필수):**
-1. `.ai/CURRENT_SPRINT.md` 진행 상태 업데이트
-2. 중요 기술 결정 시 `.ai/DECISIONS.md` 업데이트
-3. `.ai/SESSION_LOG.md`에 요약 기록 (핵심 변경사항 위주)
+**세션 종료 시 (필수):**
+1. `/session-end` 명령으로 일괄 정리 (권장), 또는 수동으로:
+   - `.ai/CURRENT_SPRINT.md` 진행 상태 업데이트
+   - 중요 기술 결정 시 `.ai/DECISIONS.md` 업데이트
+   - `.ai/SESSION_LOG.md`에 요약 기록 (핵심 변경사항 위주)
+2. Stop Hook이 미기록 변경사항 감지 시 자동 리마인더 출력
 
 **SESSION_LOG.md 기록 형식:**
 ```markdown
@@ -466,6 +469,7 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 ├── commit/SKILL.md            # /commit - 커밋 생성
 ├── review-pr/SKILL.md         # /review-pr - PR 리뷰
 ├── security-check/SKILL.md   # /security-check - 보안 점검 (v2.0)
+├── session-end/SKILL.md       # /session-end - 세션 종료
 ├── session-start/SKILL.md     # /session-start - 세션 시작
 └── test/SKILL.md              # /test - 테스트 실행
 ```
@@ -474,6 +478,7 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 |--------|------|
 | `/apply-standard` | 이 표준을 프로젝트에 적용하거나 업데이트 |
 | `/session-start` | 세션 시작, 이전 작업 확인, 표준 버전 체크 |
+| `/session-end` | 세션 종료, 작업 기록 정리, 다음 세션 컨텍스트 저장 |
 | `/commit` | 변경사항 분석 후 표준에 맞는 커밋 생성 |
 | `/review-pr <번호>` | PR을 표준 기준으로 리뷰 |
 | `/security-check` | 변경사항 보안 점검 (금지 패턴, 시크릿, 의존성) |

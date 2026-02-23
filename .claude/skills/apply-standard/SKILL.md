@@ -74,7 +74,7 @@ CLAUDE.md가 없는 경우 다음을 순서대로 생성합니다:
 반드시 포함할 메타 정보:
 ```markdown
 <!-- JINHAK Standard Metadata -->
-<!-- jinhak_standard_version: 2.0.1 -->
+<!-- jinhak_standard_version: 2.0.2 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: YYYY-MM-DD -->
 ```
@@ -231,6 +231,7 @@ JINHAK 전사 AI 개발 표준 v1.8을 프로젝트에 적용한다.
 - `commit/SKILL.md`
 - `review-pr/SKILL.md`
 - `security-check/SKILL.md` (v2.0 신규)
+- `session-end/SKILL.md`
 - `session-start/SKILL.md`
 - `test/SKILL.md`
 
@@ -283,7 +284,7 @@ CLAUDE.md가 이미 있는 경우:
    다음 필수 파일이 존재하고 올바른지 확인하여, 누락/불일치 파일은 표준 저장소에서 복사/수정:
    - [ ] `.claude/scripts/session-briefing.cjs` 존재 여부
    - [ ] `.claude/settings.json` Hook 경로가 `node .claude/scripts/session-briefing.cjs`인지
-   - [ ] `.claude/skills/` 내 6개 스킬 존재 (apply-standard, commit, review-pr, security-check, session-start, test)
+   - [ ] `.claude/skills/` 내 7개 스킬 존재 (apply-standard, commit, review-pr, security-check, session-end, session-start, test)
    - [ ] `.ai/` 폴더 5개 파일 존재
    - [ ] `.gitignore`에 필수 항목 포함
 
@@ -360,4 +361,4 @@ CLAUDE.md가 이미 있는 경우:
 - [ ] settings.json에 PreToolUse Bash 보안 검사 Hook이 설정되었는가
 - [ ] settings.json에 PostToolUse 패키지 설치 감시 Hook이 설정되었는가
 - [ ] CLAUDE.md에 섹션 11 "AI 보안 가이드레일"이 존재하는가
-- [ ] CLAUDE.md 메타 정보가 `jinhak_standard_version: 2.0.1`인가
+- [ ] CLAUDE.md 메타 정보가 `jinhak_standard_version: 2.0.2`인가

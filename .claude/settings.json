@@ -101,7 +101,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"console.log('[SESSION] 응답 완료')\""
+            "command": "node scripts/session-end-reminder.cjs"
           }
         ]
       }
