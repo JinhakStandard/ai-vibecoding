@@ -123,7 +123,6 @@ JinhakStandard/
 ├── ARCHITECTURE.md               # 아키텍처 원칙 및 패턴
 ├── VIBE_CODING_GUIDE.md          # 바이브 코딩 방법론 (비개발자 포함)
 ├── PROJECT_STRUCTURE.md          # 표준 프로젝트 구조
-├── DOCKER_STANDARD.md            # Docker 빌드 및 배포 표준
 ├── SECURITY_ISMS.md              # ISMS 보안 가이드
 ├── security/                     # AI 보안 가이드레일 (v2.0)
 │   ├── AI_SECURITY_GUARDRAILS.md #   7-Layer Defense 마스터 문서
@@ -147,12 +146,6 @@ JinhakStandard/
 └── templates/
     ├── project-claude.md         # 개별 프로젝트용 CLAUDE.md 템플릿
     ├── component-template.md     # 컴포넌트 생성 템플릿
-    ├── docker/                   # Docker 템플릿
-    │   ├── node-api.Dockerfile   #   Node.js API 서버용
-    │   ├── react-spa.Dockerfile  #   React/Vite SPA용
-    │   ├── monorepo.Dockerfile   #   pnpm 모노레포용
-    │   ├── .dockerignore         #   공통 .dockerignore
-    │   └── nginx.conf            #   SPA용 nginx 설정
     ├── .eslintrc.security.js     # ESLint 보안 규칙 (v2.0)
     ├── .secretlintrc.json        # 시크릿 스캔 설정 (v2.0)
     ├── .semgreprc.yml            # SAST 설정 (v2.0)
@@ -169,7 +162,6 @@ JinhakStandard/
 | **ARCHITECTURE.md** | 개발자/설계자 | 프론트엔드/백엔드 아키텍처, API 설계, DB 선택 기준, Vault 보안, 서비스 간 통신 |
 | **VIBE_CODING_GUIDE.md** | 전체 (비개발자 포함) | AI와 협업하는 방법, 프롬프트 작성법, 주의사항, 팀 협업 방법 |
 | **PROJECT_STRUCTURE.md** | 개발자 | 표준 디렉토리 구조, 파일 배치 규칙, 초기 설정 스크립트 |
-| **DOCKER_STANDARD.md** | 개발자/DevOps | Docker 빌드 및 배포 표준, Dockerfile 템플릿 |
 | **SECURITY_ISMS.md** | 개발자/보안 | ISMS 인증 기준 AI 개발 보안 가이드 |
 | **security/** | 개발자/보안 | 7-Layer AI 보안 가이드레일 (OWASP LLM Top 10, 금지 패턴, 데이터 분류, 인시던트 대응) |
 
@@ -272,9 +264,7 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
-| **2.0.3** | **2026-02-23** | **Docker 표준: DOCKER_STANDARD.md, Dockerfile 템플릿 3종 (Node API, React SPA, 모노레포), nginx.conf** |
-| 2.0.2 | 2026-02-23 | 세션 관리 개선: Stop Hook 리마인더, /session-end 스킬, batch-apply 비파괴 Hook 병합 |
-| 2.0.1 | 2026-02-23 | ESM 호환성 수정: 모든 CommonJS 스크립트 .js → .cjs 변경, 글로벌 Hook 레거시 제거 버그 수정 |
+| **2.0.1** | **2026-02-23** | **ESM 호환성 수정: 모든 CommonJS 스크립트 .js → .cjs 변경, 글로벌 Hook 레거시 제거 버그 수정** |
 | 2.0 | 2026-02-20 | AI 보안 가이드레일: 7-Layer Defense, OWASP LLM Top 10, 금지 패턴 12종, 데이터 분류, 인시던트 대응, /security-check 스킬 |
 | 1.8 | 2026-02-13 | Hook 크로스 플랫폼 통일: 모든 Hook을 Node.js 기반으로, Windows 개발 환경 규칙 |
 | 1.7 | 2026-02-13 | 세션 브리핑 자동화: session-briefing.cjs로 세션 시작 시 자동 컨텍스트 로드 |

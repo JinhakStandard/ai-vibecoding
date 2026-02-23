@@ -416,20 +416,7 @@ POST 요청에는 action 필드로 생성/수정/삭제를 구분한다.
 
 ---
 
-## 7. 배포 아키텍처
-
-Docker 이미지 빌드는 [DOCKER_STANDARD.md](./DOCKER_STANDARD.md)를 따릅니다.
-프로젝트 유형별 Dockerfile 템플릿은 `templates/docker/`에서 확인하세요.
-
-| 유형 | 베이스 이미지 | 템플릿 |
-|------|-------------|--------|
-| Node.js API | `node:20-alpine` | `templates/docker/node-api.Dockerfile` |
-| React SPA | `nginx:alpine` (prod) | `templates/docker/react-spa.Dockerfile` |
-| 모노레포 | `node:20-alpine` | `templates/docker/monorepo.Dockerfile` |
-
----
-
-## 8. AI 협업 아키텍처 고려사항
+## 7. AI 협업 아키텍처 고려사항
 
 ### 7.1 대규모 코드베이스 분석 전략 (1M 컨텍스트)
 

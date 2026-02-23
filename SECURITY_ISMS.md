@@ -486,17 +486,7 @@ AI-Review: required
 - [ ] Agent Teams 사용 시 SubagentStart hook이 설정되어 있는가
 - [ ] 디버그 로그에 OAuth 토큰, API Key 등 민감 정보가 노출되지 않는가
 
-### 8.7 Docker 보안
-
-- [ ] alpine 기반 이미지만 사용하고 있는가 (공격 표면 최소화)
-- [ ] `.env` 파일이 Docker 이미지에 포함되지 않는가 (`.dockerignore` 확인)
-- [ ] 빌드 시크릿이 `--mount=type=secret`으로 전달되는가
-- [ ] production 스테이지에서 non-root 유저로 실행하는가
-- [ ] `npm audit` critical 경고가 해결되었는가
-
-> 상세 규칙: [DOCKER_STANDARD.md](./DOCKER_STANDARD.md) 섹션 4
-
-### 8.8 AI 보안 가이드레일 (v2.0)
+### 8.7 AI 보안 가이드레일 (v2.0)
 
 - [ ] 7-Layer Defense 가이드레일이 적용되었는가 (security/ 폴더)
 - [ ] AI 생성 코드에 금지 패턴 12종이 포함되지 않았는가 (FORBIDDEN_PATTERNS.md)

@@ -5,30 +5,6 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
-## [2.0.3] - 2026-02-23
-
-### Docker 빌드 및 배포 표준 추가
-
-JABIS 전체 프로젝트의 Docker 이미지 빌드를 표준화합니다. 멀티스테이지 빌드, chown 최적화, BuildKit 캐시 활용, non-root 실행 등 핵심 규칙과 프로젝트 유형별 Dockerfile 템플릿을 제공합니다.
-
-### 추가
-- `DOCKER_STANDARD.md` - Docker 빌드/배포 표준 문서 (7개 섹션 + PR 리뷰 체크리스트)
-- `templates/docker/node-api.Dockerfile` - Node.js API 서버 3단계 멀티스테이지 빌드 템플릿
-- `templates/docker/react-spa.Dockerfile` - React + Vite SPA (pnpm + nginx:alpine) 템플릿
-- `templates/docker/monorepo.Dockerfile` - pnpm workspace 모노레포 템플릿 (ARG APP_NAME)
-- `templates/docker/nginx.conf` - SPA용 nginx 설정 (gzip, SPA 라우팅, 정적 캐시, 보안 헤더)
-- `templates/docker/.dockerignore` - 공통 Docker 빌드 제외 파일 목록
-
-### 변경
-- CLAUDE.md 섹션 1 기술스택에 DOCKER_STANDARD.md 링크 추가
-- CLAUDE.md 섹션 5.1 Docker 관련 규칙 신규 추가
-- CLAUDE.md 섹션 9 문서 참조에 DOCKER_STANDARD.md 추가
-- ARCHITECTURE.md 섹션 7 배포 아키텍처 신규 추가 (프로젝트 유형별 템플릿 안내)
-- SECURITY_ISMS.md 섹션 8.7 Docker 보안 체크리스트 신규 추가
-- README.md 문서 구조 트리 및 문서 설명 표에 Docker 관련 항목 추가
-
----
-
 ## [2.0.2] - 2026-02-23
 
 ### 세션 관리 개선
