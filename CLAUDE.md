@@ -1,9 +1,9 @@
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 2.0.2 -->
+<!-- jinhak_standard_version: 2.0.3 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: 2026-02-23 -->
 
-# JINHAK 전사 AI 개발 표준 v2.0.2
+# JINHAK 전사 AI 개발 표준 v2.0.3
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
 

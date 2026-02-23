@@ -272,7 +272,9 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
-| **2.0.1** | **2026-02-23** | **ESM 호환성 수정: 모든 CommonJS 스크립트 .js → .cjs 변경, 글로벌 Hook 레거시 제거 버그 수정** |
+| **2.0.3** | **2026-02-23** | **Docker 표준: DOCKER_STANDARD.md, Dockerfile 템플릿 3종 (Node API, React SPA, 모노레포), nginx.conf** |
+| 2.0.2 | 2026-02-23 | 세션 관리 개선: Stop Hook 리마인더, /session-end 스킬, batch-apply 비파괴 Hook 병합 |
+| 2.0.1 | 2026-02-23 | ESM 호환성 수정: 모든 CommonJS 스크립트 .js → .cjs 변경, 글로벌 Hook 레거시 제거 버그 수정 |
 | 2.0 | 2026-02-20 | AI 보안 가이드레일: 7-Layer Defense, OWASP LLM Top 10, 금지 패턴 12종, 데이터 분류, 인시던트 대응, /security-check 스킬 |
 | 1.8 | 2026-02-13 | Hook 크로스 플랫폼 통일: 모든 Hook을 Node.js 기반으로, Windows 개발 환경 규칙 |
 | 1.7 | 2026-02-13 | 세션 브리핑 자동화: session-briefing.cjs로 세션 시작 시 자동 컨텍스트 로드 |
