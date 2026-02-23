@@ -69,7 +69,7 @@ function createBackup() {
 
 function isJinhakHook(entry) {
   return entry.hooks?.some(
-    (h) => h.command?.includes(JINHAK_IDENTIFIER) || h.command?.includes(LEGACY_IDENTIFIER)
+    (h) => h.command?.includes(JINHAK_IDENTIFIER) || h.command?.includes('check-standard.js') || h.command?.includes(LEGACY_IDENTIFIER)
   );
 }
 
@@ -115,7 +115,7 @@ function removeCheckScript() {
 
 function isLegacyHook(entry) {
   return entry.hooks?.some(
-    (h) => h.command?.includes(LEGACY_IDENTIFIER) || h.command?.includes('check-standard.js') || (h.command?.includes(JINHAK_IDENTIFIER) && !h.command?.includes("require('os').homedir()"))
+    (h) => h.command?.includes(LEGACY_IDENTIFIER) || h.command?.includes('check-standard.js')
   );
 }
 
