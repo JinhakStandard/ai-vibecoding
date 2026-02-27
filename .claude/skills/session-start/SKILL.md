@@ -5,16 +5,17 @@ description: AI 개발 세션을 시작하고 이전 작업 컨텍스트를 로�
 
 새로운 AI 개발 세션을 시작합니다. 이전 작업 내용을 파악하고 현재 진행 상태를 확인합니다.
 
-> **Agent Memory**: Claude Code의 프로젝트 메모리가 활성화되어 있으면 이전 세션의 컨텍스트를 자동으로 회상합니다. `.ai/` 파일은 팀원 간 공유와 Git 추적이 필요한 핵심 사항을 보조합니다.
+> **Auto Memory**: Claude Code는 `~/.claude/projects/.../memory/MEMORY.md`에 대화 간 지속되는 메모리를 자동으로 로드합니다. `.ai/` 파일은 팀원 간 공유와 Git 추적이 필요한 핵심 사항을 보조합니다.
 
 ## 실행 절차
 
 ### 1단계: 이전 작업 확인
 다음 파일들을 순서대로 읽습니다:
 
-1. **`.ai/CURRENT_SPRINT.md`** - 현재 진행 중/대기 중인 작업 파악
-2. **`.ai/SESSION_LOG.md`** - 최근 세션 작업 확인 (최근 3개 세션)
-3. **`.ai/DECISIONS.md`** - 최근 기술 의사결정 확인
+1. **`memory/MEMORY.md`** - Auto Memory에서 이전 세션 컨텍스트 확인 (자동 로드됨)
+2. **`.ai/CURRENT_SPRINT.md`** - 현재 진행 중/대기 중인 작업 파악
+3. **`.ai/SESSION_LOG.md`** - 최근 세션 작업 확인 (최근 3개 세션)
+4. **`.ai/DECISIONS.md`** - 최근 기술 의사결정 확인
 
 파일이 없으면 `.ai/` 폴더 구조 생성을 제안합니다.
 
@@ -49,6 +50,9 @@ description: AI 개발 세션을 시작하고 이전 작업 컨텍스트를 로�
 - 현재 적용: vX.X
 - 최신 버전: vX.X
 - 상태: [최신 / 업데이트 필요]
+
+### Auto Memory 상태
+- MEMORY.md: [로드됨 / 미존재 → 신규 생성 권장]
 
 ### 보안 상태 (v2.0)
 - security/ 폴더: [존재 / 미존재]

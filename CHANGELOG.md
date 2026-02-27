@@ -5,6 +5,58 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [2.1] - 2026-02-27
+
+### Claude Code 신기능 통합 (Auto Memory, Agent Teams 강화, Worktree)
+
+Claude Code의 공식 기능을 표준에 반영합니다. Auto Memory 시스템 가이드, Agent Teams 워크플로우 상세화, Git Worktree 격리 개발 가이드, `/orchestrate` 스킬을 추가합니다.
+
+### 추가
+- CLAUDE.md 섹션 2.7 "Auto Memory 활용" 신규 추가
+  - `~/.claude/projects/.../memory/MEMORY.md` 경로 및 구조
+  - 200줄 제한, 토픽별 서브파일 분리 가이드
+  - 저장할 것/저장 안 할 것 기준
+  - Auto Memory vs `.ai/` 폴더 역할 구분 테이블
+- CLAUDE.md 섹션 6.8 "Git Worktree 격리 개발" 신규 추가
+  - `EnterWorktree` 도구 사용법 및 주의사항
+  - `isolation: "worktree"` 에이전트 파라미터 가이드
+  - WorktreeCreate/Remove Hook 예시
+  - 활용 시나리오 테이블
+- `.claude/skills/orchestrate/SKILL.md` 신규 추가 (`/orchestrate` 스킬)
+  - 0단계 적합성 판단 기준
+  - 팀 구성 → 태스크 분배 → 모니터링 → 결과 통합 → 종료 전체 플로우
+  - 오케스트레이션 패턴 3가지 예시
+- CLAUDE.md 섹션 6.1 Hook 이벤트 테이블에 `WorktreeCreate`, `WorktreeRemove` 추가
+
+### 변경
+- CLAUDE.md 섹션 6.4 Agent Teams 대폭 강화 (기존 개요 수준 → 완전한 워크플로우 문서)
+  - 6.4.1 팀 워크플로우 (TeamCreate → 종료 전체 흐름)
+  - 6.4.2 SendMessage 타입별 설명 (message/broadcast/shutdown/plan_approval)
+  - 6.4.3 내장 Task 시스템 (TaskCreate/Update/List/Get)
+  - 6.4.4 Background 에이전트 및 에이전트 Resume
+  - 6.4.5 적합/부적합 작업 정리
+  - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` 활성화 설정 유지
+- CLAUDE.md 섹션 6.7 Plan 모드 & Task 관리 상세화
+  - Plan 모드 사용/비사용 기준 명확화
+  - EnterPlanMode → AskUserQuestion → ExitPlanMode 플로우 문서화
+  - Agent Teams에서 plan_approval_request/response 처리 방법 추가
+  - Task 도구 역할 테이블 추가
+- `session-start/SKILL.md`: Auto Memory 확인 단계 추가 (1단계에 memory/MEMORY.md 포함), 브리핑에 "Auto Memory 상태" 항목 추가
+- `session-end/SKILL.md`: Auto Memory 업데이트 단계(4단계) 추가
+- CLAUDE.md 프로젝트 구조 트리에 `orchestrate/SKILL.md` 추가
+- CLAUDE.md 스킬 목록 테이블에 `/orchestrate` 추가
+- CLAUDE.md 버전 2.0.2 → 2.1
+
+### Migration Guide (v2.0.2 → v2.1)
+
+기존 v2.0.2 프로젝트에서 업데이트 시:
+1. **Auto Memory**: `~/.claude/projects/.../memory/MEMORY.md` 생성 (선택, AI가 자동 관리)
+2. **orchestrate 스킬 복사**: `/tmp/jinhak-standards/.claude/skills/orchestrate/` → `.claude/skills/`
+3. **session-start/session-end 스킬 업데이트**: 최신 버전으로 교체
+4. **CLAUDE.md 업데이트**: `/apply-standard`로 자동 적용 또는 섹션 2.7, 6.4, 6.7, 6.8 직접 반영
+
+---
+
 ## [2.0.2] - 2026-02-23
 
 ### 세션 관리 개선
