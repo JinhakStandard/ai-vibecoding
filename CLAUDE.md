@@ -1,9 +1,9 @@
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 2.2 -->
+<!-- jinhak_standard_version: 2.3 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: 2026-02-28 -->
 
-# JINHAK 전사 AI 개발 표준 v2.2
+# JINHAK 전사 AI 개발 표준 v2.3
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
 
@@ -73,7 +73,8 @@
 │       ├── commit/SKILL.md           # 커밋 생성
 │       ├── review-pr/SKILL.md        # PR 리뷰
 │       ├── security-check/SKILL.md   # 보안 점검 (v2.0)
-│       ├── deep-plan/SKILL.md         # Planner-Critic 심층 계획 (v2.2)
+│       ├── deep-plan/SKILL.md         # Planner-Critic 적응적 추천 (v2.3)
+│       ├── debug/SKILL.md             # 체계적 디버깅 (v2.3)
 │       ├── orchestrate/SKILL.md      # Agent Teams 오케스트레이션 (v2.1)
 │       ├── session-end/SKILL.md      # 세션 종료
 │       ├── session-start/SKILL.md    # 세션 시작
@@ -90,7 +91,10 @@
     ├── CURRENT_SPRINT.md  # 현재 진행/대기 작업 현황
     ├── DECISIONS.md       # 기술 의사결정 기록 (ADR)
     ├── ARCHITECTURE.md    # 시스템 아키텍처 문서
-    └── CONVENTIONS.md     # 코딩 컨벤션
+    ├── CONVENTIONS.md     # 코딩 컨벤션
+    ├── PENDING_PLANS.md   # /deep-plan 미수렴 보류 계획 (NightBuilder용)
+    └── plans/             # /deep-plan 최종 계획서 아카이브
+        └── YYYY-MM-DD_HHmm_[작업요약].md
 ```
 
 #### 2.1.1 CLAUDE.local.md 오버라이드
@@ -145,6 +149,13 @@ CLAUDE.md (전사 표준) < 프로젝트 CLAUDE.md < CLAUDE.local.md
 3. **보안을 최우선으로 한다** - XSS, SQL Injection, 커맨드 인젝션 등 OWASP Top 10 취약점 방지
 4. **기존 패턴을 따른다** - 프로젝트의 기존 컨벤션과 패턴을 존중
 5. **한국어로 소통한다** - 모든 응답, 주석 설명, 커밋 메시지는 한국어 사용
+6. **절차를 건너뛰지 않는다** - 스킬에 정의된 단계는 "이 경우에는 불필요하다"고 자체 판단하여 생략하지 않는다. 단계를 건너뛸 합리적 이유가 있으면 사용자에게 먼저 확인을 구한다.
+
+   금지되는 합리화 패턴:
+   - "이 변경은 단순하므로 [절차]가 불필요합니다" → 사용자에게 확인 필요
+   - "이미 충분히 검증되었으므로 [검증 단계]를 건너뜁니다" → 실행 후 보고
+   - "시간 절약을 위해 [단계]를 생략합니다" → 절차 준수가 시간 절약보다 우선
+   - "이전 경험상 이 패턴은 안전합니다" → 매번 검증 필수
 
 ### 2.4 AI 안티패턴 자동 감지
 
@@ -515,7 +526,8 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 ├── commit/SKILL.md            # /commit - 커밋 생성
 ├── review-pr/SKILL.md         # /review-pr - PR 리뷰
 ├── security-check/SKILL.md   # /security-check - 보안 점검 (v2.0)
-├── deep-plan/SKILL.md         # /deep-plan - Planner-Critic 심층 계획 (v2.2)
+├── deep-plan/SKILL.md         # /deep-plan - Planner-Critic 적응적 추천 (v2.3)
+├── debug/SKILL.md             # /debug - 체계적 디버깅 (v2.3)
 ├── orchestrate/SKILL.md       # /orchestrate - Agent Teams 오케스트레이션 (v2.1)
 ├── session-end/SKILL.md       # /session-end - 세션 종료
 ├── session-start/SKILL.md     # /session-start - 세션 시작
@@ -530,9 +542,10 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 | `/commit` | 변경사항 분석 후 표준에 맞는 커밋 생성 |
 | `/review-pr <번호>` | PR을 표준 기준으로 리뷰 |
 | `/security-check` | 변경사항 보안 점검 (금지 패턴, 시크릿, 의존성) |
-| `/deep-plan` | Planner-Critic 듀얼 에이전트로 심층 계획 수립 및 비평 검증 |
-| `/orchestrate` | Agent Teams 구성하여 복잡한 작업 병렬 처리 |
-| `/test` | 테스트 실행 및 결과 분석 |
+| `/deep-plan` | Planner-Critic 가중치 비평 + C6 Hard Gate 심층 계획 수립 |
+| `/debug` | 4단계 체계적 디버깅 (근본 원인 추적 + Red-Green 검증) |
+| `/orchestrate` | Agent Teams 구성하여 복잡한 작업 병렬 처리 (2단계 검증) |
+| `/test` | 테스트 실행 및 결과 분석 (Red-Green 검증 포함) |
 
 ### 6.3 권한 설정
 
@@ -765,11 +778,15 @@ Opus 4.6은 문맥 신호를 감지하여 추론 깊이를 자동 조절하는 *
 - 명확한 지시가 있는 단순 기능 추가
 - 순수 탐색/리서치 작업 (코드 변경 없음)
 
-**Plan 모드 진행 흐름:**
+**Plan 모드 진행 흐름 (적응적 추천 포함):**
 ```
 EnterPlanMode
     ↓
 코드베이스 탐색 (Glob, Grep, Read)
+    ↓
+[복잡도 자동 판정]
+    ├─ L3+ 해당 → "/deep-plan 추천" 안내 → 사용자 승인/거절
+    └─ 그 외 → 일반 Plan 모드 계속
     ↓
 [불명확한 요구사항이 있으면] AskUserQuestion으로 먼저 확인
     ↓
@@ -780,8 +797,19 @@ ExitPlanMode → 사용자 승인 대기
 [승인] 구현 시작  /  [피드백] 계획 수정
 ```
 
+**복잡도 자동 판정 기준 (L3+ 추천 트리거):**
+
+| 조건 | 설명 |
+|------|------|
+| 수정 대상 파일 5개 이상 | 영향 범위가 넓어 체계적 계획 필요 |
+| 아키텍처 결정 포함 | 기술 선택, 구조 변경 등 되돌리기 어려운 결정 |
+| Human-in-the-Loop 필수 영역 | 인증/결제/개인정보/암호화/인프라/마이그레이션 |
+| 2개 이상 구현 방법 존재 | 트레이드오프 분석이 필요한 경우 |
+
+> `/deep-plan`은 **자동 추천하되 강제하지 않습니다**. 사용자가 거절하면 일반 Plan 모드로 진행합니다.
+
 > **주의**: `AskUserQuestion`은 접근 방법/요구사항 명확화에 사용. "계획이 괜찮으세요?"는 `ExitPlanMode`가 처리.
-> **심층 계획**: 복잡한 작업(5파일+, 아키텍처 결정)은 `/deep-plan`으로 Planner-Critic 듀얼 에이전트 심층 계획이 가능합니다. 상세: [VIBE_CODING_GUIDE.md 섹션 6.8](./VIBE_CODING_GUIDE.md)
+> **심층 계획**: 복잡한 작업은 `/deep-plan`으로 Planner-Critic 듀얼 에이전트 + 가중치 비평 + C6 Hard Gate 심층 계획이 가능합니다. 상세: [VIBE_CODING_GUIDE.md 섹션 6.8](./VIBE_CODING_GUIDE.md)
 
 **Agent Teams에서 Plan 승인 (plan_approval_request):**
 
@@ -889,6 +917,23 @@ Task({
 | 일반 기능 개발 | 불필요 |
 | 단순 버그 수정 | 불필요 |
 
+### 6.9 스킬 토큰 최적화
+
+Claude Code는 스킬의 YAML frontmatter(name + description)를 세션 시작 시 로드하고, 전체 SKILL.md는 해당 스킬이 호출될 때 로드합니다 (Progressive Disclosure).
+
+**스킬 작성 시 최적화 원칙:**
+
+1. **frontmatter의 description을 정확하고 구체적으로** 작성
+   - Claude가 description만 보고 적절한 스킬을 선택할 수 있어야 함
+   - 나쁜 예: "디버깅 도구" → 좋은 예: "4단계 체계적 디버깅 — 근본 원인 추적 후 검증된 수정 적용"
+
+2. **SKILL.md 본문은 절차적 지시에 집중**
+   - 배경 설명, 이론, 예시를 과도하게 넣지 않음
+   - 상세 참조가 필요하면 별도 .md 파일로 분리하고 스킬에서 참조
+
+3. **스킬당 토큰 목표: 2,000~3,000 토큰 이내**
+   - 초과 시 핵심 절차만 SKILL.md에, 나머지는 references/ 로 분리
+
 ---
 
 ## 7. 표준 적용 프로세스
@@ -982,6 +1027,7 @@ new Intl.NumberFormat('ko-KR', {
 | [templates/ai-folder-templates.md](./templates/ai-folder-templates.md) | .ai/ 폴더 파일 초기 템플릿 |
 | [templates/claude-local-template.md](./templates/claude-local-template.md) | CLAUDE.local.md 가이드 및 템플릿 |
 | [templates/memory-templates.md](./templates/memory-templates.md) | Auto Memory 서브파일 참고 템플릿 |
+| [templates/skill-testing-guide.md](./templates/skill-testing-guide.md) | 스킬 품질 검증(TDD) 가이드 |
 | [SECURITY_ISMS.md](./SECURITY_ISMS.md) | ISMS 보안 가이드 (AI 개발) |
 | [security/AI_SECURITY_GUARDRAILS.md](./security/AI_SECURITY_GUARDRAILS.md) | 7-Layer AI 보안 가이드레일 마스터 문서 |
 | [security/OWASP_LLM_CHECKLIST.md](./security/OWASP_LLM_CHECKLIST.md) | OWASP LLM Top 10 체크리스트 |
@@ -1088,4 +1134,4 @@ AI가 생성해서는 안 되는 12가지 위험 패턴:
 ---
 
 *마지막 업데이트: 2026-02-28*
-*버전: 2.2*
+*버전: 2.3*

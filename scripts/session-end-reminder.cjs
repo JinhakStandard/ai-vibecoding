@@ -29,5 +29,14 @@ try {
   // 파일 없으면 리마인더 출력
 }
 
-// 3. 리마인더 출력
+// 3. README.md 업데이트 여부 확인
+const changedFiles = (diff + '\n' + diffCached).trim();
+const readmeUpdated = changedFiles.split('\n').some(f => f.toLowerCase() === 'readme.md');
+const hasNonReadmeChanges = changedFiles.split('\n').some(f => f.toLowerCase() !== 'readme.md' && f.length > 0);
+
+if (!readmeUpdated && hasNonReadmeChanges) {
+  console.log('[README] 변경사항이 있지만 README.md가 업데이트되지 않았습니다. README.md 반영이 필요한지 확인하세요.');
+}
+
+// 4. 세션 로그 리마인더 출력
 console.log('[SESSION] 미커밋 변경사항이 있습니다. 세션 종료 전 /session-end 또는 .ai/SESSION_LOG.md 업데이트를 권장합니다.');

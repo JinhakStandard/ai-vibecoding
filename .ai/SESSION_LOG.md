@@ -6,6 +6,27 @@
 
 ---
 
+## 2026-02-28
+
+### 세션 작업 요약
+- JINHAK 표준 v2.2 릴리스 (/deep-plan 듀얼 에이전트, Auto Memory 보강)
+- GitHub remote 추가 (Bitbucket + GitHub 이중 push 체계 구성)
+
+### 주요 변경
+- `.claude/skills/deep-plan/SKILL.md` - Planner-Critic 듀얼 에이전트 스킬 신규 생성
+- `templates/memory-templates.md` - Auto Memory 서브파일 참고 템플릿 신규 생성
+- `scripts/session-briefing.cjs` - Auto Memory 상태 표시 추가
+- `.claude/skills/session-end/SKILL.md` - 4단계 체크리스트 구체화
+- `.claude/skills/apply-standard/SKILL.md` - Auto Memory 안내, deep-plan 검증 추가
+- `VIBE_CODING_GUIDE.md` - 섹션 6.8 계획 수립 프레임워크 추가
+- `CLAUDE.md` - v2.2 버전 업, 스킬 목록/구조/Plan 모드 참조 갱신
+- `CHANGELOG.md` - v2.2 항목 작성
+
+### 커밋
+- `40d284e` feat: 표준 v2.2 릴리스 - /deep-plan 듀얼 에이전트, Auto Memory 보강
+
+---
+
 ## 2026-02-20
 
 ### 세션 요약

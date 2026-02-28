@@ -1,4 +1,4 @@
-# JINHAK AI 개발 표준 v2.2 (AI Vibe Coding Standards)
+# JINHAK AI 개발 표준 v2.3 (AI Vibe Coding Standards)
 
 JINHAK 전사에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 개발 표준 문서입니다.
 
@@ -62,10 +62,11 @@ claude
 /session-end            # 세션 종료 (작업 기록 정리 + Auto Memory 업데이트)
 /commit                 # 표준에 맞는 커밋 생성
 /review-pr 123          # PR을 표준 기준으로 리뷰
-/test                   # 테스트 실행 및 결과 분석
+/test                   # 테스트 실행 및 결과 분석 (Red-Green 검증 포함)
 /security-check         # 변경사항 보안 점검 (금지 패턴, 시크릿, 의존성)
-/deep-plan              # Planner-Critic 듀얼 에이전트로 심층 계획 수립
-/orchestrate            # Agent Teams 구성하여 복잡한 작업 병렬 처리
+/deep-plan              # Planner-Critic 가중치 비평 + C6 Hard Gate 심층 계획 수립
+/debug                  # 4단계 체계적 디버깅 (근본 원인 추적 + 검증된 수정)
+/orchestrate            # Agent Teams 구성하여 복잡한 작업 병렬 처리 (2단계 검증)
 ```
 
 > 기존 프로젝트든 신규 프로젝트든 상관없이 동작합니다.
@@ -98,7 +99,7 @@ claude
 
 > 각 프로젝트의 CLAUDE.md에 다음 메타 정보가 기록되어 추적됩니다:
 > ```html
-> <!-- jinhak_standard_version: 2.2 -->
+> <!-- jinhak_standard_version: 2.3 -->
 > <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 > <!-- applied_date: 2026-02-28 -->
 > ```
@@ -146,22 +147,24 @@ JinhakStandard/
 │   ├── settings.json             #   권한, hooks 설정
 │   ├── scripts/
 │   │   └── session-briefing.cjs  #   세션 자동 브리핑 Hook 스크립트
-│   └── skills/                   #   슬래시 명령어 (9개)
+│   └── skills/                   #   슬래시 명령어 (10개)
 │       ├── apply-standard/       #   /apply-standard - 표준 적용/업데이트
 │       ├── commit/               #   /commit - 커밋 생성
-│       ├── deep-plan/            #   /deep-plan - Planner-Critic 심층 계획 (v2.2)
-│       ├── orchestrate/          #   /orchestrate - Agent Teams 오케스트레이션 (v2.1)
+│       ├── debug/                #   /debug - 체계적 디버깅 (v2.3)
+│       ├── deep-plan/            #   /deep-plan - Planner-Critic 적응적 추천 (v2.3)
+│       ├── orchestrate/          #   /orchestrate - Agent Teams + 2단계 검증 (v2.3)
 │       ├── review-pr/            #   /review-pr - PR 리뷰
 │       ├── security-check/       #   /security-check - 보안 점검 (v2.0)
 │       ├── session-end/          #   /session-end - 세션 종료 (v2.0.2)
 │       ├── session-start/        #   /session-start - 세션 시작
-│       └── test/                 #   /test - 테스트 실행
+│       └── test/                 #   /test - 테스트 + Red-Green 검증 (v2.3)
 └── templates/
     ├── project-claude.md         # 개별 프로젝트용 CLAUDE.md 템플릿
     ├── component-template.md     # 컴포넌트 생성 템플릿
     ├── ai-folder-templates.md    # .ai/ 폴더 파일 초기 템플릿
     ├── claude-local-template.md  # CLAUDE.local.md 가이드 및 템플릿
     ├── memory-templates.md       # Auto Memory 서브파일 참고 템플릿 (v2.2)
+    ├── skill-testing-guide.md    # 스킬 품질 검증(TDD) 가이드 (v2.3)
     ├── .eslintrc.security.js     # ESLint 보안 규칙 (v2.0)
     ├── .secretlintrc.json        # 시크릿 스캔 설정 (v2.0)
     ├── .semgreprc.yml            # SAST 설정 (v2.0)
@@ -280,7 +283,8 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
-| **2.2** | **2026-02-28** | **Planner-Critic 듀얼 에이전트 `/deep-plan` 스킬, Auto Memory 보강, memory-templates 추가** |
+| **2.3** | **2026-02-28** | **적응적 추천 + skills.sh 모범사례: 가중치 비평, C6 Hard Gate, 2단계 검증, Red-Green 검증, `/debug` 스킬, AI 합리화 방지** |
+| 2.2 | 2026-02-28 | Planner-Critic 듀얼 에이전트 `/deep-plan` 스킬, Auto Memory 보강, memory-templates 추가 |
 | 2.1 | 2026-02-27 | Auto Memory 가이드, Agent Teams 워크플로우 강화, Git Worktree 격리 개발, `/orchestrate` 스킬 |
 | 2.0.2 | 2026-02-23 | Stop Hook 세션 종료 리마인더, `/session-end` 스킬, 비파괴 Hook 병합 |
 | 2.0.1 | 2026-02-23 | ESM 호환성 수정: 모든 CommonJS 스크립트 .js → .cjs 변경 |

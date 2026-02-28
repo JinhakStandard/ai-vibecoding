@@ -41,6 +41,9 @@ description: 세션 종료 시 작업 기록을 정리하고 다음 세션을 �
 - [ ] 반복 문제 해결책 → `memory/debugging.md`에 추가
 - [ ] 아키텍처 결정 → `memory/architecture.md`에 추가
 - [ ] 사용자 워크플로우 선호 → `memory/MEMORY.md`에 추가
+- [ ] 이번 세션에 `/deep-plan` 사용 작업이 있는가?
+  → `.ai/DECISIONS.md`의 해당 `DP-NNN` 기록에 "구현 후 실제 이슈" 업데이트
+  → 계획대로 구현되었는지, 예상치 못한 이슈, 비평에서 놓친 점 기록
 
 **기록 규칙:**
 - `MEMORY.md`는 **200줄 이내** 유지 (초과 시 서브파일로 분리)

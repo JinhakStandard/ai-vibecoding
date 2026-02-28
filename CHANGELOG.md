@@ -5,6 +5,56 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [2.3] - 2026-02-28
+
+### 적응적 추천 모델 + skills.sh 모범사례 반영
+
+기존 `/deep-plan`의 5가지 구조적 문제를 해결하고, skills.sh 생태계(obra/superpowers 등) 모범사례를 반영합니다.
+
+### 추가
+- `.claude/skills/deep-plan/SKILL.md`: 0단계 작업 유형 태그 자동 분류 (보안/UI/인프라/데이터/비즈니스/일반)
+- `.claude/skills/deep-plan/SKILL.md`: 3단계 Critic에 가중치 매트릭스 전달 (유형별 C1~C7 가중치 차등 적용)
+- `.claude/skills/deep-plan/SKILL.md`: 4단계 C6 Hard Gate 조건 추가 (보안/비즈니스 유형 시 C6 ≥ 8/10 필수)
+- `.claude/skills/deep-plan/SKILL.md`: 4단계 NightBuilder 비동기 위임 경로 (미수렴 시 PENDING_PLANS.md 저장)
+- `.claude/skills/deep-plan/SKILL.md`: 6.5단계 계획 품질 기록 (`.ai/DECISIONS.md`에 deep-plan 실행 결과 기록)
+- `security/NIGHTBUILDER_SECURITY.md`: 섹션 7 "deep-plan 미수렴 시 비동기 위임 정책" 신규 추가
+- `templates/ai-folder-templates.md`: 섹션 7 "PENDING_PLANS.md" 초기 템플릿 추가
+- CLAUDE.md 프로젝트 구조 트리에 `.ai/PENDING_PLANS.md` 추가
+
+### 변경
+- `.claude/skills/deep-plan/SKILL.md`: 수렴 기준을 가중 비율(%) 기반으로 변경 (기존 절대점수 56/70 → 가중총점/가중만점 ≥ 80%)
+- `.claude/skills/deep-plan/SKILL.md`: 5단계 계획서 저장 템플릿에 작업 유형, 가중 점수, 보안 관문 상태 필드 추가
+- `.claude/skills/deep-plan/SKILL.md`: 6단계 사용자 제시에 보안 관문 테이블 + 시니어 리뷰 필수 경고 추가
+- `CLAUDE.md`: Plan 모드 진행 흐름에 복잡도 자동 판정 분기 추가 (L3+ 해당 시 /deep-plan 추천)
+- `VIBE_CODING_GUIDE.md`: 섹션 6.8 수렴 기준을 가중치/Hard Gate 반영으로 갱신, 적응적 추천 파이프라인 업데이트
+- `scripts/session-briefing.cjs`: PENDING_PLANS.md 자동 감지 + 보류 건 경고 출력 추가
+- `.claude/skills/session-end/SKILL.md`: 4단계 Auto Memory 체크리스트에 deep-plan 사후 검증 항목 추가
+- `templates/ai-folder-templates.md`: plans/ 폴더 저장 템플릿에 가중 점수/보안 관문 필드 추가
+- `.claude/skills/orchestrate/SKILL.md`: 5단계를 2단계 검증(Spec Compliance → Code Quality)으로 교체
+- `.claude/skills/test/SKILL.md`: 6단계 Red-Green 검증 추가 (버그 수정 시 필수)
+- `.claude/skills/debug/SKILL.md`: **신규** — 4단계 체계적 디버깅 스킬 (Observe → Trace → Diagnose → Fix+Verify)
+- `CLAUDE.md` 섹션 6.9: 스킬 토큰 최적화 (Progressive Disclosure) 가이드 추가
+- `CLAUDE.md` 섹션 2.3: Anti-Rationalization 원칙 추가 (AI 합리화 방지 6번 항목)
+- `templates/skill-testing-guide.md`: **신규** — 스킬 품질 검증(TDD) 가이드
+- 각 스킬 SKILL.md에 "합리화 방지" 섹션 추가 (test, debug)
+
+---
+
+## [2.2.1] - 2026-02-28
+
+### `/deep-plan` 최종 계획서 자동 저장
+
+### 추가
+- `.claude/skills/deep-plan/SKILL.md`: 5단계 "최종 계획서 저장" 신규 추가
+  - `.ai/plans/YYYY-MM-DD_HHmm_[작업요약].md` 형식으로 자동 저장
+  - 비평 점수, 요구사항, 구현 계획, 기술적 결정, 비평 이력 전체 포함
+  - 기존 5단계→6단계, 6단계→7단계로 번호 조정
+  - 4번 선택지 "계획만 저장 → DECISIONS.md" → "여기서 종료 - 계획서는 이미 저장됨"으로 변경
+- `templates/ai-folder-templates.md`: 섹션 6 "plans/ 폴더" 템플릿 추가
+- CLAUDE.md 프로젝트 구조 트리에 `.ai/plans/` 폴더 추가
+
+---
+
 ## [2.2] - 2026-02-28
 
 ### `/deep-plan` 듀얼 에이전트 + Auto Memory 보강

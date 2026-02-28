@@ -1,6 +1,6 @@
 # NightBuilder 보안 규칙
 
-<!-- jinhak_standard_version: 2.0 -->
+<!-- jinhak_standard_version: 2.3 -->
 <!-- document_type: security-nightbuilder -->
 <!-- last_updated: 2026-02-20 -->
 
@@ -167,7 +167,58 @@ main (프로덕션)
 
 ---
 
-## 6. 관련 문서 참조
+## 7. deep-plan 미수렴 시 비동기 위임 정책
+
+NightBuilder 환경에서 `/deep-plan`이 3라운드 내 수렴하지 않으면, 교착 상태를 방지하기 위해 **비동기 위임 경로**를 사용합니다.
+
+### 7.1 PENDING_PLANS.md 저장 형식
+
+미수렴 계획은 `.ai/PENDING_PLANS.md`에 다음 형식으로 저장됩니다:
+
+```markdown
+## [보류] YYYY-MM-DD HH:mm - [작업요약]
+- **상태**: 미수렴 (라운드 N, 가중 비율 NN.N%)
+- **C6 Hard Gate**: 통과 / 실패 / 해당없음
+- **저장된 계획서**: `.ai/plans/YYYY-MM-DD_HHmm_[작업요약].md`
+- **사유**: [정체 / 라운드 초과 / C6 Hard Gate 실패]
+- **마지막 비평 요약**: [주요 미달 항목 1~3개]
+```
+
+### 7.2 다음 세션 조치 흐름
+
+다음 유인(사람 참여) 세션이 시작되면:
+
+1. `session-briefing.cjs`가 `PENDING_PLANS.md`의 `[보류]` 항목을 자동 감지하여 경고 출력
+2. 개발자가 보류 건을 확인하고 다음 중 하나를 선택:
+
+| 조치 | 설명 | 방법 |
+|------|------|------|
+| **수정 후 진행** | 비평 피드백을 반영하여 계획 수정 후 구현 | `/deep-plan`으로 재실행 또는 수동 보완 |
+| **현재 계획으로 진행** | 미수렴이지만 충분하다고 판단 | 계획서를 참고하여 바로 구현 시작 |
+| **보류 유지** | 추가 검토/논의가 필요 | `PENDING_PLANS.md`에 유지, 다음 세션에서 재확인 |
+| **폐기** | 계획이 더 이상 유효하지 않음 | `PENDING_PLANS.md`에서 해당 항목 삭제 |
+
+3. 조치 완료 후 `PENDING_PLANS.md`의 해당 항목 상태를 업데이트 (해결됨/폐기됨)
+
+### 7.3 NightBuilder 자동 동작 요약
+
+```
+/deep-plan 실행
+    ↓
+3라운드 내 수렴? → [예] → 정상 흐름 (계획서 저장 + 구현)
+    ↓ [아니오]
+PENDING_PLANS.md에 보류 저장
+    ↓
+계획서(.ai/plans/)도 현재 상태로 저장 (미수렴 표기)
+    ↓
+다음 태스크로 진행 (교착 방지)
+    ↓
+다음 유인 세션에서 session-briefing이 보류 건 안내
+```
+
+---
+
+## 8. 관련 문서 참조
 
 | 문서 | 설명 |
 |------|------|
@@ -176,7 +227,8 @@ main (프로덕션)
 | [INCIDENT_RESPONSE.md](./INCIDENT_RESPONSE.md) | 인시던트 대응 가이드 |
 | [DATA_CLASSIFICATION.md](./DATA_CLASSIFICATION.md) | 데이터 분류 및 처리 기준 |
 | [../CLAUDE.md](../CLAUDE.md) | JINHAK 전사 AI 개발 표준 메인 문서 |
+| [../.claude/skills/deep-plan/SKILL.md](../.claude/skills/deep-plan/SKILL.md) | /deep-plan 스킬 (가중치 비평 + Hard Gate) |
 
 ---
 
-*이 문서는 [JINHAK 전사 AI 개발 표준](../CLAUDE.md) v2.0의 보안 상세 문서입니다.*
+*이 문서는 [JINHAK 전사 AI 개발 표준](../CLAUDE.md) v2.3의 보안 상세 문서입니다.*

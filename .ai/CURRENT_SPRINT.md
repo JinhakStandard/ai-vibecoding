@@ -1,6 +1,6 @@
 # 현재 진행 중인 작업
 
-> 마지막 업데이트: 2026-02-20
+> 마지막 업데이트: 2026-02-28
 
 ---
 
@@ -17,6 +17,15 @@
 ---
 
 ## 최근 완료
+
+### 2026-02-28
+- [x] JINHAK 표준 v2.2 릴리스
+  - [x] /deep-plan 스킬 생성 (Planner-Critic 듀얼 에이전트)
+  - [x] Auto Memory 보강 (session-briefing, session-end, memory-templates)
+  - [x] VIBE_CODING_GUIDE 섹션 6.8 계획 수립 프레임워크 추가
+  - [x] apply-standard v2.2 검증 항목 추가
+  - [x] CLAUDE.md/CHANGELOG v2.2 갱신
+- [x] GitHub remote 추가 (Bitbucket + GitHub 이중 push)
 
 ### 2026-02-20
 - [x] JINHAK 표준 v1.8 → v2.0 메이저 업그레이드
@@ -46,6 +55,7 @@
 
 | 영역 | 완성도 | 상태 |
 |------|--------|------|
+| v2.2 /deep-plan + Auto Memory 보강 | 100% | 완료 |
 | v2.0 보안 가이드레일 도입 | 100% | 완료 |
 | JabisStandard 자체 정비 | 100% | 완료 |
 | 외부 프로젝트 일괄 정비 | 100% | 완료 |

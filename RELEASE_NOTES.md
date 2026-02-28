@@ -5,6 +5,38 @@
 
 ---
 
+## v2.3 (2026-02-28) - 적응적 추천 모델 + skills.sh 모범사례
+
+### 핵심 변경
+
+기존 `/deep-plan`의 5가지 구조적 문제를 개선하고, skills.sh 생태계(obra/superpowers 등) 모범사례를 반영합니다. 가중치 비평, C6 Hard Gate, 2단계 검증, Red-Green 검증, 체계적 디버깅, AI 합리화 방지를 도입합니다.
+
+### 주요 내용
+
+**신규 (개선 1~5: 적응적 추천)**
+- 작업 유형 태그 자동 분류 (보안/UI/인프라/데이터/비즈니스/일반) → 유형별 Critic 가중치 차등 적용
+- C6 Hard Gate: 보안/비즈니스 유형 작업은 C6 보안 점수 8/10 이상 필수 (가중 비율 충족과 별개)
+- NightBuilder 비동기 위임: 미수렴 시 `.ai/PENDING_PLANS.md`에 보류 저장, 다음 유인 세션에서 자동 감지
+- 계획 품질 사후 기록: `.ai/DECISIONS.md`에 deep-plan 실행 결과 기록, `/session-end`에서 사후 검증
+- 적응적 추천: Plan 모드에서 L3+ 복잡도 감지 시 `/deep-plan` 추천 (사용자가 거절 가능)
+
+**신규 (개선 6~11: skills.sh 모범사례)**
+- `/orchestrate` 2단계 검증 (Two-Stage Review): 스펙 준수 → 코드 품질 순차 검증
+- `/test` Red-Green 검증: 버그 수정 시 Green→Red→Green 실증 검증 필수
+- `/debug` 스킬 신규: 4단계 체계적 디버깅 (Observe → Trace → Diagnose → Fix+Verify)
+- Anti-Rationalization 원칙: AI가 절차를 자의적으로 건너뛰는 합리화 패턴 방지
+- 스킬 토큰 최적화: Progressive Disclosure 원칙, 스킬당 2,000~3,000 토큰 목표
+- `templates/skill-testing-guide.md`: 스킬 품질 검증(TDD) 가이드
+
+**개선**
+- 수렴 기준: 절대 점수(56/70) → 가중 비율(가중총점/가중만점 ≥ 80%)로 변경
+- 계획서 템플릿: 작업 유형, 가중 점수, 보안 관문 상태 필드 추가
+- `session-briefing.cjs`: PENDING_PLANS.md 자동 감지 + 보류 건 경고
+- `session-end` 스킬: Auto Memory 체크리스트에 deep-plan 사후 검증 항목 추가
+- `NIGHTBUILDER_SECURITY.md`: 섹션 7 "deep-plan 미수렴 시 비동기 위임 정책" 추가
+
+---
+
 ## v2.2 (2026-02-28) - Planner-Critic 듀얼 에이전트 + Auto Memory 보강
 
 ### 핵심 변경
