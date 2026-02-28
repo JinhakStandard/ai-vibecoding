@@ -5,6 +5,58 @@
 
 ---
 
+## v2.2 (2026-02-28) - Planner-Critic 듀얼 에이전트 + Auto Memory 보강
+
+### 핵심 변경
+
+바이브 코딩에서 "구현보다 촘촘한 계획 수립이 중요"하다는 인사이트를 반영합니다. Planner(계획 수립)와 Critic(냉혹한 비평) 2개 에이전트를 동시에 돌려 피드백 루프를 형성하고, 계획 품질을 자동 검증하는 `/deep-plan` 스킬을 추가합니다.
+
+### 주요 내용
+
+**신규**
+- `/deep-plan` 스킬: Planner-Critic 듀얼 에이전트 워크플로우 (7가지 비평 관점, 56/70 수렴 기준, 최대 3라운드)
+- `templates/memory-templates.md`: Auto Memory 서브파일 참고 템플릿
+- VIBE_CODING_GUIDE.md 섹션 6.8 "계획 수립 프레임워크" (계획 입도 4단계, 비평 체크리스트)
+
+**개선**
+- `session-end` 스킬: 4단계 Auto Memory 업데이트 체크리스트 형식으로 구체화
+- `session-briefing.cjs`: Auto Memory 상태 표시 추가
+- `apply-standard` 스킬: deep-plan 스킬 검증 항목 추가
+
+---
+
+## v2.1 (2026-02-27) - Auto Memory, Agent Teams 강화, Worktree
+
+### 핵심 변경
+
+Claude Code의 공식 기능을 표준에 반영합니다. Auto Memory 시스템 가이드, Agent Teams 워크플로우 상세화, Git Worktree 격리 개발 가이드, `/orchestrate` 스킬을 추가합니다.
+
+### 주요 내용
+
+**신규**
+- CLAUDE.md 섹션 2.7 "Auto Memory 활용" (MEMORY.md 200줄 제한, 토픽별 서브파일 분리, `.ai/` 폴더 역할 구분)
+- CLAUDE.md 섹션 6.8 "Git Worktree 격리 개발" (EnterWorktree, isolation: "worktree", Hook 예시)
+- `/orchestrate` 스킬: Agent Teams 구성 → 태스크 분배 → 모니터링 → 결과 통합 → 종료 전체 플로우
+
+**개선**
+- Agent Teams 섹션 대폭 강화 (워크플로우, SendMessage 타입, Task 시스템, Background 에이전트, 적합/부적합 작업)
+- Plan 모드 사용/비사용 기준 명확화 및 plan_approval_request 처리 방법 추가
+
+---
+
+## v2.0.2 (2026-02-23) - 세션 관리 개선
+
+### 핵심 변경
+
+세션 로그 기록 누락 방지 및 Hook 적용 시 프로젝트 고유 설정 보존 문제를 개선합니다.
+
+### 주요 내용
+- `/session-end` 스킬 신규: 세션 종료 시 일괄 정리 (변경사항 수집, SESSION_LOG/CURRENT_SPRINT 업데이트)
+- `session-end-reminder.cjs`: Stop Hook 리마인더 (미커밋 변경사항 + SESSION_LOG 미기록 시 알림)
+- `batch-apply.cjs` 비파괴 Hook 병합 로직 도입 (프로젝트 고유 Hook 보존)
+
+---
+
 ## v2.0.1 (2026-02-23) - ESM 호환성 수정
 
 ### 핵심 변경

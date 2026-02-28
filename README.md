@@ -1,4 +1,4 @@
-# JINHAK AI 개발 표준 v2.0.1 (AI Vibe Coding Standards)
+# JINHAK AI 개발 표준 v2.2 (AI Vibe Coding Standards)
 
 JINHAK 전사에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 개발 표준 문서입니다.
 
@@ -59,9 +59,13 @@ claude
 
 ```
 /session-start          # 세션 시작 (이전 작업 확인 + 표준 버전 체크)
+/session-end            # 세션 종료 (작업 기록 정리 + Auto Memory 업데이트)
 /commit                 # 표준에 맞는 커밋 생성
 /review-pr 123          # PR을 표준 기준으로 리뷰
 /test                   # 테스트 실행 및 결과 분석
+/security-check         # 변경사항 보안 점검 (금지 패턴, 시크릿, 의존성)
+/deep-plan              # Planner-Critic 듀얼 에이전트로 심층 계획 수립
+/orchestrate            # Agent Teams 구성하여 복잡한 작업 병렬 처리
 ```
 
 > 기존 프로젝트든 신규 프로젝트든 상관없이 동작합니다.
@@ -94,9 +98,9 @@ claude
 
 > 각 프로젝트의 CLAUDE.md에 다음 메타 정보가 기록되어 추적됩니다:
 > ```html
-> <!-- jinhak_standard_version: 1.1 -->
+> <!-- jinhak_standard_version: 2.2 -->
 > <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
-> <!-- applied_date: 2025-02-20 -->
+> <!-- applied_date: 2026-02-28 -->
 > ```
 
 ---
@@ -133,19 +137,31 @@ JinhakStandard/
 │   └── NIGHTBUILDER_SECURITY.md  #   NightBuilder 보안 규칙
 ├── scripts/
 │   ├── install-global-hook.cjs    # 글로벌 Hook 설치/제거 스크립트
-│   └── security-check-hook.cjs    # 보안 검사 Hook (v2.0)
+│   ├── batch-apply.cjs            # 외부 프로젝트 일괄 표준 적용 (v1.8)
+│   ├── check-standard.cjs         # 표준 적용 여부 감지 (v1.8)
+│   ├── security-check-hook.cjs    # 보안 검사 Hook (v2.0)
+│   ├── session-briefing.cjs       # 세션 브리핑 원본 (v1.7)
+│   └── session-end-reminder.cjs   # Stop Hook 세션 종료 리마인더 (v2.0.2)
 ├── .claude/                      # Claude Code 설정 (표준 템플릿)
 │   ├── settings.json             #   권한, hooks 설정
-│   └── skills/                   #   슬래시 명령어
-│       ├── apply-standard/       #   /apply-standard - 표준 적용
+│   ├── scripts/
+│   │   └── session-briefing.cjs  #   세션 자동 브리핑 Hook 스크립트
+│   └── skills/                   #   슬래시 명령어 (9개)
+│       ├── apply-standard/       #   /apply-standard - 표준 적용/업데이트
 │       ├── commit/               #   /commit - 커밋 생성
+│       ├── deep-plan/            #   /deep-plan - Planner-Critic 심층 계획 (v2.2)
+│       ├── orchestrate/          #   /orchestrate - Agent Teams 오케스트레이션 (v2.1)
 │       ├── review-pr/            #   /review-pr - PR 리뷰
 │       ├── security-check/       #   /security-check - 보안 점검 (v2.0)
+│       ├── session-end/          #   /session-end - 세션 종료 (v2.0.2)
 │       ├── session-start/        #   /session-start - 세션 시작
 │       └── test/                 #   /test - 테스트 실행
 └── templates/
     ├── project-claude.md         # 개별 프로젝트용 CLAUDE.md 템플릿
     ├── component-template.md     # 컴포넌트 생성 템플릿
+    ├── ai-folder-templates.md    # .ai/ 폴더 파일 초기 템플릿
+    ├── claude-local-template.md  # CLAUDE.local.md 가이드 및 템플릿
+    ├── memory-templates.md       # Auto Memory 서브파일 참고 템플릿 (v2.2)
     ├── .eslintrc.security.js     # ESLint 보안 규칙 (v2.0)
     ├── .secretlintrc.json        # 시크릿 스캔 설정 (v2.0)
     ├── .semgreprc.yml            # SAST 설정 (v2.0)
@@ -264,8 +280,11 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
-| **2.0.1** | **2026-02-23** | **ESM 호환성 수정: 모든 CommonJS 스크립트 .js → .cjs 변경, 글로벌 Hook 레거시 제거 버그 수정** |
-| 2.0 | 2026-02-20 | AI 보안 가이드레일: 7-Layer Defense, OWASP LLM Top 10, 금지 패턴 12종, 데이터 분류, 인시던트 대응, /security-check 스킬 |
+| **2.2** | **2026-02-28** | **Planner-Critic 듀얼 에이전트 `/deep-plan` 스킬, Auto Memory 보강, memory-templates 추가** |
+| 2.1 | 2026-02-27 | Auto Memory 가이드, Agent Teams 워크플로우 강화, Git Worktree 격리 개발, `/orchestrate` 스킬 |
+| 2.0.2 | 2026-02-23 | Stop Hook 세션 종료 리마인더, `/session-end` 스킬, 비파괴 Hook 병합 |
+| 2.0.1 | 2026-02-23 | ESM 호환성 수정: 모든 CommonJS 스크립트 .js → .cjs 변경 |
+| 2.0 | 2026-02-20 | AI 보안 가이드레일: 7-Layer Defense, OWASP LLM Top 10, 금지 패턴 12종, `/security-check` 스킬 |
 | 1.8 | 2026-02-13 | Hook 크로스 플랫폼 통일: 모든 Hook을 Node.js 기반으로, Windows 개발 환경 규칙 |
 | 1.7 | 2026-02-13 | 세션 브리핑 자동화: session-briefing.cjs로 세션 시작 시 자동 컨텍스트 로드 |
 | 1.6 | 2026-02-12 | 글로벌 Hook 자동 감지: 세션 시작 시 표준 적용 여부 자동 감지, install-global-hook.cjs 추가 |
