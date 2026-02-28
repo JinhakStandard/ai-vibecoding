@@ -37,6 +37,10 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 - `CLAUDE.md` 섹션 2.3: Anti-Rationalization 원칙 추가 (AI 합리화 방지 6번 항목)
 - `templates/skill-testing-guide.md`: **신규** — 스킬 품질 검증(TDD) 가이드
 - 각 스킬 SKILL.md에 "합리화 방지" 섹션 추가 (test, debug, orchestrate, deep-plan, security-check, commit)
+- `.claude/skills/deep-plan/SKILL.md`: 6단계에 `/orchestrate` 상태 전달 명세 (State Contract) 추가
+- `.claude/skills/orchestrate/SKILL.md`: 0단계 "입력 확인 (State Contract)" 신규 추가 — `/deep-plan` 파이프라인 연결 시 계획서/유형/C6 수신
+- `VIBE_CODING_GUIDE.md` 섹션 6.9: "스킬 조합 가이드 (Composite Pattern)" 신규 추가 — 작업 유형별 추천 조합 매트릭스, 파이프라인 흐름도
+- `CLAUDE.md` 섹션 6.9: 스킬 조합 가이드 참조 추가, 기존 6.9(토큰 최적화) → 6.10으로 번호 변경
 
 ---
 

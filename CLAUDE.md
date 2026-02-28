@@ -917,7 +917,11 @@ Task({
 | 일반 기능 개발 | 불필요 |
 | 단순 버그 수정 | 불필요 |
 
-### 6.9 스킬 토큰 최적화
+### 6.9 스킬 조합 가이드
+
+작업 유형별 최적 스킬 조합은 [VIBE_CODING_GUIDE.md 섹션 6.9](./VIBE_CODING_GUIDE.md)를 참조하세요.
+
+### 6.10 스킬 토큰 최적화
 
 Claude Code는 스킬의 YAML frontmatter(name + description)를 세션 시작 시 로드하고, 전체 SKILL.md는 해당 스킬이 호출될 때 로드합니다 (Progressive Disclosure).
 

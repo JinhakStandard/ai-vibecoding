@@ -541,6 +541,55 @@ AI와 협업할 때 보안을 유지하기 위한 단계별 워크플로우입�
 
 > `/deep-plan` 스킬 상세: `.claude/skills/deep-plan/SKILL.md`
 
+### 6.9 스킬 조합 가이드 (Composite Pattern)
+
+실무에서는 단일 스킬만 사용하는 경우보다 여러 스킬을 조합하는 경우가 많습니다.
+다음 의사결정 매트릭스를 참고하여 작업에 맞는 최적 조합을 선택하세요.
+
+#### 작업 유형별 추천 조합
+
+| 작업 유형 | 추천 조합 | 설명 |
+|----------|----------|------|
+| 단순 버그 수정 | `/debug` → `/test` → `/commit` | 체계적 디버깅 → Red-Green 검증 → 커밋 |
+| 단일 파일 기능 추가 | Plan 모드 → `/test` → `/commit` | 일반 Plan으로 충분, /deep-plan 불필요 |
+| 다파일 기능 구현 (5+파일) | `/deep-plan` → 직접 구현 → `/test` → `/commit` | 심층 계획 후 순차 구현 |
+| 대규모 기능 구현 (10+파일) | `/deep-plan` → `/orchestrate` → `/test` → `/commit` | 심층 계획 → 병렬 구현 → 검증 |
+| 보안 민감 기능 | `/deep-plan` → 구현 → `/security-check` → `/test` → `/commit` | C6 Hard Gate + 보안 전수 검사 |
+| 대규모 리팩토링 | `/deep-plan` → `/orchestrate` (worktree 격리) → `/test` → `/commit` | 격리 환경 병렬 작업 |
+| NightBuilder 자동 작업 | `/deep-plan` → (수렴 시) `/orchestrate` / (미수렴 시) PENDING_PLANS.md 보류 | 무인 환경 교착 방지 |
+
+#### 파이프라인 흐름도
+
+```
+[요청 접수]
+    ↓
+[복잡도 자동 판정 (CLAUDE.md 6.7)]
+    ├─ L1~L2 (단순) ──→ Plan 모드 → 구현 → /test → /commit
+    │
+    ├─ L3 (중규모) ──→ /deep-plan → 구현 → /test → /commit
+    │                         ↓ (보안 유형이면)
+    │                    /security-check
+    │
+    └─ L4 (대규모) ──→ /deep-plan → /orchestrate → /test → /commit
+                              ↓ (State Contract)
+                         계획서 경로 + 유형 + C6 전달
+```
+
+#### 조합 시 주의사항
+
+1. **파이프라인은 순방향만**: `/orchestrate` → `/deep-plan` 역방향 연결 금지.
+   구현 중 계획 변경이 필요하면 사용자에게 보고 후 `/deep-plan` 재실행.
+
+2. **스킬 간 상태 계약 준수**: `/deep-plan` → `/orchestrate` 연결 시
+   반드시 계획서 경로, 작업 유형, C6 결과를 명시적으로 전달 (State Contract).
+
+3. **보안 유형은 /security-check 필수**: 작업 유형이 보안/비즈니스일 때
+   `/security-check`를 건너뛰는 조합은 허용하지 않음.
+
+4. **NightBuilder에서의 조합 제한**:
+   사용자 확인이 필요한 분기점(예: `/deep-plan` 미수렴 위임)에서는
+   PENDING_PLANS.md 저장 후 다음 태스크로 진행. 무한 대기 금지.
+
 ---
 
 ## 7. 팀 협업 베스트 프랙티스

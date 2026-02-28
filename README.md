@@ -66,7 +66,7 @@ claude
 /security-check         # 변경사항 보안 점검 (금지 패턴, 시크릿, 의존성)
 /deep-plan              # Planner-Critic 가중치 비평 + C6 Hard Gate 심층 계획 수립
 /debug                  # 4단계 체계적 디버깅 (근본 원인 추적 + 검증된 수정)
-/orchestrate            # Agent Teams 구성하여 복잡한 작업 병렬 처리 (2단계 검증)
+/orchestrate            # Agent Teams 구성하여 복잡한 작업 병렬 처리 (State Contract + 2단계 검증)
 ```
 
 > 기존 프로젝트든 신규 프로젝트든 상관없이 동작합니다.
@@ -283,7 +283,7 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
-| **2.3** | **2026-02-28** | **적응적 추천 + skills.sh 모범사례: 가중치 비평, C6 Hard Gate, 2단계 검증, Red-Green 검증, `/debug` 스킬, AI 합리화 방지** |
+| **2.3** | **2026-02-28** | **적응적 추천 + skills.sh 모범사례 + 멀티 에이전트 패턴: 가중치 비평, C6 Hard Gate, State Contract, 스킬 조합 가이드, 2단계 검증, `/debug` 스킬, AI 합리화 방지** |
 | 2.2 | 2026-02-28 | Planner-Critic 듀얼 에이전트 `/deep-plan` 스킬, Auto Memory 보강, memory-templates 추가 |
 | 2.1 | 2026-02-27 | Auto Memory 가이드, Agent Teams 워크플로우 강화, Git Worktree 격리 개발, `/orchestrate` 스킬 |
 | 2.0.2 | 2026-02-23 | Stop Hook 세션 종료 리마인더, `/session-end` 스킬, 비파괴 Hook 병합 |
