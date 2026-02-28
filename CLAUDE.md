@@ -1,9 +1,9 @@
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 2.1 -->
+<!-- jinhak_standard_version: 2.2 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
-<!-- applied_date: 2026-02-27 -->
+<!-- applied_date: 2026-02-28 -->
 
-# JINHAK 전사 AI 개발 표준 v2.1
+# JINHAK 전사 AI 개발 표준 v2.2
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
 
@@ -73,6 +73,7 @@
 │       ├── commit/SKILL.md           # 커밋 생성
 │       ├── review-pr/SKILL.md        # PR 리뷰
 │       ├── security-check/SKILL.md   # 보안 점검 (v2.0)
+│       ├── deep-plan/SKILL.md         # Planner-Critic 심층 계획 (v2.2)
 │       ├── orchestrate/SKILL.md      # Agent Teams 오케스트레이션 (v2.1)
 │       ├── session-end/SKILL.md      # 세션 종료
 │       ├── session-start/SKILL.md    # 세션 시작
@@ -514,6 +515,7 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 ├── commit/SKILL.md            # /commit - 커밋 생성
 ├── review-pr/SKILL.md         # /review-pr - PR 리뷰
 ├── security-check/SKILL.md   # /security-check - 보안 점검 (v2.0)
+├── deep-plan/SKILL.md         # /deep-plan - Planner-Critic 심층 계획 (v2.2)
 ├── orchestrate/SKILL.md       # /orchestrate - Agent Teams 오케스트레이션 (v2.1)
 ├── session-end/SKILL.md       # /session-end - 세션 종료
 ├── session-start/SKILL.md     # /session-start - 세션 시작
@@ -528,6 +530,7 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 | `/commit` | 변경사항 분석 후 표준에 맞는 커밋 생성 |
 | `/review-pr <번호>` | PR을 표준 기준으로 리뷰 |
 | `/security-check` | 변경사항 보안 점검 (금지 패턴, 시크릿, 의존성) |
+| `/deep-plan` | Planner-Critic 듀얼 에이전트로 심층 계획 수립 및 비평 검증 |
 | `/orchestrate` | Agent Teams 구성하여 복잡한 작업 병렬 처리 |
 | `/test` | 테스트 실행 및 결과 분석 |
 
@@ -778,6 +781,7 @@ ExitPlanMode → 사용자 승인 대기
 ```
 
 > **주의**: `AskUserQuestion`은 접근 방법/요구사항 명확화에 사용. "계획이 괜찮으세요?"는 `ExitPlanMode`가 처리.
+> **심층 계획**: 복잡한 작업(5파일+, 아키텍처 결정)은 `/deep-plan`으로 Planner-Critic 듀얼 에이전트 심층 계획이 가능합니다. 상세: [VIBE_CODING_GUIDE.md 섹션 6.8](./VIBE_CODING_GUIDE.md)
 
 **Agent Teams에서 Plan 승인 (plan_approval_request):**
 
@@ -977,6 +981,7 @@ new Intl.NumberFormat('ko-KR', {
 | [templates/component-template.md](./templates/component-template.md) | 컴포넌트 생성 템플릿 |
 | [templates/ai-folder-templates.md](./templates/ai-folder-templates.md) | .ai/ 폴더 파일 초기 템플릿 |
 | [templates/claude-local-template.md](./templates/claude-local-template.md) | CLAUDE.local.md 가이드 및 템플릿 |
+| [templates/memory-templates.md](./templates/memory-templates.md) | Auto Memory 서브파일 참고 템플릿 |
 | [SECURITY_ISMS.md](./SECURITY_ISMS.md) | ISMS 보안 가이드 (AI 개발) |
 | [security/AI_SECURITY_GUARDRAILS.md](./security/AI_SECURITY_GUARDRAILS.md) | 7-Layer AI 보안 가이드레일 마스터 문서 |
 | [security/OWASP_LLM_CHECKLIST.md](./security/OWASP_LLM_CHECKLIST.md) | OWASP LLM Top 10 체크리스트 |
@@ -1082,5 +1087,5 @@ AI가 생성해서는 안 되는 12가지 위험 패턴:
 
 ---
 
-*마지막 업데이트: 2026-02-27*
-*버전: 2.1*
+*마지막 업데이트: 2026-02-28*
+*버전: 2.2*

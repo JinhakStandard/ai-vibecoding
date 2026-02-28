@@ -117,7 +117,19 @@ if (version) {
   output.push('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 }
 
-output.push('');
+// 6. Auto Memory 상태
+const path = require('path');
+const homeDir = process.env.HOME || process.env.USERPROFILE || '';
+if (homeDir) {
+  const memoryBase = path.join(homeDir, '.claude', 'projects');
+  if (fs.existsSync(memoryBase)) {
+    output.push('[Auto Memory] 활성 - 이전 세션 컨텍스트가 자동 로드됩니다');
+  } else {
+    output.push('[Auto Memory] 비활성 - 세션을 반복하면 AI가 자동으로 패턴/인사이트를 기록합니다');
+  }
+  output.push('');
+}
+
 output.push('위 컨텍스트를 참고하여 이전 작업 맥락을 이어서 진행하세요.');
 
 console.log(output.join('\n'));

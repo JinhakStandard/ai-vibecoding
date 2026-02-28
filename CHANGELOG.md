@@ -5,6 +5,49 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [2.2] - 2026-02-28
+
+### `/deep-plan` 듀얼 에이전트 + Auto Memory 보강
+
+바이브 코딩에서 "구현보다 촘촘한 계획 수립이 중요"하다는 인사이트를 반영합니다. Planner(계획 수립)와 Critic(냉혹한 비평) 2개 에이전트를 동시에 돌려 피드백 루프를 형성하고, 계획 품질을 자동 검증하는 `/deep-plan` 스킬을 추가합니다. Auto Memory 도구 연계도 강화합니다.
+
+### 추가
+- `.claude/skills/deep-plan/SKILL.md` 신규 추가 (`/deep-plan` 스킬)
+  - Planner-Critic 듀얼 에이전트 워크플로우 (0~6단계)
+  - 7가지 비평 관점 (C1~C7, 각 10점 만점)
+  - 수렴 기준: 56/70 (80%) 이상 + 치명적 문제 0건, 최대 3라운드
+  - `/orchestrate`와의 파이프라인 연결 가이드
+- `templates/memory-templates.md` 신규 추가
+  - `MEMORY.md`, `patterns.md`, `debugging.md`, `architecture.md` 참고 템플릿
+  - AI 자동 관리 안내 및 기록 규칙 요약
+- VIBE_CODING_GUIDE.md 섹션 6.8 "계획 수립 프레임워크 (Plan Granularity)" 신규 추가
+  - 계획 입도 4단계 (L1 스케치 ~ L4 설계 문서)
+  - 비평 체크리스트 (C1~C7) 수동 점검용
+  - 수렴 기준 및 계획→구현 파이프라인
+- CLAUDE.md 섹션 9 문서 참조에 `templates/memory-templates.md` 추가
+
+### 변경
+- `scripts/session-briefing.cjs`: Auto Memory 상태 표시 추가 (`[Auto Memory] 활성/비활성`)
+- `.claude/skills/session-end/SKILL.md`: 4단계 Auto Memory 업데이트를 체크리스트 형식으로 구체화
+  - patterns.md, debugging.md, architecture.md, MEMORY.md 각 역할 명시
+  - 200줄 제한, CLAUDE.md 중복 금지, 미검증 정보 금지 규칙 추가
+- `.claude/skills/apply-standard/SKILL.md`: Auto Memory 안내 단계(2-2.5) 추가, deep-plan 스킬 검증 항목 추가, v2.2 신규 항목 검증 섹션 추가
+- CLAUDE.md 프로젝트 구조 트리에 `deep-plan/SKILL.md` 추가
+- CLAUDE.md 스킬 목록 테이블에 `/deep-plan` 행 추가
+- CLAUDE.md 섹션 6.7 Plan 모드에 `/deep-plan` 참조 추가
+- CLAUDE.md 버전 2.1 → 2.2
+
+### Migration Guide (v2.1 → v2.2)
+
+기존 v2.1 프로젝트에서 업데이트 시:
+1. **deep-plan 스킬 복사**: `/tmp/jinhak-standards/.claude/skills/deep-plan/` → `.claude/skills/`
+2. **session-end 스킬 업데이트**: 최신 버전으로 교체 (4단계 체크리스트 개선)
+3. **session-briefing.cjs 업데이트**: 최신 버전으로 교체 (Auto Memory 상태 표시)
+4. **Memory 템플릿 참고**: `templates/memory-templates.md` (AI가 자동 관리하므로 수동 생성 불필요)
+5. **CLAUDE.md 업데이트**: `/apply-standard`로 자동 적용 또는 프로젝트 구조/스킬 목록/Plan 모드 참조 직접 반영
+
+---
+
 ## [2.1] - 2026-02-27
 
 ### Claude Code 신기능 통합 (Auto Memory, Agent Teams 강화, Worktree)
