@@ -1,0 +1,22 @@
+{
+  "id": "security-review",
+  "title": "보안 코드 리뷰",
+  "description": "JINHAK 금지 패턴 12종 기반 경량 보안 코드 리뷰",
+  "category": "code-review",
+  "tags": ["security", "owasp", "forbidden-patterns", "review"],
+  "author": "JINHAK Standard",
+  "created": "2026-02-28",
+  "updated": "2026-02-28",
+  "version": "1.0",
+  "compatibility": {
+    "claude_code": true,
+    "claude_ai": true,
+    "jabis": false
+  },
+  "tech_stack": ["node", "typescript", "javascript"],
+  "difficulty": "intermediate",
+  "estimated_tokens": 600,
+  "quality_score": null,
+  "usage_count": 0,
+  "fork_parent": null
+}

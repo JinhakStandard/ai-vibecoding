@@ -1,4 +1,4 @@
-# JINHAK AI 개발 표준 v2.3 (AI Vibe Coding Standards)
+# JINHAK AI 개발 표준 v2.4 (AI Vibe Coding Standards)
 
 JINHAK 전사에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 개발 표준 문서입니다.
 
@@ -67,6 +67,9 @@ claude
 /deep-plan              # Planner-Critic 가중치 비평 + C6 Hard Gate 심층 계획 수립
 /debug                  # 4단계 체계적 디버깅 (근본 원인 추적 + 검증된 수정)
 /orchestrate            # Agent Teams 구성하여 복잡한 작업 병렬 처리 (State Contract + 2단계 검증)
+/prompt-search          # 프롬프트 라이브러리에서 검색 (키워드, 카테고리, 태그)
+/prompt-register        # 새 프롬프트 등록 (중복 검사 + 메타데이터 자동 생성)
+/prompt-quality-check   # 프롬프트 품질 검증 (100점 만점, 4개 영역)
 ```
 
 > 기존 프로젝트든 신규 프로젝트든 상관없이 동작합니다.
@@ -99,7 +102,7 @@ claude
 
 > 각 프로젝트의 CLAUDE.md에 다음 메타 정보가 기록되어 추적됩니다:
 > ```html
-> <!-- jinhak_standard_version: 2.3 -->
+> <!-- jinhak_standard_version: 2.4 -->
 > <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 > <!-- applied_date: 2026-02-28 -->
 > ```
@@ -129,6 +132,17 @@ JinhakStandard/
 ├── VIBE_CODING_GUIDE.md          # 바이브 코딩 방법론 (비개발자 포함)
 ├── PROJECT_STRUCTURE.md          # 표준 프로젝트 구조
 ├── SECURITY_ISMS.md              # ISMS 보안 가이드
+├── PROMPT-LIBRARY.md             # 프롬프트 라이브러리 시스템 가이드 (v2.4)
+├── PROMPT_LIBRARY_USAGE.md       # 프롬프트 라이브러리 사용법 (v2.4)
+├── prompts/                      # 프롬프트 라이브러리 (v2.4)
+│   ├── _template/                #   새 프롬프트 작성용 템플릿
+│   ├── code-gen/                 #   코드 생성 프롬프트
+│   ├── code-review/              #   코드 리뷰 프롬프트
+│   ├── testing/                  #   테스트 프롬프트
+│   ├── docs/                     #   문서 프롬프트
+│   ├── refactor/                 #   리팩토링 프롬프트
+│   ├── debug/                    #   디버깅 프롬프트
+│   └── planning/                 #   설계/계획 프롬프트
 ├── security/                     # AI 보안 가이드레일 (v2.0)
 │   ├── AI_SECURITY_GUARDRAILS.md #   7-Layer Defense 마스터 문서
 │   ├── OWASP_LLM_CHECKLIST.md   #   OWASP LLM Top 10 체크리스트
@@ -147,7 +161,7 @@ JinhakStandard/
 │   ├── settings.json             #   권한, hooks 설정
 │   ├── scripts/
 │   │   └── session-briefing.cjs  #   세션 자동 브리핑 Hook 스크립트
-│   └── skills/                   #   슬래시 명령어 (10개)
+│   └── skills/                   #   슬래시 명령어 (13개)
 │       ├── apply-standard/       #   /apply-standard - 표준 적용/업데이트
 │       ├── commit/               #   /commit - 커밋 생성
 │       ├── debug/                #   /debug - 체계적 디버깅 (v2.3)
@@ -155,6 +169,9 @@ JinhakStandard/
 │       ├── orchestrate/          #   /orchestrate - Agent Teams + 2단계 검증 (v2.3)
 │       ├── review-pr/            #   /review-pr - PR 리뷰
 │       ├── security-check/       #   /security-check - 보안 점검 (v2.0)
+│       ├── prompt-register/       #   /prompt-register - 프롬프트 등록 (v2.4)
+│       ├── prompt-search/        #   /prompt-search - 프롬프트 검색 (v2.4)
+│       ├── prompt-quality-check/ #   /prompt-quality-check - 품질 검증 (v2.4)
 │       ├── session-end/          #   /session-end - 세션 종료 (v2.0.2)
 │       ├── session-start/        #   /session-start - 세션 시작
 │       └── test/                 #   /test - 테스트 + Red-Green 검증 (v2.3)
@@ -182,6 +199,8 @@ JinhakStandard/
 | **VIBE_CODING_GUIDE.md** | 전체 (비개발자 포함) | AI와 협업하는 방법, 프롬프트 작성법, 주의사항, 팀 협업 방법 |
 | **PROJECT_STRUCTURE.md** | 개발자 | 표준 디렉토리 구조, 파일 배치 규칙, 초기 설정 스크립트 |
 | **SECURITY_ISMS.md** | 개발자/보안 | ISMS 인증 기준 AI 개발 보안 가이드 |
+| **PROMPT-LIBRARY.md** | 전체 | 프롬프트 라이브러리 시스템 구조, 메타데이터 스키마, Phase 로드맵 |
+| **[PROMPT_LIBRARY_USAGE.md](./PROMPT_LIBRARY_USAGE.md)** | 전체 | 프롬프트 검색/등록/품질검증 사용법 가이드 (비개발자 포함) |
 | **security/** | 개발자/보안 | 7-Layer AI 보안 가이드레일 (OWASP LLM Top 10, 금지 패턴, 데이터 분류, 인시던트 대응) |
 
 ---
@@ -283,7 +302,8 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
-| **2.3** | **2026-02-28** | **적응적 추천 + skills.sh 모범사례 + 멀티 에이전트 패턴: 가중치 비평, C6 Hard Gate, State Contract, 스킬 조합 가이드, 2단계 검증, `/debug` 스킬, AI 합리화 방지** |
+| **2.4** | **2026-02-28** | **프롬프트 라이브러리 Phase 1: 등록/검색/품질검증 시스템, 예시 프롬프트 3개, `/prompt-register` `/prompt-search` `/prompt-quality-check` 스킬** |
+| 2.3 | 2026-02-28 | 적응적 추천 + skills.sh 모범사례 + 멀티 에이전트 패턴: 가중치 비평, C6 Hard Gate, State Contract, 스킬 조합 가이드, 2단계 검증, `/debug` 스킬, AI 합리화 방지 |
 | 2.2 | 2026-02-28 | Planner-Critic 듀얼 에이전트 `/deep-plan` 스킬, Auto Memory 보강, memory-templates 추가 |
 | 2.1 | 2026-02-27 | Auto Memory 가이드, Agent Teams 워크플로우 강화, Git Worktree 격리 개발, `/orchestrate` 스킬 |
 | 2.0.2 | 2026-02-23 | Stop Hook 세션 종료 리마인더, `/session-end` 스킬, 비파괴 Hook 병합 |

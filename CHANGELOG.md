@@ -5,6 +5,49 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [2.4] - 2026-02-28
+
+### 프롬프트 라이브러리 시스템 (Phase 1)
+
+개발자가 만든 좋은 프롬프트를 팀 전체가 공유하고, 품질을 체계적으로 관리하는 프롬프트 라이브러리 시스템을 도입합니다. Phase 1에서는 등록/검색/품질검증 기반을 구축하고, Phase 2에서 JABIS API 연동 + 사용량 추적을 추가할 예정입니다.
+
+### 추가
+- `prompts/` 폴더 신규 생성 — 프롬프트 라이브러리 루트
+  - `prompts/_template/metadata.json` — 메타데이터 스키마 템플릿 (15개 필드)
+  - `prompts/_template/prompt.md` — 프롬프트 본문 구조 템플릿 (컨텍스트/프롬프트/사용 예시/변형)
+- 예시 프롬프트 3개:
+  - `prompts/code-review/security-review/` — 금지 패턴 12종 기반 경량 보안 코드 리뷰
+  - `prompts/code-gen/react-component/` — JINHAK 표준 React 컴포넌트 생성 (Tailwind+CVA+Lucide)
+  - `prompts/testing/unit-test-gen/` — Vitest/Jest 단위 테스트 생성 (describe/it, 경계값, 에러 케이스)
+- `.claude/skills/prompt-register/SKILL.md` — `/prompt-register` 스킬 (6단계: 입력 분석 → 중복 검사 → ID 생성 → 메타데이터 → 본문 작성 → 품질 검증)
+- `.claude/skills/prompt-search/SKILL.md` — `/prompt-search` 스킬 (4단계: 저장소 위치 확인 → 조건 분석 → 검색 실행 → 결과 출력)
+- `.claude/skills/prompt-quality-check/SKILL.md` — `/prompt-quality-check` 스킬 (5단계: 대상 확인 → 구조 25점 → 내용 35점 → 보안 25점 → 호환성 15점, 100점 만점)
+- `PROMPT-LIBRARY.md` — 프롬프트 라이브러리 전체 가이드 문서 (폴더 구조, 메타데이터 스키마, 카테고리, 사용법, 작성 가이드라인, Phase 2 로드맵)
+
+### 변경
+- `CLAUDE.md`: 버전 2.3 → 2.4
+  - 섹션 2.1 프로젝트 구조 트리에 `prompts/` 폴더 + prompt 스킬 3개 추가
+  - 섹션 6.2 Skills 목록 트리 및 테이블에 `/prompt-register`, `/prompt-search`, `/prompt-quality-check` 추가
+  - 섹션 9 문서 참조 테이블에 `PROMPT-LIBRARY.md` 추가
+- `PROJECT_STRUCTURE.md`: 섹션 4.2 skills 트리에 prompt 스킬 3개 추가, 섹션 4.4 "prompts/ 폴더" 신규 추가
+- `.claude/skills/apply-standard/SKILL.md`: 5단계 결과 보고의 "사용 가능한 명령어"에 prompt 스킬 3개 추가
+
+### 아키텍처 결정
+- **AD-1**: 메타데이터 형식 → `metadata.json` (YAML 대신 JSON — `.cjs` 스크립트 호환, Phase 2 API 직접 매핑)
+- **AD-2**: 카테고리 → 2레벨 (폴더 대분류 7종 + tags 세분류)
+- **AD-3**: 소비자 프로젝트 → prompts/ 복사 안 함, `/prompt-search`가 표준 레포에서 검색
+- **AD-4**: JABIS 통합 방향 → POST /api/prompts + action 패턴 (Phase 2, 문서화만)
+
+### Migration Guide (v2.3 → v2.4)
+
+기존 v2.3 프로젝트에서 업데이트 시:
+1. **prompt 스킬 3개 복사**: `/tmp/jinhak-standards/.claude/skills/prompt-register/`, `prompt-search/`, `prompt-quality-check/` → `.claude/skills/`
+2. **prompts/ 폴더 복사** (선택): `/tmp/jinhak-standards/prompts/` → 프로젝트 루트 (또는 `/prompt-search`가 표준 레포에서 검색하므로 복사 불필요)
+3. **CLAUDE.md 업데이트**: `/apply-standard`로 자동 적용 또는 구조 트리/스킬 목록/문서 참조 직접 반영
+4. **세션 재시작**: settings.json 변경 없으므로 재시작 불필요 (스킬 파일은 즉시 반영)
+
+---
+
 ## [2.3] - 2026-02-28
 
 ### 적응적 추천 모델 + skills.sh 모범사례 반영

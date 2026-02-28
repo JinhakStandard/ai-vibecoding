@@ -1,0 +1,22 @@
+{
+  "id": "prompt-unique-id",
+  "title": "프롬프트 제목",
+  "description": "프롬프트 설명 (1~2줄)",
+  "category": "code-gen",
+  "tags": ["tag1", "tag2"],
+  "author": "작성자명",
+  "created": "2026-01-01",
+  "updated": "2026-01-01",
+  "version": "1.0",
+  "compatibility": {
+    "claude_code": true,
+    "claude_ai": true,
+    "jabis": false
+  },
+  "tech_stack": ["react", "typescript"],
+  "difficulty": "intermediate",
+  "estimated_tokens": 500,
+  "quality_score": null,
+  "usage_count": 0,
+  "fork_parent": null
+}

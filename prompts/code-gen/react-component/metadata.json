@@ -1,0 +1,22 @@
+{
+  "id": "react-component",
+  "title": "JINHAK 표준 React 컴포넌트 생성",
+  "description": "JINHAK 기술 스택(React + Tailwind + CVA + Lucide)에 맞는 컴포넌트 생성",
+  "category": "code-gen",
+  "tags": ["react", "component", "tailwind", "cva", "lucide"],
+  "author": "JINHAK Standard",
+  "created": "2026-02-28",
+  "updated": "2026-02-28",
+  "version": "1.0",
+  "compatibility": {
+    "claude_code": true,
+    "claude_ai": true,
+    "jabis": false
+  },
+  "tech_stack": ["react", "tailwind", "cva", "lucide-react"],
+  "difficulty": "beginner",
+  "estimated_tokens": 700,
+  "quality_score": null,
+  "usage_count": 0,
+  "fork_parent": null
+}

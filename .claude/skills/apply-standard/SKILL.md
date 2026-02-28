@@ -220,6 +220,9 @@ CLAUDE.md가 이미 있는 경우:
 - `/deep-plan` - 심층 계획 수립
 - `/debug` - 체계적 디버깅
 - `/orchestrate` - Agent Teams 병렬 처리
+- `/prompt-register` - 프롬프트 등록
+- `/prompt-search` - 프롬프트 검색
+- `/prompt-quality-check` - 프롬프트 품질 검증
 ```
 
 ## 합리화 방지

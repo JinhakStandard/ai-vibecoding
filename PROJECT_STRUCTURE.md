@@ -198,6 +198,12 @@ project-root/
     │   └── SKILL.md           # /review-pr 명령어
     ├── security-check/
     │   └── SKILL.md           # /security-check 명령어 (v2.0)
+    ├── prompt-register/
+    │   └── SKILL.md           # /prompt-register 명령어 (v2.4)
+    ├── prompt-search/
+    │   └── SKILL.md           # /prompt-search 명령어 (v2.4)
+    ├── prompt-quality-check/
+    │   └── SKILL.md           # /prompt-quality-check 명령어 (v2.4)
     ├── session-end/
     │   └── SKILL.md           # /session-end 명령어
     ├── session-start/
@@ -228,6 +234,39 @@ security/
 | `DATA_CLASSIFICATION.md` | 데이터 분류 기준 | 규제 변경 시 |
 | `INCIDENT_RESPONSE.md` | 인시던트 대응 절차 | 연 1회 이상 |
 | `NIGHTBUILDER_SECURITY.md` | 자동화 개발 보안 | NightBuilder 정책 변경 시 |
+
+### 4.4 prompts/ 폴더 (v2.4)
+
+프롬프트 라이브러리를 관리합니다. 각 프롬프트는 카테고리 폴더 아래에 고유 ID 폴더를 가집니다.
+
+```
+prompts/
+├── _template/                    # 새 프롬프트 작성 시 참고 템플릿
+│   ├── metadata.json             #   메타데이터 스키마
+│   └── prompt.md                 #   프롬프트 본문 구조
+├── code-gen/                     # 코드 생성/구현
+│   └── {prompt-id}/
+│       ├── metadata.json
+│       └── prompt.md
+├── code-review/                  # 코드 리뷰/분석
+├── testing/                      # 테스트 작성/실행
+├── docs/                         # 문서 생성/업데이트
+├── refactor/                     # 리팩토링/최적화
+├── debug/                        # 디버깅/문제 해결
+└── planning/                     # 설계/계획 수립
+```
+
+| 카테고리 | 설명 | 관련 스킬 |
+|----------|------|----------|
+| `code-gen` | 코드 생성, 컴포넌트 구현 | `/prompt-register`, `/prompt-search` |
+| `code-review` | 보안 리뷰, 성능 분석 | `/prompt-quality-check` |
+| `testing` | 단위/통합 테스트 생성 | `/test` |
+| `docs` | API 문서, README 생성 | - |
+| `refactor` | 코드 최적화, 구조 개선 | - |
+| `debug` | 디버깅 전략, 에러 추적 | `/debug` |
+| `planning` | 아키텍처 설계, 마이그레이션 | `/deep-plan` |
+
+> 상세 가이드: [PROMPT-LIBRARY.md](./PROMPT-LIBRARY.md)
 
 ---
 

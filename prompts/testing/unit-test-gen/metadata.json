@@ -1,0 +1,22 @@
+{
+  "id": "unit-test-gen",
+  "title": "단위 테스트 생성",
+  "description": "Vitest/Jest 기반 단위 테스트 생성 — describe/it, 경계값, 에러 케이스 포함",
+  "category": "testing",
+  "tags": ["vitest", "jest", "unit-test", "testing"],
+  "author": "JINHAK Standard",
+  "created": "2026-02-28",
+  "updated": "2026-02-28",
+  "version": "1.0",
+  "compatibility": {
+    "claude_code": true,
+    "claude_ai": true,
+    "jabis": false
+  },
+  "tech_stack": ["vitest", "jest", "typescript", "javascript"],
+  "difficulty": "intermediate",
+  "estimated_tokens": 550,
+  "quality_score": null,
+  "usage_count": 0,
+  "fork_parent": null
+}

@@ -1,9 +1,9 @@
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 2.3 -->
+<!-- jinhak_standard_version: 2.4 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
 <!-- applied_date: 2026-02-28 -->
 
-# JINHAK 전사 AI 개발 표준 v2.3
+# JINHAK 전사 AI 개발 표준 v2.4
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
 
@@ -76,9 +76,21 @@
 │       ├── deep-plan/SKILL.md         # Planner-Critic 적응적 추천 (v2.3)
 │       ├── debug/SKILL.md             # 체계적 디버깅 (v2.3)
 │       ├── orchestrate/SKILL.md      # Agent Teams 오케스트레이션 (v2.1)
+│       ├── prompt-register/SKILL.md   # 프롬프트 등록 (v2.4)
+│       ├── prompt-search/SKILL.md    # 프롬프트 검색 (v2.4)
+│       ├── prompt-quality-check/SKILL.md # 프롬프트 품질 검증 (v2.4)
 │       ├── session-end/SKILL.md      # 세션 종료
 │       ├── session-start/SKILL.md    # 세션 시작
 │       └── test/SKILL.md             # 테스트 실행
+├── prompts/               # 프롬프트 라이브러리 (v2.4)
+│   ├── _template/         # 템플릿 (metadata.json + prompt.md)
+│   ├── code-gen/          # 코드 생성 프롬프트
+│   ├── code-review/       # 코드 리뷰 프롬프트
+│   ├── testing/           # 테스트 프롬프트
+│   ├── docs/              # 문서 프롬프트
+│   ├── refactor/          # 리팩토링 프롬프트
+│   ├── debug/             # 디버깅 프롬프트
+│   └── planning/          # 설계/계획 프롬프트
 ├── security/              # AI 보안 가이드레일 (v2.0)
 │   ├── AI_SECURITY_GUARDRAILS.md   # 7-Layer Defense 마스터 문서
 │   ├── OWASP_LLM_CHECKLIST.md     # OWASP LLM Top 10 체크리스트
@@ -531,6 +543,9 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 ├── orchestrate/SKILL.md       # /orchestrate - Agent Teams 오케스트레이션 (v2.1)
 ├── session-end/SKILL.md       # /session-end - 세션 종료
 ├── session-start/SKILL.md     # /session-start - 세션 시작
+├── prompt-register/SKILL.md   # /prompt-register - 프롬프트 등록 (v2.4)
+├── prompt-search/SKILL.md     # /prompt-search - 프롬프트 검색 (v2.4)
+├── prompt-quality-check/SKILL.md # /prompt-quality-check - 품질 검증 (v2.4)
 └── test/SKILL.md              # /test - 테스트 실행
 ```
 
@@ -546,6 +561,9 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 | `/debug` | 4단계 체계적 디버깅 (근본 원인 추적 + Red-Green 검증) |
 | `/orchestrate` | Agent Teams 구성하여 복잡한 작업 병렬 처리 (2단계 검증) |
 | `/test` | 테스트 실행 및 결과 분석 (Red-Green 검증 포함) |
+| `/prompt-register` | 프롬프트 라이브러리에 새 프롬프트 등록 (중복 검사 + 품질 기본 검증) |
+| `/prompt-search` | 프롬프트 라이브러리에서 키워드/카테고리/태그 검색 |
+| `/prompt-quality-check` | 프롬프트 품질 100점 만점 검증 (구조/내용/보안/호환성) |
 
 ### 6.3 권한 설정
 
@@ -1039,6 +1057,8 @@ new Intl.NumberFormat('ko-KR', {
 | [security/DATA_CLASSIFICATION.md](./security/DATA_CLASSIFICATION.md) | 데이터 분류 및 처리 기준 |
 | [security/INCIDENT_RESPONSE.md](./security/INCIDENT_RESPONSE.md) | AI 보안 인시던트 대응 가이드 |
 | [security/NIGHTBUILDER_SECURITY.md](./security/NIGHTBUILDER_SECURITY.md) | NightBuilder 보안 규칙 |
+| [PROMPT-LIBRARY.md](./PROMPT-LIBRARY.md) | 프롬프트 라이브러리 시스템 가이드 (구조/스키마/Phase 로드맵) |
+| [PROMPT_LIBRARY_USAGE.md](./PROMPT_LIBRARY_USAGE.md) | 프롬프트 라이브러리 사용법 (검색/등록/품질검증/비개발자) |
 | [CHANGELOG.md](./CHANGELOG.md) | 버전별 변경 이력 |
 
 ---
@@ -1138,4 +1158,4 @@ AI가 생성해서는 안 되는 12가지 위험 패턴:
 ---
 
 *마지막 업데이트: 2026-02-28*
-*버전: 2.3*
+*버전: 2.4*
