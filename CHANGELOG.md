@@ -41,6 +41,7 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 - `.claude/skills/orchestrate/SKILL.md`: 0단계 "입력 확인 (State Contract)" 신규 추가 — `/deep-plan` 파이프라인 연결 시 계획서/유형/C6 수신
 - `VIBE_CODING_GUIDE.md` 섹션 6.9: "스킬 조합 가이드 (Composite Pattern)" 신규 추가 — 작업 유형별 추천 조합 매트릭스, 파이프라인 흐름도
 - `CLAUDE.md` 섹션 6.9: 스킬 조합 가이드 참조 추가, 기존 6.9(토큰 최적화) → 6.10으로 번호 변경
+- `.claude/skills/apply-standard/SKILL.md`: 버전 하드코딩 버그 수정 — 0단계에서 CHANGELOG.md 기반 최신 버전 자동 감지, 모든 하드코딩 버전 제거, 하드코딩 금지 경고문 추가
 
 ---
 
