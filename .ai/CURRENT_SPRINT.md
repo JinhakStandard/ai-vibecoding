@@ -19,6 +19,15 @@
 ## 최근 완료
 
 ### 2026-02-28
+- [x] JINHAK 표준 v2.3 릴리스 (11개 개선사항)
+  - [x] 개선 1-5: deep-plan 적응적 추천 모델 (가중치 비평, C6 Hard Gate, NightBuilder 비동기 위임, 사후 검증)
+  - [x] 개선 6: /orchestrate Two-Stage Review
+  - [x] 개선 7: /test Red-Green 검증
+  - [x] 개선 8: /debug 신규 스킬 (4단계 체계적 디버깅)
+  - [x] 개선 9: 스킬 토큰 최적화 가이드
+  - [x] 개선 10: Anti-Rationalization 패턴 전사 적용
+  - [x] 개선 11: Skill TDD 가이드 (skill-testing-guide.md)
+  - [x] session-briefing PENDING_PLANS 감지, session-end-reminder README 경고
 - [x] JINHAK 표준 v2.2 릴리스
   - [x] /deep-plan 스킬 생성 (Planner-Critic 듀얼 에이전트)
   - [x] Auto Memory 보강 (session-briefing, session-end, memory-templates)
@@ -55,6 +64,7 @@
 
 | 영역 | 완성도 | 상태 |
 |------|--------|------|
+| v2.3 적응적 추천 + 스킬 품질 강화 | 100% | 완료 |
 | v2.2 /deep-plan + Auto Memory 보강 | 100% | 완료 |
 | v2.0 보안 가이드레일 도입 | 100% | 완료 |
 | JabisStandard 자체 정비 | 100% | 완료 |

@@ -9,10 +9,25 @@
 ## 2026-02-28
 
 ### 세션 작업 요약
+- JINHAK 표준 v2.3 릴리스 (11개 개선사항: 적응적 추천 모델 + 스킬 품질 강화)
 - JINHAK 표준 v2.2 릴리스 (/deep-plan 듀얼 에이전트, Auto Memory 보강)
 - GitHub remote 추가 (Bitbucket + GitHub 이중 push 체계 구성)
 
-### 주요 변경
+### 주요 변경 (v2.3)
+- `.claude/skills/deep-plan/SKILL.md` - 가중치 비평 매트릭스, C6 Hard Gate, NightBuilder 비동기 위임, 사후 검증
+- `.claude/skills/orchestrate/SKILL.md` - Two-Stage Review (스펙 적합성 + 코드 품질)
+- `.claude/skills/test/SKILL.md` - Red-Green 검증 + Anti-Rationalization
+- `.claude/skills/debug/SKILL.md` - 4단계 체계적 디버깅 스킬 신규 생성
+- `.claude/skills/session-end/SKILL.md` - deep-plan 사후 검증 체크 추가
+- `CLAUDE.md` - v2.3, 적응적 추천 분기, Anti-Rationalization, 토큰 최적화 섹션
+- `VIBE_CODING_GUIDE.md` - 가중치 수렴 기준 + C6 Hard Gate
+- `security/NIGHTBUILDER_SECURITY.md` - deep-plan 미수렴 비동기 위임 정책
+- `scripts/session-briefing.cjs` - PENDING_PLANS 감지 로직
+- `scripts/session-end-reminder.cjs` - README.md 업데이트 리마인더
+- `templates/ai-folder-templates.md` - PENDING_PLANS 템플릿 + plans 가중 점수 갱신
+- `templates/skill-testing-guide.md` - Skill TDD 가이드 신규 생성
+
+### 주요 변경 (v2.2)
 - `.claude/skills/deep-plan/SKILL.md` - Planner-Critic 듀얼 에이전트 스킬 신규 생성
 - `templates/memory-templates.md` - Auto Memory 서브파일 참고 템플릿 신규 생성
 - `scripts/session-briefing.cjs` - Auto Memory 상태 표시 추가
@@ -23,6 +38,7 @@
 - `CHANGELOG.md` - v2.2 항목 작성
 
 ### 커밋
+- `59b150f` feat: 표준 v2.3 릴리스 - Planner-Critic 적응적 추천 모델, 스킬 품질 강화 (11개 개선)
 - `40d284e` feat: 표준 v2.2 릴리스 - /deep-plan 듀얼 에이전트, Auto Memory 보강
 
 ---

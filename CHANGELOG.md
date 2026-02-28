@@ -36,7 +36,7 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 - `CLAUDE.md` 섹션 6.9: 스킬 토큰 최적화 (Progressive Disclosure) 가이드 추가
 - `CLAUDE.md` 섹션 2.3: Anti-Rationalization 원칙 추가 (AI 합리화 방지 6번 항목)
 - `templates/skill-testing-guide.md`: **신규** — 스킬 품질 검증(TDD) 가이드
-- 각 스킬 SKILL.md에 "합리화 방지" 섹션 추가 (test, debug)
+- 각 스킬 SKILL.md에 "합리화 방지" 섹션 추가 (test, debug, orchestrate, deep-plan, security-check, commit)
 
 ---
 

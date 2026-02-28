@@ -94,7 +94,24 @@ if (gitLog) {
   output.push('');
 }
 
-// 5. 표준 버전
+// 5. PENDING_PLANS 감지 (deep-plan 미수렴 보류 건)
+const path = require('path');
+const pendingPath = path.join(process.cwd(), '.ai', 'PENDING_PLANS.md');
+const pendingContent = readFile(pendingPath);
+if (pendingContent) {
+  const pendingMatches = pendingContent.match(/## \[보류\]/g);
+  const pendingCount = pendingMatches ? pendingMatches.length : 0;
+  if (pendingCount > 0) {
+    output.push('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    output.push('!!  [deep-plan 보류 건 ' + pendingCount + '개 감지]');
+    output.push('!!  .ai/PENDING_PLANS.md를 확인하세요!');
+    output.push('!!  미수렴 계획을 검토 후 수정/진행/폐기를 결정하세요.');
+    output.push('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    output.push('');
+  }
+}
+
+// 6. 표준 버전
 const version = getStandardVersion();
 if (version) {
   output.push('[JINHAK 표준] v' + version + ' 적용됨');
