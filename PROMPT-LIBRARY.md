@@ -16,8 +16,8 @@
 **Phase 로드맵:**
 | Phase | 내용 | 상태 |
 |-------|------|------|
-| Phase 1 | 등록/검색/품질검증 기반 | ✅ 현재 |
-| Phase 2 | JABIS API 연동 + 사용량 추적 | 계획 |
+| Phase 1 | 등록/검색/품질검증 기반 | ✅ 완료 |
+| Phase 2 | JABIS API 연동 + 사용량 추적 | ✅ 현재 |
 | Phase 3 | Slack 자동 다이제스트 + 웹 대시보드 | 계획 |
 | Phase 4 | NightBuilder 연동 자동 품질 테스트 | 계획 |
 
@@ -154,32 +154,53 @@ prompts/
 
 ---
 
-## 7. Phase 2 로드맵
+## 7. Phase 2 — JABIS API 연동 + 사용량 추적
 
 ### 7.1 JABIS API 연동
 
-JINHAK HTTP API 규칙(GET/POST만, action 필드)을 준수하는 API 설계:
+JINHAK HTTP API 규칙(GET/POST만, action 필드)을 준수하는 API가 `jabis-api-gateway`에 구현되어 있습니다.
 
-```
-POST /api/prompts  { action: "search", query: "...", category: "..." }
-POST /api/prompts  { action: "register", metadata: {...}, content: "..." }
-POST /api/prompts  { action: "track", prompt_id: "...", event: "used" }
-POST /api/prompts  { action: "report", period: "weekly" }
-```
+**엔드포인트:** `POST /api/prompts`
+
+| Action | 설명 | 인증 |
+|--------|------|------|
+| `search` | 프롬프트 검색 (키워드, 카테고리, 태그, 난이도) | API Key 또는 JWT |
+| `get` | 프롬프트 상세 조회 (content 포함) | API Key 또는 JWT |
+| `register` | 새 프롬프트 등록 (중복 검사 포함) | JWT 필수 |
+| `track` | 사용 이벤트 기록 (search/view/use/fork/commit) | API Key 또는 JWT |
+| `report` | 주간/월간 사용량 리포트 조회 | API Key 또는 JWT |
+| `evaluate` | 프롬프트 자동 평가 (4가지 가중치 지표) | JWT 필수 |
+
+**인증 방식:**
+- **API Key**: `X-Prompt-Api-Key` 헤더 — Claude Code 스킬, Hook에서 사용 (읽기 전용)
+- **JWT**: `Authorization: Bearer` 헤더 — jabis-lab UI에서 사용 (모든 action 허용)
+
+**구현 파일 (jabis-api-gateway):**
+- `sql/prompt-schema.sql` — DB 스키마 (prompts, prompt_usage_events, prompt_evaluations)
+- `src/types/prompt.ts` — 타입 정의
+- `src/repositories/promptRepository.ts` — DB CRUD
+- `src/services/promptService.ts` — 비즈니스 로직
+- `src/routes/prompts.ts` — 라우트 핸들러
+
+**상세 API 사양:** [jabis-api-gateway/docs/PROMPT_API_SPECIFICATION.md](../jabis-api-gateway/docs/PROMPT_API_SPECIFICATION.md)
 
 ### 7.2 사용량 추적
 
-- `scripts/prompt-track.cjs`: Claude Code Hook에서 프롬프트 사용 시 자동 기록
-- `/prompt-report` 스킬: 주간/월간 사용 통계 출력
+- `.claude/scripts/prompt-track.cjs`: PostToolUse Hook에서 프롬프트 사용 시 API로 자동 기록
+- `/prompt-report` 스킬: API의 report action을 호출하여 주간/월간 사용 통계 출력
 
 ### 7.3 자동 평가 지표
 
+`evaluate` action이 서버에서 4가지 지표를 계산하여 `prompt_evaluations` 테이블에 저장합니다.
+
 | 지표 | 가중치 | 설명 |
 |------|--------|------|
-| 사용 횟수 | 30% | 검색 + 복사 + 적용 횟수 |
-| 커밋 채택률 | 40% | 프롬프트 사용 후 실제 커밋까지 이어진 비율 |
-| 재사용률 | 20% | 서로 다른 프로젝트에서의 사용 비율 |
-| Fork 횟수 | 10% | 다른 프롬프트의 기반이 된 횟수 |
+| 사용 횟수 | 30% | 기간 내 총 사용 이벤트 / 기준값 (0~10점) |
+| 커밋 채택률 | 40% | commit 이벤트 / use 이벤트 (0~10점) |
+| 재사용률 | 20% | 고유 프로젝트 수 / 기준값 (0~10점) |
+| Fork 횟수 | 10% | fork 이벤트 수 / 기준값 (0~10점) |
+
+총점 = (사용×0.3 + 커밋×0.4 + 재사용×0.2 + Fork×0.1) × 10 (100점 만점)
 
 ### 7.4 Slack 다이제스트 (Phase 3)
 

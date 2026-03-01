@@ -4,12 +4,60 @@
 > 상세 컨텍스트는 Agent Memory가 자동 관리하므로, 이 문서는 요약 수준으로 유지합니다.
 > 세션 종료 시 반드시 업데이트하세요.
 
+## 2026-03-01 (v2.5 릴리스)
+
+### 세션 작업 요약
+- 프롬프트 라이브러리 Phase 2 구현 — JABIS API 연동 + 사용량 추적
+
+### 주요 변경 (jabis-api-gateway)
+- `sql/prompt-schema.sql` — DB 스키마 3개 테이블 (prompts, prompt_usage_events, prompt_evaluations)
+- `src/types/prompt.ts` — 타입 정의 (PromptCategory, PromptEvent, Action Body 유니온)
+- `src/repositories/promptRepository.ts` — DB CRUD (검색/등록/트래킹/리포트/평가 계산)
+- `src/services/promptService.ts` — 비즈니스 로직
+- `src/routes/prompts.ts` — 라우트 핸들러 (6개 action: search/get/register/track/report/evaluate)
+- `src/routes/index.ts` — promptRoutes 등록 추가
+- `src/config/index.ts` — PROMPT_API_KEYS 환경변수 추가
+
+### 주요 변경 (jinhakstandardai)
+- `.claude/skills/prompt-report/SKILL.md` — /prompt-report 스킬 생성
+- `.claude/scripts/prompt-track.cjs` — PostToolUse Hook 스크립트 생성
+- `PROMPT-LIBRARY.md` — Phase 2 상태 갱신 + 실제 구현 내용 반영
+- `CLAUDE.md` — v2.5, 스킬/스크립트 추가
+- `CHANGELOG.md` — v2.5 항목 작성
+
+### 검증 결과
+- jabis-api-gateway TypeScript 컴파일: OK (`pnpm run typecheck` 통과)
+
+---
+
+## 2026-02-28 (v2.4 릴리스)
+
+### 세션 작업 요약
+- 프롬프트 라이브러리 시스템 Phase 1 구축 (v2.4)
+- 프롬프트 라이브러리 사용법 가이드 문서 생성
+
+### 주요 변경
+- `prompts/` - 템플릿 + 예시 프롬프트 3개 (security-review, react-component, unit-test-gen)
+- `.claude/skills/prompt-register/SKILL.md` - 프롬프트 등록 스킬 (6단계)
+- `.claude/skills/prompt-search/SKILL.md` - 프롬프트 검색 스킬 (4단계)
+- `.claude/skills/prompt-quality-check/SKILL.md` - 품질 검증 스킬 (100점, 4영역)
+- `PROMPT-LIBRARY.md` - 시스템 구조 가이드
+- `PROMPT_LIBRARY_USAGE.md` - 사용법 가이드 (비개발자 포함)
+- `CLAUDE.md`, `README.md`, `PROJECT_STRUCTURE.md`, `CHANGELOG.md` - v2.4 갱신
+
+### 커밋
+- `ee5dc45` feat: 표준 v2.4 — 프롬프트 라이브러리 시스템 Phase 1 (등록/검색/품질검증)
+
 ---
 
 ## 2026-02-28
 
 ### 세션 작업 요약
-- JINHAK 표준 v2.3 릴리스 (11개 개선사항: 적응적 추천 모델 + 스킬 품질 강화)
+- JINHAK 표준 v2.3 릴리스 (13개 개선사항: 적응적 추천 모델 + 스킬 품질 강화 + 멀티 에이전트 패턴)
+- v2.3 검증 후 수정: PENDING_PLANS 감지 누락 보완, 합리화 방지 6개 스킬 전사 적용
+- 개선 12~13: State Contract (스킬 간 상태 계약), 스킬 조합 가이드 (Composite Pattern)
+- /apply-standard 버전 하드코딩 버그 수정 → CHANGELOG.md 기반 동적 감지로 전환
+- /commit 스킬에 푸시 단계 추가
 - JINHAK 표준 v2.2 릴리스 (/deep-plan 듀얼 에이전트, Auto Memory 보강)
 - GitHub remote 추가 (Bitbucket + GitHub 이중 push 체계 구성)
 
@@ -26,6 +74,23 @@
 - `scripts/session-end-reminder.cjs` - README.md 업데이트 리마인더
 - `templates/ai-folder-templates.md` - PENDING_PLANS 템플릿 + plans 가중 점수 갱신
 - `templates/skill-testing-guide.md` - Skill TDD 가이드 신규 생성
+
+### 주요 변경 (v2.3 추가)
+- `.claude/scripts/session-briefing.cjs` - PENDING_PLANS 감지 로직 추가 (실행 파일 누락 보완)
+- `.claude/skills/orchestrate/SKILL.md` - 0단계 State Contract + 합리화 방지 섹션
+- `.claude/skills/deep-plan/SKILL.md` - 6단계 State Contract 출력 계약 + 합리화 방지 섹션
+- `.claude/skills/security-check/SKILL.md` - 합리화 방지 섹션
+- `.claude/skills/commit/SKILL.md` - 4단계 푸시 + 합리화 방지 섹션
+- `.claude/skills/apply-standard/SKILL.md` - 버전 하드코딩 전면 제거, 동적 감지 전환
+- `VIBE_CODING_GUIDE.md` 섹션 6.9 - 스킬 조합 가이드 (Composite Pattern)
+- `CLAUDE.md` 섹션 6.9 - 스킬 조합 가이드 참조, 6.9→6.10 번호 변경
+
+### 커밋
+- `ddeb7a8` fix: /apply-standard 버전 하드코딩 버그 수정
+- `54e1939` feat: 개선 12~13 - State Contract, 스킬 조합 가이드
+- `a0351f8` fix: v2.3 검증 후 수정 - PENDING_PLANS 감지, 합리화 방지 전사 확대
+- `59b150f` feat: 표준 v2.3 릴리스 (11개 개선)
+- `eaf138c` docs: README.md, RELEASE_NOTES.md v2.2 기준으로 갱신
 
 ### 주요 변경 (v2.2)
 - `.claude/skills/deep-plan/SKILL.md` - Planner-Critic 듀얼 에이전트 스킬 신규 생성

@@ -1,9 +1,9 @@
 <!-- JINHAK Standard Metadata - 이 메타 정보는 자동 버전 관리에 사용됩니다. 삭제하지 마세요. -->
-<!-- jinhak_standard_version: 2.4 -->
+<!-- jinhak_standard_version: 2.5 -->
 <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
-<!-- applied_date: 2026-02-28 -->
+<!-- applied_date: 2026-03-01 -->
 
-# JINHAK 전사 AI 개발 표준 v2.4
+# JINHAK 전사 AI 개발 표준 v2.5
 
 이 문서는 JINHAK의 모든 프로젝트에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 전사 표준입니다.
 
@@ -67,7 +67,8 @@
 ├── .claude/               # Claude Code 설정 폴더
 │   ├── settings.json      # 권한, 환경변수, 훅 설정
 │   ├── scripts/           # Hook 실행 스크립트
-│   │   └── session-briefing.cjs  # 세션 시작 시 자동 브리핑
+│   │   ├── session-briefing.cjs  # 세션 시작 시 자동 브리핑
+│   │   └── prompt-track.cjs     # 프롬프트 사용량 자동 추적 (v2.5)
 │   └── skills/            # 슬래시 명령어 (Skills) 정의
 │       ├── apply-standard/SKILL.md   # 표준 적용/업데이트
 │       ├── commit/SKILL.md           # 커밋 생성
@@ -79,6 +80,7 @@
 │       ├── prompt-register/SKILL.md   # 프롬프트 등록 (v2.4)
 │       ├── prompt-search/SKILL.md    # 프롬프트 검색 (v2.4)
 │       ├── prompt-quality-check/SKILL.md # 프롬프트 품질 검증 (v2.4)
+│       ├── prompt-report/SKILL.md        # 프롬프트 사용량 리포트 (v2.5)
 │       ├── session-end/SKILL.md      # 세션 종료
 │       ├── session-start/SKILL.md    # 세션 시작
 │       └── test/SKILL.md             # 테스트 실행
@@ -546,6 +548,7 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 ├── prompt-register/SKILL.md   # /prompt-register - 프롬프트 등록 (v2.4)
 ├── prompt-search/SKILL.md     # /prompt-search - 프롬프트 검색 (v2.4)
 ├── prompt-quality-check/SKILL.md # /prompt-quality-check - 품질 검증 (v2.4)
+├── prompt-report/SKILL.md    # /prompt-report - 사용량 리포트 (v2.5)
 └── test/SKILL.md              # /test - 테스트 실행
 ```
 
@@ -564,6 +567,7 @@ node /tmp/jinhak-standards/scripts/install-global-hook.cjs --remove
 | `/prompt-register` | 프롬프트 라이브러리에 새 프롬프트 등록 (중복 검사 + 품질 기본 검증) |
 | `/prompt-search` | 프롬프트 라이브러리에서 키워드/카테고리/태그 검색 |
 | `/prompt-quality-check` | 프롬프트 품질 100점 만점 검증 (구조/내용/보안/호환성) |
+| `/prompt-report` | JABIS API에서 주간/월간 프롬프트 사용량 리포트 조회 |
 
 ### 6.3 권한 설정
 
@@ -1157,5 +1161,5 @@ AI가 생성해서는 안 되는 12가지 위험 패턴:
 
 ---
 
-*마지막 업데이트: 2026-02-28*
-*버전: 2.4*
+*마지막 업데이트: 2026-03-01*
+*버전: 2.5*

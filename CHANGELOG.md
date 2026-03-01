@@ -5,6 +5,47 @@ Claude Code의 `/session-start` 스킬이 이 파일을 참조하여 표준 업�
 
 ---
 
+## [2.5] - 2026-03-01
+
+### 프롬프트 라이브러리 Phase 2 — JABIS API 연동 + 사용량 추적
+
+Phase 1(등록/검색/품질검증 기반)에 이어, JABIS API Gateway에 실제 API를 구현하고 사용량 추적/자동 평가 시스템을 구축합니다.
+
+### 추가 (jabis-api-gateway)
+- `sql/prompt-schema.sql` — DB 스키마 (prompts, prompt_usage_events, prompt_evaluations) + GIN 인덱스
+- `src/types/prompt.ts` — 타입 정의 (Prompt, PromptUsageEvent, PromptEvaluation, Action Body 유니온)
+- `src/repositories/promptRepository.ts` — DB CRUD (검색/등록/트래킹/리포트/평가 계산)
+- `src/services/promptService.ts` — 비즈니스 로직 (중복 검사, 존재 검증, 클램핑)
+- `src/routes/prompts.ts` — 라우트 핸들러 (6개 action: search/get/register/track/report/evaluate)
+- `src/routes/index.ts` — promptRoutes 등록
+- `src/config/index.ts` — PROMPT_API_KEYS 환경변수 추가
+
+### 추가 (jinhakstandardai)
+- `.claude/skills/prompt-report/SKILL.md` — `/prompt-report` 스킬 (JABIS API report action 호출)
+- `.claude/scripts/prompt-track.cjs` — PostToolUse Hook 스크립트 (프롬프트 사용 자동 트래킹)
+
+### 변경
+- `PROMPT-LIBRARY.md`: Phase 2 상태 "계획" → "✅ 현재", 섹션 7.1~7.3에 실제 구현 내용 반영
+- `CLAUDE.md`: 버전 2.4 → 2.5
+  - 프로젝트 구조 트리에 `prompt-report/SKILL.md`, `prompt-track.cjs` 추가
+  - 섹션 6.2 Skills 목록에 `/prompt-report` 추가
+- `CHANGELOG.md`: v2.5 항목 작성
+
+### API 인증 방식
+- **API Key** (`X-Prompt-Api-Key`): search, get, track, report만 허용 (Claude Code 스킬/Hook용)
+- **JWT** (`Authorization: Bearer`): 모든 action 허용 (jabis-lab UI용, register/evaluate는 JWT 필수)
+
+### Migration Guide (v2.4 → v2.5)
+
+기존 v2.4 프로젝트에서 업데이트 시:
+1. **prompt-report 스킬 복사**: `/tmp/jinhak-standards/.claude/skills/prompt-report/` → `.claude/skills/`
+2. **prompt-track.cjs 복사**: `/tmp/jinhak-standards/.claude/scripts/prompt-track.cjs` → `.claude/scripts/`
+3. **CLAUDE.md 업데이트**: `/apply-standard`로 자동 적용 또는 구조 트리/스킬 목록 직접 반영
+4. **JABIS API 환경변수 설정** (선택): `CLAUDE.local.md`에 `JABIS_API_URL`, `PROMPT_API_KEY` 추가
+5. **세션 재시작**: 스킬 파일은 즉시 반영, Hook은 settings.json 변경 시만 재시작 필요
+
+---
+
 ## [2.4] - 2026-02-28
 
 ### 프롬프트 라이브러리 시스템 (Phase 1)
