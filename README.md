@@ -105,9 +105,9 @@ claude
 
 > 각 프로젝트의 CLAUDE.md에 다음 메타 정보가 기록되어 추적됩니다:
 > ```html
-> <!-- jinhak_standard_version: 2.4 -->
+> <!-- jinhak_standard_version: 2.6 -->
 > <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
-> <!-- applied_date: 2026-02-28 -->
+> <!-- applied_date: 2026-03-02 -->
 > ```
 
 ---
@@ -138,9 +138,9 @@ JinhakStandard/
 ├── VIBE_CODING_GUIDE.md          # 바이브 코딩 방법론 (비개발자 포함)
 ├── PROJECT_STRUCTURE.md          # 표준 프로젝트 구조
 ├── SECURITY_ISMS.md              # ISMS 보안 가이드
-├── PROMPT-LIBRARY.md             # 프롬프트 라이브러리 시스템 가이드 (v2.4)
-├── PROMPT_LIBRARY_USAGE.md       # 프롬프트 라이브러리 사용법 (v2.4)
-├── prompts/                      # 프롬프트 라이브러리 (v2.4)
+├── PROMPT-LIBRARY.md             # 프롬프트 라이브러리 시스템 가이드
+├── PROMPT_LIBRARY_USAGE.md       # 프롬프트 라이브러리 사용법
+├── prompts/                      # 프롬프트 라이브러리
 │   ├── _template/                #   새 프롬프트 작성용 템플릿
 │   ├── code-gen/                 #   코드 생성 프롬프트
 │   ├── code-review/              #   코드 리뷰 프롬프트
@@ -167,7 +167,7 @@ JinhakStandard/
 │   ├── settings.json             #   권한, hooks 설정
 │   ├── scripts/
 │   │   └── session-briefing.cjs  #   세션 자동 브리핑 Hook 스크립트
-│   └── skills/                   #   슬래시 명령어 (13개)
+│   └── skills/                   #   슬래시 명령어 (14개)
 │       ├── apply-standard/       #   /apply-standard - 표준 적용/업데이트
 │       ├── commit/               #   /commit - 커밋 생성
 │       ├── debug/                #   /debug - 체계적 디버깅 (v2.3)
@@ -175,9 +175,10 @@ JinhakStandard/
 │       ├── orchestrate/          #   /orchestrate - Agent Teams + 2단계 검증 (v2.3)
 │       ├── review-pr/            #   /review-pr - PR 리뷰
 │       ├── security-check/       #   /security-check - 보안 점검 (v2.0)
-│       ├── prompt-register/       #   /prompt-register - 프롬프트 등록 (v2.4)
-│       ├── prompt-search/        #   /prompt-search - 프롬프트 검색 (v2.4)
-│       ├── prompt-quality-check/ #   /prompt-quality-check - 품질 검증 (v2.4)
+│       ├── prompt-register/       #   /prompt-register - 프롬프트 등록
+│       ├── prompt-search/        #   /prompt-search - 프롬프트 검색
+│       ├── prompt-quality-check/ #   /prompt-quality-check - 품질 검증
+│       ├── prompt-report/        #   /prompt-report - 사용량 리포트 (v2.5)
 │       ├── session-end/          #   /session-end - 세션 종료 (v2.0.2)
 │       ├── session-start/        #   /session-start - 세션 시작
 │       └── test/                 #   /test - 테스트 + Red-Green 검증 (v2.3)
@@ -213,26 +214,20 @@ JinhakStandard/
 
 ## 빠른 시작
 
-> **자동 적용(권장):** [QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md)의 프롬프트를 사용하세요.
+> **자동 적용(권장):** `npx jinhak-ai-standard` 또는 [QUICK_START_PROMPT.md](./QUICK_START_PROMPT.md)의 프롬프트를 사용하세요.
 
 ### 수동 적용 (필요 시)
 
 ```bash
-# 1. 이 저장소를 클론하여 참고
+# 방법 A: npx로 한 번에 적용 (권장)
+npx jinhak-ai-standard
+
+# 방법 B: 저장소 클론 후 수동 복사
 git clone https://github.com/JinhakStandard/ai-vibecoding.git /tmp/jinhak-standards
-
-# 2. CLAUDE.md 템플릿 복사 후 프로젝트 정보 수정
 cp /tmp/jinhak-standards/templates/project-claude.md ./CLAUDE.md
-
-# 3. AI 문서화 폴더 및 파일 생성
-mkdir -p .ai .claude/skills/commit .claude/skills/review-pr .claude/skills/session-start .claude/skills/test
-touch .ai/SESSION_LOG.md .ai/CURRENT_SPRINT.md .ai/DECISIONS.md .ai/ARCHITECTURE.md .ai/CONVENTIONS.md
-
-# 4. 스킬 파일 및 settings.json 복사
-cp /tmp/jinhak-standards/.claude/skills/*/SKILL.md 각_스킬_폴더/
-cp /tmp/jinhak-standards/.claude/settings.json .claude/
-
-# 5. .gitignore에 추가
+cp -r /tmp/jinhak-standards/.claude .
+cp -r /tmp/jinhak-standards/security .
+mkdir -p .ai
 echo "CLAUDE.local.md" >> .gitignore
 ```
 

@@ -99,7 +99,7 @@ CLAUDE.local.md
 
 ```bash
 mkdir -p /tmp/jinhak-standards
-curl -sL https://github.com/JinhakStandard/ai-vibecoding/archive/refs/tags/v2.5.tar.gz \
+curl -sL https://github.com/JinhakStandard/ai-vibecoding/archive/refs/tags/v2.6.tar.gz \
   | tar -xz -C /tmp/jinhak-standards --strip-components=1
 ```
 
