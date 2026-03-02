@@ -14,5 +14,8 @@ Desktop.ini
 # 표준 참조 폴더
 *vibecoding-ref/
 
+# 임시 계획 문서
+plan/
+
 # Node
 node_modules/
