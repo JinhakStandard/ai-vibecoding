@@ -2,26 +2,43 @@
 
 ## 사용법
 
+3가지 방법 중 편한 것을 선택하세요.
+
+---
+
+## 방법 1: npx 한 줄 적용 (가장 빠름)
+
+프로젝트 디렉토리에서 실행:
+```bash
+npx jinhak-ai-standard
+```
+
+이것만으로 `.claude/`, `.ai/`, `security/` 등 표준 파일이 자동 복사됩니다.
+이후 Claude Code에서 `CLAUDE.md`를 프로젝트에 맞게 작성하고 `/session-start`로 시작하세요.
+
+> npm 퍼블리시 전이라면 방법 2 또는 3을 사용하세요.
+
+---
+
+## 방법 2: Claude Code 프롬프트 (복사-붙여넣기)
+
 아래 프롬프트를 **Claude Code에 그대로 복사-붙여넣기** 하세요.
 
 - 신규 프로젝트든 기존 프로젝트든 상관없이 **동일한 프롬프트**를 사용합니다.
 - 처음 실행하면 표준 레포를 다운로드하고, **두 번째 프로젝트부터는 이미 받아둔 파일을 재사용**하므로 더 빠릅니다.
 - 이미 표준이 적용된 프로젝트에서 다시 실행하면, 버전을 비교해서 **업데이트만 수행**합니다.
 
----
-
-## 프롬프트
-
 ```
 이 프로젝트에 JINHAK AI 개발 표준을 적용해줘.
 
-표준 저장소: https://github.com/JinhakStandard/ai-vibecoding (master 브랜치)
+표준 저장소: https://github.com/JinhakStandard/ai-vibecoding
 
 ## 적용 방법
 
 아래 순서대로 진행해줘. 단, 레포의 각 파일을 웹에서 하나씩 가져오지 말고, 먼저 레포 전체를 로컬에 클론한 다음 로컬 파일을 참고해서 작업해.
 
-### 0단계: 표준 레포 로컬 클론
+### 0단계: 표준 레포 로컬 준비
+먼저 npx jinhak-ai-standard link 를 시도해. 실패하면 git clone으로 폴백:
 git clone https://github.com/JinhakStandard/ai-vibecoding.git /tmp/jinhak-standards
 만약 이미 /tmp/jinhak-standards가 있으면 git pull로 최신화만 해.
 참고: /tmp/jinhak-standards는 참고용일 뿐, 현재 프로젝트의 git에 포함시키지 마.
@@ -73,6 +90,20 @@ CLAUDE.local.md
 - 적용된 표준 버전
 - 사용 가능한 슬래시 명령어 (/session-start, /session-end, /commit, /review-pr, /security-check, /test)
 ```
+
+---
+
+## 방법 3: GitHub Release에서 직접 다운로드
+
+브랜치와 무관하게 최신 릴리스를 받을 수 있습니다:
+
+```bash
+mkdir -p /tmp/jinhak-standards
+curl -sL https://github.com/JinhakStandard/ai-vibecoding/archive/refs/tags/v2.5.tar.gz \
+  | tar -xz -C /tmp/jinhak-standards --strip-components=1
+```
+
+이후 Claude Code에서 `/apply-standard` 실행.
 
 ---
 

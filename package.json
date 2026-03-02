@@ -1,0 +1,42 @@
+{
+  "name": "jinhak-ai-standard",
+  "version": "2.6.0",
+  "description": "JINHAK 전사 AI 개발 표준 — Claude Code 프로젝트 자동 적용 도구",
+  "bin": {
+    "jinhak-ai-standard": "./bin/cli.cjs"
+  },
+  "files": [
+    "bin/",
+    "templates/",
+    "security/",
+    "prompts/",
+    "scripts/",
+    ".claude/",
+    "CLAUDE.md",
+    "CHANGELOG.md",
+    "PROMPT-LIBRARY.md",
+    "PROMPT_LIBRARY_USAGE.md",
+    "CODING_CONVENTIONS.md",
+    "ARCHITECTURE.md",
+    "PROJECT_STRUCTURE.md",
+    "VIBE_CODING_GUIDE.md",
+    "SECURITY_ISMS.md",
+    "QUICK_START_PROMPT.md"
+  ],
+  "keywords": [
+    "jinhak",
+    "ai-standard",
+    "claude-code",
+    "vibe-coding",
+    "developer-tools"
+  ],
+  "author": "JINHAK",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JinhakStandard/ai-vibecoding.git"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -33,10 +33,27 @@ $ARGUMENTS - 표준 저장소 URL (선택사항. 없으면 기본 URL 사용)
 
 ## 실행 절차
 
-### 0단계: 표준 레포 로컬 클론 + 최신 버전 감지
+### 0단계: 표준 레포 로컬 준비 + 최신 버전 감지
 
-표준 저장소를 로컬에 클론하여 파일을 직접 참고합니다 (웹 크롤링보다 빠르고 안정적):
+표준 파일을 로컬에 준비합니다. 다음 3가지 방법을 **우선순위 순으로** 시도합니다:
 
+**방법 A: npm 패키지 경로 감지 (가장 빠름)**
+```bash
+# npx로 설치된 경우 패키지 내부 파일을 직접 참조
+node -e "console.log(require.resolve('jinhak-ai-standard/CHANGELOG.md'))" 2>/dev/null
+```
+→ 성공 시 패키지 설치 경로를 `/tmp/jinhak-standards` 대신 사용
+
+**방법 B: GitHub Release tarball (브랜치 무관, 권장)**
+```bash
+# /tmp/jinhak-standards가 없을 때 — 최신 릴리스 자동 다운로드
+mkdir -p /tmp/jinhak-standards
+curl -sL https://github.com/JinhakStandard/ai-vibecoding/releases/latest/download/source.tar.gz \
+  | tar -xz -C /tmp/jinhak-standards --strip-components=1
+```
+→ 실패 시 방법 C로 폴백
+
+**방법 C: git clone (폴백)**
 ```bash
 git clone https://github.com/JinhakStandard/ai-vibecoding.git /tmp/jinhak-standards
 ```
