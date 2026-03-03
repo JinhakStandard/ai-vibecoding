@@ -13,8 +13,8 @@ cd my-project
 npx jinhak-ai-standard
 ```
 
-`.claude/`, `.ai/`, `security/` 등 표준 파일이 자동으로 복사됩니다.
-이후 `CLAUDE.md`를 프로젝트에 맞게 작성하고 Claude Code에서 `/session-start`로 시작하세요.
+`CLAUDE.md`, `.claude/`, `.ai/`, `security/`, `prompts/` 등 표준 파일이 자동으로 생성됩니다.
+`CLAUDE.md`의 `[대괄호]` 내용을 프로젝트 정보로 수정한 뒤 Claude Code에서 `/session-start`로 시작하세요.
 
 ### 방법 2: Claude Code 프롬프트 (복사-붙여넣기)
 
@@ -303,7 +303,8 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
-| **2.5** | **2026-03-01** | **프롬프트 라이브러리 Phase 2 + npm/GitHub Releases 배포: JABIS API 연동, `/prompt-report` 스킬, `npx jinhak-ai-standard` CLI** |
+| **2.6** | **2026-03-02** | **npm 패키지 + GitHub Releases 배포: `npx jinhak-ai-standard` CLI (CLAUDE.md 자동 생성/업데이트, prompts/ 복사 포함)** |
+| 2.5 | 2026-03-01 | 프롬프트 라이브러리 Phase 2: JABIS API 연동, `/prompt-report` 스킬, 사용량 추적 |
 | 2.4 | 2026-02-28 | 프롬프트 라이브러리 Phase 1: 등록/검색/품질검증 시스템, 예시 프롬프트 3개, `/prompt-register` `/prompt-search` `/prompt-quality-check` 스킬 |
 | 2.3 | 2026-02-28 | 적응적 추천 + skills.sh 모범사례 + 멀티 에이전트 패턴: 가중치 비평, C6 Hard Gate, State Contract, 스킬 조합 가이드, 2단계 검증, `/debug` 스킬, AI 합리화 방지 |
 | 2.2 | 2026-02-28 | Planner-Critic 듀얼 에이전트 `/deep-plan` 스킬, Auto Memory 보강, memory-templates 추가 |

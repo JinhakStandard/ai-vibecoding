@@ -175,6 +175,65 @@ function apply() {
     created.push(`.gitignore (+${gitignoreAdded.length}개 항목)`);
   }
 
+  // 8. CLAUDE.md
+  const claudeMdDest = path.join(TARGET, 'CLAUDE.md');
+  const claudeTemplateSrc = path.join(STANDARD_ROOT, 'templates', 'project-claude.md');
+  if (!fs.existsSync(claudeMdDest)) {
+    // 신규 프로젝트: 템플릿에서 생성
+    if (fs.existsSync(claudeTemplateSrc)) {
+      let template = fs.readFileSync(claudeTemplateSrc, 'utf8');
+      const today = new Date().toISOString().split('T')[0];
+
+      // 템플릿 헤더(사용법 안내) 제거
+      const metaStart = template.indexOf('<!-- JINHAK Standard Metadata');
+      if (metaStart > 0) template = template.substring(metaStart);
+
+      // 메타데이터 치환
+      template = template.replace(/jinhak_standard_version:\s*[\d.]+/, 'jinhak_standard_version: ' + version);
+      template = template.replace('[YYYY-MM-DD]', today);
+      template = template.replace(
+        /\[표준 저장소 URL[^\]]*\]/,
+        'https://github.com/JinhakStandard/ai-vibecoding'
+      );
+
+      // package.json에서 프로젝트명 감지
+      const pkgPath = path.join(TARGET, 'package.json');
+      let projectName = path.basename(TARGET);
+      if (fs.existsSync(pkgPath)) {
+        try {
+          const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+          if (pkg.name) projectName = pkg.name;
+        } catch (e) { /* ignore */ }
+      }
+      template = template.replace(/\[프로젝트명\]/g, projectName);
+
+      fs.writeFileSync(claudeMdDest, template, 'utf8');
+      created.push('CLAUDE.md (템플릿에서 생성 — [대괄호] 내용 수정 필요)');
+    }
+  } else if (current && current !== version) {
+    // 기존 프로젝트: 버전 메타데이터만 업데이트
+    let claudeContent = fs.readFileSync(claudeMdDest, 'utf8');
+    const today = new Date().toISOString().split('T')[0];
+    claudeContent = claudeContent.replace(
+      /jinhak_standard_version:\s*[\d.]+/,
+      'jinhak_standard_version: ' + version
+    );
+    claudeContent = claudeContent.replace(
+      /applied_date:\s*[\d-]+/,
+      'applied_date: ' + today
+    );
+    fs.writeFileSync(claudeMdDest, claudeContent, 'utf8');
+    created.push('CLAUDE.md (버전 ' + current + ' → ' + version + ' 업데이트)');
+  }
+
+  // 9. prompts/
+  const promptsSrc = path.join(STANDARD_ROOT, 'prompts');
+  const promptsDest = path.join(TARGET, 'prompts');
+  if (fs.existsSync(promptsSrc)) {
+    const promptCount = copyDir(promptsSrc, promptsDest);
+    if (promptCount > 0) created.push('prompts/ (' + promptCount + '개 파일)');
+  }
+
   // 결과 출력
   log('');
   if (created.length > 0) {
@@ -188,7 +247,7 @@ function apply() {
 
   log('');
   log(c.bold('다음 단계:'));
-  log('  1. CLAUDE.md를 프로젝트에 맞게 작성/수정');
+  log('  1. CLAUDE.md의 [대괄호] 내용을 프로젝트 정보로 수정');
   log('  2. Claude Code 세션 재시작 (settings.json 반영)');
   log('  3. /session-start 로 세션 시작');
   log('');
