@@ -5,6 +5,48 @@
 
 ---
 
+## v2.7 (2026-03-04) - CLI 기술 스택 자동 감지 + CLAUDE.md 완전 자동 생성
+
+### 핵심 변경
+- `npx jinhak-ai-standard` 실행 시 **package.json을 분석하여 기술 스택 자동 감지**
+- 감지 항목: 프레임워크, 언어(TS/JS), 패키지매니저, 상태관리, 스타일링, DB, ORM, 빌드도구, 테스트도구
+- CLAUDE.md 템플릿의 `[대괄호]` 플레이스홀더를 감지된 값으로 자동 치환
+- `.ai/` 폴더 파일에 감지된 기술 스택 기반 의미있는 초기 내용 생성 (ADR-001 포함)
+- 프로젝트 1-depth 폴더 트리 자동 생성
+
+### 영향
+- 기존: CLI 실행 후 `/apply-standard`로 CLAUDE.md 별도 설정 필요
+- 변경: CLI 한 번으로 프로젝트 맞춤 CLAUDE.md + .ai/ 완성
+
+---
+
+## v2.6 (2026-03-02) - npm 패키지 + GitHub Releases 배포
+
+### 핵심 변경
+- `npx jinhak-ai-standard` CLI 도구 도입
+- GitHub Actions workflow로 태그 push 시 자동 npm publish + GitHub Release
+- apply, info, link, help 4개 CLI 명령
+
+---
+
+## v2.5 (2026-03-01) - 프롬프트 라이브러리 Phase 2
+
+### 핵심 변경
+- JABIS API Gateway에 프롬프트 API 구현 (DB 스키마, 타입, 리포지토리, 서비스, 라우트)
+- `/prompt-report` 스킬, `prompt-track.cjs` Hook 스크립트
+- 사용량 추적 + 자동 평가 시스템
+
+---
+
+## v2.4 (2026-02-28) - 프롬프트 라이브러리 Phase 1
+
+### 핵심 변경
+- 프롬프트 등록/검색/품질검증 시스템
+- `/prompt-register`, `/prompt-search`, `/prompt-quality-check` 스킬 3개
+- PROMPT-LIBRARY.md, PROMPT_LIBRARY_USAGE.md 가이드 문서
+
+---
+
 ## v2.3 (2026-02-28) - 적응적 추천 모델 + skills.sh 모범사례
 
 ### 핵심 변경
