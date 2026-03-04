@@ -84,17 +84,167 @@ function ensureGitignoreEntries(entries) {
 }
 
 // ─────────────────────────────────────────
+// 기술 스택 자동 감지
+// ─────────────────────────────────────────
+
+function detectTechStack() {
+  const stack = { projectName: path.basename(TARGET), description: '', framework: [], language: 'JavaScript', packageManager: 'npm', stateManagement: '', styling: '', database: '', orm: '', buildTool: '', testTool: '', scripts: {} };
+  let pkg = null;
+  try { pkg = JSON.parse(fs.readFileSync(path.join(TARGET, 'package.json'), 'utf8')); } catch { /* ignore */ }
+
+  if (pkg) {
+    if (pkg.name) stack.projectName = pkg.name;
+    if (pkg.description) stack.description = pkg.description;
+    if (pkg.scripts) stack.scripts = pkg.scripts;
+    const deps = Object.keys(pkg.dependencies || {}), devDeps = Object.keys(pkg.devDependencies || {}), allDeps = [...deps, ...devDeps];
+
+    if (deps.includes('next')) stack.framework.push('Next.js');
+    if (deps.includes('react') && !deps.includes('next')) stack.framework.push('React');
+    if (deps.includes('@nestjs/core')) stack.framework.push('NestJS');
+    if (deps.includes('express')) stack.framework.push('Express');
+    if (deps.includes('fastify')) stack.framework.push('Fastify');
+    if (deps.includes('nuxt')) stack.framework.push('Nuxt');
+    if (deps.includes('vue')) stack.framework.push('Vue');
+
+    if (allDeps.includes('typescript') || fs.existsSync(path.join(TARGET, 'tsconfig.json'))) stack.language = 'TypeScript';
+
+    if (deps.includes('zustand')) stack.stateManagement = 'Zustand';
+    else if (deps.includes('@reduxjs/toolkit') || deps.includes('redux')) stack.stateManagement = 'Redux';
+    else if (deps.includes('recoil')) stack.stateManagement = 'Recoil';
+    else if (deps.includes('jotai')) stack.stateManagement = 'Jotai';
+
+    if (allDeps.includes('tailwindcss')) stack.styling = 'Tailwind CSS';
+    else if (allDeps.includes('styled-components')) stack.styling = 'styled-components';
+    else if (allDeps.includes('@emotion/react')) stack.styling = 'Emotion';
+    else if (allDeps.includes('sass') || allDeps.includes('node-sass')) stack.styling = 'Sass/SCSS';
+
+    if (deps.includes('pg')) stack.database = 'PostgreSQL';
+    else if (deps.includes('mssql') || deps.includes('tedious')) stack.database = 'MSSQL';
+    else if (deps.includes('mysql2') || deps.includes('mysql')) stack.database = 'MySQL';
+    else if (deps.includes('mongodb') || deps.includes('mongoose')) stack.database = 'MongoDB';
+
+    if (deps.includes('@prisma/client') || devDeps.includes('prisma')) stack.orm = 'Prisma';
+    else if (deps.includes('drizzle-orm')) stack.orm = 'Drizzle';
+    else if (deps.includes('typeorm')) stack.orm = 'TypeORM';
+
+    if (allDeps.includes('vite')) stack.buildTool = 'Vite';
+    else if (allDeps.includes('webpack')) stack.buildTool = 'Webpack';
+    else if (allDeps.includes('esbuild')) stack.buildTool = 'esbuild';
+
+    if (allDeps.includes('vitest')) stack.testTool = 'Vitest';
+    else if (allDeps.includes('jest')) stack.testTool = 'Jest';
+    else if (allDeps.includes('mocha')) stack.testTool = 'Mocha';
+    else if (allDeps.includes('playwright')) stack.testTool = 'Playwright';
+  }
+
+  if (fs.existsSync(path.join(TARGET, 'pnpm-lock.yaml'))) stack.packageManager = 'pnpm';
+  else if (fs.existsSync(path.join(TARGET, 'yarn.lock'))) stack.packageManager = 'yarn';
+  else if (fs.existsSync(path.join(TARGET, 'bun.lockb')) || fs.existsSync(path.join(TARGET, 'bun.lock'))) stack.packageManager = 'bun';
+  if (fs.existsSync(path.join(TARGET, 'tsconfig.json'))) stack.language = 'TypeScript';
+
+  return stack;
+}
+
+function generateFolderTree() {
+  try {
+    const entries = fs.readdirSync(TARGET, { withFileTypes: true })
+      .filter(e => !(e.name.startsWith('.') && e.name !== '.ai' && e.name !== '.claude') && e.name !== 'node_modules')
+      .sort((a, b) => a.isDirectory() === b.isDirectory() ? a.name.localeCompare(b.name) : a.isDirectory() ? -1 : 1);
+    return entries.map((e, i) => (i === entries.length - 1 ? '\u2514\u2500\u2500 ' : '\u251C\u2500\u2500 ') + e.name + (e.isDirectory() ? '/' : '')).join('\n');
+  } catch { return '[프로젝트 폴더 구조를 여기에 작성]'; }
+}
+
+function applyStackToTemplate(template, stack, version) {
+  const today = new Date().toISOString().split('T')[0];
+  template = template.replace(/\r\n/g, '\n');
+  const metaStart = template.indexOf('<!-- JINHAK Standard Metadata');
+  if (metaStart > 0) template = template.substring(metaStart);
+
+  template = template.replace(/jinhak_standard_version:\s*[\d.]+/, 'jinhak_standard_version: ' + version);
+  template = template.replace('[YYYY-MM-DD]', today);
+  template = template.replace(/\[표준 저장소 URL[^\]]*\]/, 'https://github.com/JinhakStandard/ai-vibecoding');
+  template = template.replace(/\[프로젝트명\]/g, stack.projectName);
+  template = template.replace(/\[프로젝트 한 줄 설명\]/, stack.description || '<!-- TODO: 프로젝트 설명을 작성하세요 -->');
+  template = template.replace(/\[프로젝트 폴더 구조를 여기에 작성\]/, generateFolderTree());
+
+  const fw = stack.framework.length > 0 ? stack.framework.join(' + ') : '-';
+  template = template.replace(/\[React \/ Next\.js \/ Express \/ NestJS 등\]/, fw);
+  template = template.replace(/\[JavaScript \/ TypeScript\]/, stack.language);
+  template = template.replace(/\[pnpm \/ npm \/ yarn\]/, stack.packageManager);
+  template = template.replace(/\[Zustand \/ Redux 등\]/, stack.stateManagement || '-');
+  template = template.replace(/\[Tailwind CSS \/ CSS Modules 등\]/, stack.styling || '-');
+  template = template.replace(/\[PostgreSQL \/ MySQL \/ MongoDB 등\]/, stack.database || '-');
+  template = template.replace(/\[Prisma \/ Drizzle \/ TypeORM 등\]/, stack.orm || '-');
+  template = template.replace(/\[Vite \/ Webpack \/ Turbopack 등\]/, stack.buildTool || '-');
+
+  const pm = stack.packageManager, s = stack.scripts, run = pm === 'npm' ? 'npm run' : pm;
+  template = template.replace(/\[pnpm install\]/g, pm === 'npm' ? 'npm install' : `${pm} install`);
+  template = template.replace(/\[pnpm dev\]/, s.dev ? `${run} dev` : `# ${run} dev (스크립트 미정의)`);
+  template = template.replace(/\[pnpm build\]/g, s.build ? `${run} build` : `# ${run} build (스크립트 미정의)`);
+  template = template.replace(/\[pnpm test\]/, s.test ? `${run} test` : `# ${run} test (스크립트 미정의)`);
+  template = template.replace(/\[pnpm typecheck\]/, s.typecheck ? `${run} typecheck` : (stack.language === 'TypeScript' ? 'npx tsc --noEmit' : `# TypeScript 미사용`));
+  template = template.replace(/\[pnpm lint\]/, s.lint ? `${run} lint` : `# ${run} lint (스크립트 미정의)`);
+  template = template.replace(/### 5\. \[프로젝트 특화 규칙\]\n- \[규칙 1 설명\]\n- \[규칙 2 설명\]\n- \[규칙 3 설명\]/, '### 5. 프로젝트 특화 규칙\n<!-- TODO: 프로젝트에 맞는 규칙을 추가하세요 -->\n- (규칙 추가 필요)');
+  template = template.replace(/\[apps\/\*\/node_modules packages\/\*\/node_modules\]/, '');
+
+  return template;
+}
+
+function generateAiContent(filename, stack, version) {
+  const today = new Date().toISOString().split('T')[0];
+  const fw = stack.framework.length > 0 ? stack.framework.join(' + ') : '미감지';
+
+  switch (filename) {
+    case 'SESSION_LOG.md':
+      return `# 세션 작업 기록\n\n> 세션 종료 시 반드시 업데이트하세요.\n\n---\n\n## ${today}\n\n### 세션 요약\n- JINHAK AI 개발 표준 v${version} 적용\n\n### 주요 변경\n- \`CLAUDE.md\` - AI 협업 설정 파일 생성\n- \`.claude/\` - Claude Code 설정 복사\n- \`.ai/\` - 프로젝트 문서화 폴더 초기화\n\n### 커밋\n- (표준 적용 커밋 필요)\n\n---\n`;
+    case 'CURRENT_SPRINT.md':
+      return `# 현재 진행 중인 작업\n\n> 마지막 업데이트: ${today}\n\n---\n\n## 진행 중 (In Progress)\n\n없음\n\n---\n\n## 대기 중 (Pending)\n\n### 우선순위 1: CLAUDE.md 프로젝트 특화 내용 보완\n- [ ] 프로젝트 설명 작성\n- [ ] 프로젝트 특화 규칙 추가\n\n---\n\n## 최근 완료\n\n### ${today}\n- [x] JINHAK AI 개발 표준 v${version} 적용\n\n---\n`;
+    case 'DECISIONS.md':
+      return `# 아키텍처 의사결정 기록 (ADR)\n\n---\n\n## ADR-001: 기술 스택 선정\n\n### 상태\n승인됨 (${today.substring(0, 7)})\n\n### 컨텍스트\n- ${stack.projectName} 프로젝트의 기술 스택 결정\n\n### 결정\n| 항목 | 선택 |\n|------|------|\n| 프레임워크 | ${fw} |\n| 언어 | ${stack.language} |\n| 패키지 매니저 | ${stack.packageManager} |${stack.stateManagement ? '\n| 상태관리 | ' + stack.stateManagement + ' |' : ''}${stack.database ? '\n| DB | ' + stack.database + ' |' : ''}${stack.orm ? '\n| ORM | ' + stack.orm + ' |' : ''}${stack.buildTool ? '\n| 빌드 | ' + stack.buildTool + ' |' : ''}${stack.testTool ? '\n| 테스트 | ' + stack.testTool + ' |' : ''}\n\n---\n\n## 의사결정 변경 이력\n\n| 날짜 | ADR | 변경 내용 |\n|------|-----|----------|\n| ${today} | ADR-001 | 초기 작성 (CLI 자동 감지) |\n`;
+    case 'ARCHITECTURE.md': {
+      const lines = [`# ${stack.projectName} 시스템 아키텍처\n\n> ${stack.description || '<!-- TODO: 프로젝트 설명 -->'}\n\n## 기술 스택\n`];
+      const front = stack.framework.filter(f => ['React', 'Next.js', 'Vue', 'Nuxt', 'Svelte'].includes(f));
+      const back = stack.framework.filter(f => ['Express', 'Fastify', 'NestJS'].includes(f));
+      if (front.length) lines.push(`### 프론트엔드\n- **프레임워크**: ${front.join(' + ')}${stack.styling ? '\n- **스타일링**: ' + stack.styling : ''}${stack.stateManagement ? '\n- **상태관리**: ' + stack.stateManagement : ''}\n`);
+      if (back.length) lines.push(`### 백엔드\n- **런타임**: Node.js\n- **프레임워크**: ${back.join(' + ')}\n`);
+      if (stack.database) lines.push(`### 데이터베이스\n- **DBMS**: ${stack.database}${stack.orm ? '\n- **ORM**: ' + stack.orm : ''}\n`);
+      lines.push(`### 빌드 & 개발\n- **언어**: ${stack.language}\n- **패키지 매니저**: ${stack.packageManager}${stack.buildTool ? '\n- **빌드 도구**: ' + stack.buildTool : ''}${stack.testTool ? '\n- **테스트**: ' + stack.testTool : ''}\n\n---\n`);
+      return lines.join('\n');
+    }
+    case 'CONVENTIONS.md': {
+      const ext = stack.language === 'TypeScript' ? '.tsx' : '.jsx';
+      return `# ${stack.projectName} 코딩 컨벤션\n\nJINHAK 전사 표준 기반.\n\n---\n\n## 네이밍 규칙\n\n| 유형 | 규칙 | 예시 |\n|------|------|------|\n| 컴포넌트 | PascalCase | \`MyComponent${ext}\` |\n| 함수/변수 | camelCase | \`handleSubmit\` |\n| 상수 | UPPER_SNAKE_CASE | \`MAX_RETRY\` |${stack.language === 'TypeScript' ? '\n| 타입 | PascalCase | `UserProfile` |' : ''}\n\n---\n\n## 금지 사항\n\n1. ${stack.language === 'TypeScript' ? '`any` 타입 사용 금지' : '불필요한 타입 강제 변환 금지'}\n2. \`console.log\` 프로덕션 코드 사용 금지\n3. 하드코딩된 URL/포트/비밀키 사용 금지\n4. PUT/PATCH/DELETE HTTP 메서드 사용 금지\n\n---\n`;
+    }
+    default:
+      return `# ${filename.replace('.md', '').replace(/_/g, ' ')}\n\n> 마지막 업데이트: ${today}\n\n---\n`;
+  }
+}
+
+// ─────────────────────────────────────────
 // 메인 커맨드: apply
 // ─────────────────────────────────────────
 
 function apply() {
   const version = getLatestVersion();
   const current = getCurrentVersion();
+  const stack = detectTechStack();
 
   log('');
   log(c.bold('JINHAK AI 개발 표준 적용 도구'));
   log(`표준 버전: ${c.cyan('v' + version)}`);
   log(`대상 경로: ${c.cyan(TARGET)}`);
+  log('');
+
+  log(c.bold('감지된 기술 스택:'));
+  log(`  프로젝트: ${c.cyan(stack.projectName)}`);
+  if (stack.description) log(`  설명: ${stack.description}`);
+  log(`  프레임워크: ${stack.framework.length > 0 ? c.cyan(stack.framework.join(' + ')) : '-'}`);
+  log(`  언어: ${c.cyan(stack.language)}  |  패키지 매니저: ${c.cyan(stack.packageManager)}`);
+  if (stack.stateManagement) log(`  상태관리: ${stack.stateManagement}`);
+  if (stack.styling) log(`  스타일링: ${stack.styling}`);
+  if (stack.database) log(`  DB: ${stack.database}${stack.orm ? ' + ' + stack.orm : ''}`);
+  if (stack.buildTool) log(`  빌드: ${stack.buildTool}`);
+  if (stack.testTool) log(`  테스트: ${stack.testTool}`);
   log('');
 
   if (current) {
@@ -144,20 +294,14 @@ function apply() {
     created.push('scripts/security-check-hook.cjs');
   }
 
-  // 6. .ai/ 폴더
-  const aiFiles = [
-    'SESSION_LOG.md',
-    'CURRENT_SPRINT.md',
-    'DECISIONS.md',
-    'ARCHITECTURE.md',
-    'CONVENTIONS.md',
-  ];
+  // 6. .ai/ 폴더 (기술 스택 기반 의미있는 초기 내용)
+  const aiFiles = ['SESSION_LOG.md', 'CURRENT_SPRINT.md', 'DECISIONS.md', 'ARCHITECTURE.md', 'CONVENTIONS.md'];
   const aiDir = path.join(TARGET, '.ai');
   fs.mkdirSync(aiDir, { recursive: true });
   for (const f of aiFiles) {
     const dest = path.join(aiDir, f);
     if (!fs.existsSync(dest)) {
-      fs.writeFileSync(dest, `# ${f.replace('.md', '').replace(/_/g, ' ')}\n\n> 마지막 업데이트: ${new Date().toISOString().split('T')[0]}\n\n---\n`, 'utf8');
+      fs.writeFileSync(dest, generateAiContent(f, stack, version), 'utf8');
       created.push(`.ai/${f}`);
     }
   }
@@ -175,55 +319,23 @@ function apply() {
     created.push(`.gitignore (+${gitignoreAdded.length}개 항목)`);
   }
 
-  // 8. CLAUDE.md
+  // 8. CLAUDE.md (기술 스택 자동 치환)
   const claudeMdDest = path.join(TARGET, 'CLAUDE.md');
   const claudeTemplateSrc = path.join(STANDARD_ROOT, 'templates', 'project-claude.md');
   if (!fs.existsSync(claudeMdDest)) {
-    // 신규 프로젝트: 템플릿에서 생성
     if (fs.existsSync(claudeTemplateSrc)) {
       let template = fs.readFileSync(claudeTemplateSrc, 'utf8');
-      const today = new Date().toISOString().split('T')[0];
-
-      // 템플릿 헤더(사용법 안내) 제거
-      const metaStart = template.indexOf('<!-- JINHAK Standard Metadata');
-      if (metaStart > 0) template = template.substring(metaStart);
-
-      // 메타데이터 치환
-      template = template.replace(/jinhak_standard_version:\s*[\d.]+/, 'jinhak_standard_version: ' + version);
-      template = template.replace('[YYYY-MM-DD]', today);
-      template = template.replace(
-        /\[표준 저장소 URL[^\]]*\]/,
-        'https://github.com/JinhakStandard/ai-vibecoding'
-      );
-
-      // package.json에서 프로젝트명 감지
-      const pkgPath = path.join(TARGET, 'package.json');
-      let projectName = path.basename(TARGET);
-      if (fs.existsSync(pkgPath)) {
-        try {
-          const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-          if (pkg.name) projectName = pkg.name;
-        } catch (e) { /* ignore */ }
-      }
-      template = template.replace(/\[프로젝트명\]/g, projectName);
-
+      template = applyStackToTemplate(template, stack, version);
       fs.writeFileSync(claudeMdDest, template, 'utf8');
-      created.push('CLAUDE.md (템플릿에서 생성 — [대괄호] 내용 수정 필요)');
+      created.push('CLAUDE.md (기술 스택 자동 감지 적용)');
     }
   } else if (current && current !== version) {
-    // 기존 프로젝트: 버전 메타데이터만 업데이트
     let claudeContent = fs.readFileSync(claudeMdDest, 'utf8');
     const today = new Date().toISOString().split('T')[0];
-    claudeContent = claudeContent.replace(
-      /jinhak_standard_version:\s*[\d.]+/,
-      'jinhak_standard_version: ' + version
-    );
-    claudeContent = claudeContent.replace(
-      /applied_date:\s*[\d-]+/,
-      'applied_date: ' + today
-    );
+    claudeContent = claudeContent.replace(/jinhak_standard_version:\s*[\d.]+/, 'jinhak_standard_version: ' + version);
+    claudeContent = claudeContent.replace(/applied_date:\s*[\d-]+/, 'applied_date: ' + today);
     fs.writeFileSync(claudeMdDest, claudeContent, 'utf8');
-    created.push('CLAUDE.md (버전 ' + current + ' → ' + version + ' 업데이트)');
+    created.push('CLAUDE.md (버전 ' + current + ' -> ' + version + ' 업데이트)');
   }
 
   // 9. prompts/
@@ -247,7 +359,7 @@ function apply() {
 
   log('');
   log(c.bold('다음 단계:'));
-  log('  1. CLAUDE.md의 [대괄호] 내용을 프로젝트 정보로 수정');
+  log('  1. CLAUDE.md의 TODO 항목 확인 및 프로젝트에 맞게 수정');
   log('  2. Claude Code 세션 재시작 (settings.json 반영)');
   log('  3. /session-start 로 세션 시작');
   log('');

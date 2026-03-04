@@ -1,6 +1,6 @@
 {
   "name": "jinhak-ai-standard",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "JINHAK 전사 AI 개발 표준 — Claude Code 프로젝트 자동 적용 도구",
   "bin": {
     "jinhak-ai-standard": "./bin/cli.cjs"
