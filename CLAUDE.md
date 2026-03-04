@@ -62,8 +62,8 @@
 
 ```
 프로젝트루트/
-├── package.json           # npm 패키지 설정 — npx jinhak-ai-standard (v2.6)
-├── bin/cli.cjs            # CLI 진입점 (apply/info/link/help) (v2.6)
+├── package.json           # npm 패키지 설정 — npx jinhak-ai-standard (v2.7)
+├── bin/cli.cjs            # CLI 진입점 (apply/info/link/help + 기술 스택 자동 감지) (v2.7)
 ├── .github/workflows/     # GitHub Actions (release.yml → 태그 push 시 Release + npm publish) (v2.6)
 ├── CLAUDE.md              # Claude Code 메인 설정 파일 (필수)
 ├── CLAUDE.local.md        # 로컬 개발자 설정 (git 제외, 선택사항)
@@ -1165,4 +1165,4 @@ AI가 생성해서는 안 되는 12가지 위험 패턴:
 ---
 
 *마지막 업데이트: 2026-03-01*
-*버전: 2.6*
+*버전: 2.7*

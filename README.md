@@ -1,4 +1,4 @@
-# JINHAK AI 개발 표준 v2.6 (AI Vibe Coding Standards)
+# JINHAK AI 개발 표준 v2.7 (AI Vibe Coding Standards)
 
 JINHAK 전사에서 AI(Claude Code / Claude.ai)와 협업할 때 따라야 하는 개발 표준 문서입니다.
 
@@ -105,9 +105,9 @@ claude
 
 > 각 프로젝트의 CLAUDE.md에 다음 메타 정보가 기록되어 추적됩니다:
 > ```html
-> <!-- jinhak_standard_version: 2.6 -->
+> <!-- jinhak_standard_version: 2.7 -->
 > <!-- jinhak_standard_repo: https://github.com/JinhakStandard/ai-vibecoding -->
-> <!-- applied_date: 2026-03-02 -->
+> <!-- applied_date: 2026-03-04 -->
 > ```
 
 ---
@@ -303,7 +303,8 @@ claude
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|----------|
-| **2.6** | **2026-03-02** | **npm 패키지 + GitHub Releases 배포: `npx jinhak-ai-standard` CLI (CLAUDE.md 자동 생성/업데이트, prompts/ 복사 포함)** |
+| **2.7** | **2026-03-04** | **CLI 기술 스택 자동 감지 + CLAUDE.md 완전 자동 생성: `npx jinhak-ai-standard` 실행 시 package.json 분석하여 기술 스택 자동 반영** |
+| 2.6 | 2026-03-02 | npm 패키지 + GitHub Releases 배포: `npx jinhak-ai-standard` CLI (CLAUDE.md 자동 생성/업데이트, prompts/ 복사 포함) |
 | 2.5 | 2026-03-01 | 프롬프트 라이브러리 Phase 2: JABIS API 연동, `/prompt-report` 스킬, 사용량 추적 |
 | 2.4 | 2026-02-28 | 프롬프트 라이브러리 Phase 1: 등록/검색/품질검증 시스템, 예시 프롬프트 3개, `/prompt-register` `/prompt-search` `/prompt-quality-check` 스킬 |
 | 2.3 | 2026-02-28 | 적응적 추천 + skills.sh 모범사례 + 멀티 에이전트 패턴: 가중치 비평, C6 Hard Gate, State Contract, 스킬 조합 가이드, 2단계 검증, `/debug` 스킬, AI 합리화 방지 |
