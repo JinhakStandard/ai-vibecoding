@@ -141,7 +141,7 @@ Auto Memory가 활성화되어 있습니다.
 
 > **중요**: `deny` 규칙은 프로젝트 전체에 **강제 적용**됩니다. `settings.local.json`이나 `~/.claude/settings.json`으로 우회할 수 없으므로, 위험 명령 차단에 가장 확실한 방법입니다. `deny`가 `allow`보다 우선합니다.
 
-> Hook은 Node.js 기반으로 작성되어 OS별 변환이 필요 없습니다. Windows/macOS/Linux 모두 동일한 설정을 사용합니다.
+> Hook은 bash 셸에서 실행됩니다. Unix 문법을 사용할 수 있으며, Windows 전용 문법(`> nul`, `powershell`)만 피하면 OS 무관하게 동작합니다.
 
 **Scripts 복사** - 표준 저장소의 세션 브리핑 스크립트를 복사:
 - `/tmp/jinhak-standards/.claude/scripts/session-briefing.cjs` → `.claude/scripts/session-briefing.cjs`
